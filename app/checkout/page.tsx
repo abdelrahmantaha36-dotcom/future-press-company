@@ -67,13 +67,10 @@ export default function CheckoutPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.fullName || !formData.address || !formData.phone1) {
-      alert("يرجى ملء جميع الحقول الإلزامية المطلوبة");
+      alert("يرجى ملء جميع الحقول المطلوبة");
       return;
     }
-    if (!receiptFile) {
-      alert("يرجى إرفاق إيصال تحويل العربون لتأكيد الطلب");
-      return;
-    }
+    // الانتقال المباشر لإصدار الفاتورة دون إجبار العميل على إرفاق الإيصال
     setIsSubmitted(true);
   };
 
@@ -209,14 +206,14 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            {/* 3. سداد الديبوزت (عربون) */}
+            {/* 3. سداد الديبوزت */}
             <div className="bg-[#0a1428] border border-blue-900/50 rounded-2xl p-6 shadow-xl space-y-4">
               <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
                 <CreditCard className="w-6 h-6 text-blue-400" />
                 سداد ديبوزت (عربون تأكيد الطلب)
               </h2>
               <p className="text-sm text-slate-300">
-                يرجى تحويل مبلغ العربون المتفق عليه لتأكيد أمر التوريد والبدء في التجهيز:
+                يرجى تحويل مبلغ العربون لتأكيد أمر التوريد والبدء في التجهيز:
               </p>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="p-4 bg-[#081020] border border-blue-900 rounded-xl space-y-1">
@@ -231,14 +228,13 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              {/* رفع اسكرين شوت من التحويل */}
+              {/* رفع اسكرين التحويل دون إجبار */}
               <div className="pt-2">
                 <label className="block text-sm font-semibold mb-2 text-slate-300">
-                  إرفاق اسكرين من التحويل *
+                  إرفاق اسكرين من التحويل
                 </label>
                 <input
                   type="file"
-                  required
                   accept="image/*"
                   onChange={(e) => setReceiptFile(e.target.files?.[0] || null)}
                   className="w-full bg-[#081020] border border-blue-900 rounded-lg p-2.5 text-xs text-slate-400 file:ml-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-blue-600 file:text-white"
@@ -258,7 +254,7 @@ export default function CheckoutPage() {
             </Button>
           </form>
         ) : (
-          /* 4. تصميم الفاتورة الرسمي المطابق للصورة والقابل للتحميل/الطباعة */
+          /* 4. تصميم الفاتورة الرسمي */
           <div className="space-y-6">
             <div className="flex justify-between items-center bg-[#0a1428] p-4 rounded-xl border border-blue-900">
               <div>
@@ -274,7 +270,7 @@ export default function CheckoutPage() {
               </Button>
             </div>
 
-            {/* قالب الفاتورة الرسمي المماثل للتصميم المطلوب */}
+            {/* قالب الفاتورة الرسمي */}
             <div
               id="invoice-print-area"
               className="bg-white text-slate-900 p-8 sm:p-12 rounded-2xl shadow-2xl border border-slate-200"
@@ -305,18 +301,18 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              {/* بيانات الشركة والعميل وتاريخ الفاتورة الآني */}
+              {/* بيانات الشركة والعميل */}
               <div className="grid grid-cols-2 gap-6 py-6 border-b border-slate-200 text-sm">
                 <div>
                   <h4 className="font-bold text-slate-900 mb-2">بيانات الشركة:</h4>
                   <p className="text-slate-800 font-semibold">Future Press Company</p>
                   <p className="text-slate-600 flex items-center gap-1 mt-1">
                     <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                    القاهرة - جمهورية مصر العربية
+                    القاهرة - حلوان
                   </p>
                   <p className="text-slate-600 flex items-center gap-1 mt-1">
                     <Phone className="w-3.5 h-3.5 text-slate-400" />
-                    01010625349 / 01144248804
+                    01010625349
                   </p>
                 </div>
 
