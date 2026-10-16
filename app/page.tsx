@@ -481,3 +481,106 @@ export default function HomePage() {
                       <p className="text-sm font-bold text-blue-400 mt-1">
                         {item.price * item.quantity} ج.م
                       </p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => updateCartQuantity(item.id, -1)}
+                        className="w-7 h-7 rounded border border-blue-800 bg-blue-950 flex items-center justify-center hover:bg-blue-900 text-white cursor-pointer"
+                      >
+                        <Minus className="w-3 h-3" />
+                      </button>
+                      <span className="text-sm font-bold w-6 text-center text-white">{item.quantity}</span>
+                      <button
+                        type="button"
+                        onClick={() => updateCartQuantity(item.id, 1)}
+                        className="w-7 h-7 rounded border border-blue-800 bg-blue-950 flex items-center justify-center hover:bg-blue-900 text-white cursor-pointer"
+                      >
+                        <Plus className="w-3 h-3" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => removeFromCart(item.id)}
+                        className="text-red-400 hover:bg-red-950/40 p-1.5 rounded mr-1 cursor-pointer"
+                        title="حذف"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* الحساب النهائي وزر الدفع */}
+            {cart.length > 0 && (
+              <div className="border-t border-blue-900/50 pt-4 space-y-4">
+                <div className="flex justify-between items-center text-lg font-bold">
+                  <span className="text-slate-300">الإجمالي:</span>
+                  <span className="text-blue-400 text-2xl font-black">{totalPrice} ج.م</span>
+                </div>
+                <Link href="/checkout" className="block w-full">
+                  <Button className="w-full text-base py-6 cursor-pointer bg-blue-600 hover:bg-blue-500 text-white font-bold shadow-lg shadow-blue-950/60">
+                    إتمام الطلب
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* الأزرار العائمة الثابتة (سلة، واتساب، فيسبوك، إنستجرام) */}
+      <div className="fixed bottom-6 left-6 z-40 flex flex-col gap-3">
+        {/* زر السلة العائم */}
+        <button
+          type="button"
+          onClick={() => setIsCartOpen(true)}
+          className="relative w-14 h-14 rounded-full bg-blue-600 text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform cursor-pointer border-2 border-blue-400/40"
+          title="سلة المشتريات"
+        >
+          <ShoppingCart className="w-6 h-6" />
+          {totalItemsCount > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold shadow-md">
+              {totalItemsCount}
+            </span>
+          )}
+        </button>
+
+        {/* زر الواتساب العائم */}
+        <a
+          href="https://wa.me/201010625349"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-14 h-14 rounded-full bg-[#25D366] text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform cursor-pointer"
+          title="تواصل معنا عبر واتساب"
+        >
+          <MessageCircle className="w-7 h-7" />
+        </a>
+
+        {/* زر الفيسبوك العائم */}
+        <a
+          href="https://www.facebook.com/profile.php?id=61565194104813"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-14 h-14 rounded-full bg-[#1877F2] text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform cursor-pointer"
+          title="صفحتنا على فيسبوك"
+        >
+          <Facebook className="w-7 h-7" />
+        </a>
+
+        {/* زر الإنستجرام العائم */}
+        <a
+          href="https://instagram.com/future.press1?stkn=MTI1azk0dzZsMnp1dw%3D%3D"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform cursor-pointer"
+          title="تابعنا على إنستجرام"
+        >
+          <Instagram className="w-7 h-7" />
+        </a>
+      </div>
+    </div>
+  );
+}
