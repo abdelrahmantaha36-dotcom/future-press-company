@@ -217,7 +217,7 @@ export default function HomePage() {
         </p>
       </section>
 
-      {/* Main Categories Section (كبيرة وواضحة وتحت بعضها) */}
+      {/* Main Categories Section */}
       <main className="py-16">
         <div className="container mx-auto px-4 space-y-24">
           {CATEGORIES.map((category) => (
@@ -417,12 +417,13 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* الأزرار العائمة */}
-      <div className="fixed bottom-6 left-6 z-40 flex flex-col gap-3">
+      {/* زر سلة المشتريات العائم - أسفل اليمين */}
+      <div className="fixed bottom-6 right-6 z-40">
         <button
           type="button"
           onClick={() => setIsCartOpen(true)}
           className="relative w-14 h-14 rounded-full bg-blue-600 text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform cursor-pointer border-2 border-blue-400/40"
+          title="سلة المشتريات"
         >
           <ShoppingCart className="w-6 h-6" />
           {totalItemsCount > 0 && (
@@ -431,27 +432,39 @@ export default function HomePage() {
             </span>
           )}
         </button>
+      </div>
+
+      {/* أزرار التواصل العائمة (واتساب، فيسبوك، إنستجرام) - أسفل اليسار */}
+      <div className="fixed bottom-6 left-6 z-40 flex flex-col gap-3">
+        {/* واتساب */}
         <a
           href="https://wa.me/201010625349"
           target="_blank"
           rel="noopener noreferrer"
-          className="w-14 h-14 rounded-full bg-[#25D366] text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform"
+          className="w-14 h-14 rounded-full bg-[#25D366] text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform cursor-pointer"
+          title="تواصل معنا عبر واتساب"
         >
           <MessageCircle className="w-7 h-7" />
         </a>
+
+        {/* فيسبوك */}
         <a
           href="https://www.facebook.com/profile.php?id=61565194104813"
           target="_blank"
           rel="noopener noreferrer"
-          className="w-14 h-14 rounded-full bg-[#1877F2] text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform"
+          className="w-14 h-14 rounded-full bg-[#1877F2] text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform cursor-pointer"
+          title="صفحتنا على فيسبوك"
         >
           <Facebook className="w-7 h-7" />
         </a>
+
+        {/* إنستجرام */}
         <a
           href="https://instagram.com/future.press1?stkn=MTI1azk0dzZsMnp1dw%3D%3D"
           target="_blank"
           rel="noopener noreferrer"
-          className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform"
+          className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform cursor-pointer"
+          title="تابعنا على إنستجرام"
         >
           <Instagram className="w-7 h-7" />
         </a>
