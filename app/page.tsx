@@ -8,7 +8,6 @@ import {
   Star,
   ShoppingCart,
   ShieldCheck,
-  HardHat,
   X,
   Plus,
   Minus,
@@ -159,11 +158,22 @@ export default function HomePage() {
     <div className="min-h-screen bg-background text-foreground" dir="rtl">
       {/* Header */}
       <header className="border-b sticky top-0 bg-background/95 backdrop-blur z-40">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
+            {/* اللوجو واسم الشركة */}
             <div className="flex items-center gap-3">
-              <HardHat className="w-7 h-7 text-primary" />
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight">future press company</h1>
+              <div className="relative w-10 h-10 rounded-full overflow-hidden border shadow-sm shrink-0">
+                <Image
+                  src="https://i.ibb.co/NdnYZ3Pp/Whats-App-Image-2026-10-14-at-5-53-58-AM.jpg"
+                  alt="Future Press Company Logo"
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
+                Future Press Company
+              </h1>
             </div>
 
             <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
@@ -197,7 +207,7 @@ export default function HomePage() {
         <div className="container mx-auto px-4 text-center">
           <Badge className="mb-4">تجهيزات أمان صناعي وميداني</Badge>
           <h2 className="text-3xl sm:text-5xl font-bold mb-4">
-            تجهيزات السلامة والسترات من future press company
+            تجهيزات السلامة والسترات من Future Press Company
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-base sm:text-lg">
             نوفر لشركتك أجود أنواع السترات العاكسة وخوذات الأمان المخصصة للعمال والمشرفين والمهندسين وفقاً لأعلى معايير السلامة المهنية مع إمكانية طباعة وتطريز الشعار.
@@ -364,7 +374,7 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="border-t py-8 bg-card mb-20 md:mb-0">
         <div className="container mx-auto px-4 text-center text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} future press company. جميع الحقوق محفوظة.</p>
+          <p>&copy; {new Date().getFullYear()} Future Press Company. جميع الحقوق محفوظة.</p>
         </div>
       </footer>
 
