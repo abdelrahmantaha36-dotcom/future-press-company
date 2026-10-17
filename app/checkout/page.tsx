@@ -19,6 +19,8 @@ import {
   MapPin,
   Phone,
   Calendar,
+  Copy,
+  CheckCheck,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -422,6 +424,10 @@ export default function HomePage() {
   const [orderDate, setOrderDate] = useState("");
   const [invoiceNumber, setInvoiceNumber] = useState("");
 
+  // حالات النسخ لرقمي فودافون كاش وإنستاباي
+  const [copiedVodafone, setCopiedVodafone] = useState(false);
+  const [copiedInstapay, setCopiedInstapay] = useState(false);
+
   const shippingFee = 50;
 
   useEffect(() => {
@@ -505,6 +511,20 @@ export default function HomePage() {
   const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const grandTotal = totalPrice + shippingFee;
 
+  // دالة النسخ إلى الحافظة
+  const handleCopy = (text: string, type: "vodafone" | "instapay") => {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      if (type === "vodafone") {
+        setCopiedVodafone(true);
+        setTimeout(() => setCopiedVodafone(false), 2000);
+      } else {
+        setCopiedInstapay(true);
+        setTimeout(() => setCopiedInstapay(false), 2000);
+      }
+    }
+  };
+
   // تجهيز رابط الواتساب
   const buildWhatsAppUrl = () => {
     let itemsText = "";
@@ -518,9 +538,9 @@ export default function HomePage() {
 📅 *التاريخ:* ${orderDate}
 
 👤 *بيانات العميل:*
-• *الاسم:* ${formData.fullName}
-• *الهاتف:* ${formData.phone1} ${formData.phone2 ? `\n• *هاتف إضافي:* ${formData.phone2}` : ""}
-• *العنوان:* ${formData.address}
+- *الاسم:* ${formData.fullName}
+- *الهاتف:* ${formData.phone1} ${formData.phone2 ? `\n• *هاتف إضافي:* ${formData.phone2}` : ""}
+- *العنوان:* ${formData.address}
 ${logoFile ? `• *لوجو الطباعة:* تم إرفاقه (${logoFile.name})` : "• *لوجو الطباعة:* لم يتم إرفاقه"}
 ${receiptFile ? `• *إيصال التحويل:* تم إرفاقه (${receiptFile.name})` : "• *إيصال التحويل:* لم يتم إرفاقه"}
 
@@ -597,7 +617,7 @@ ${receiptFile ? `• *إيصال التحويل:* تم إرفاقه (${receiptFi
         </div>
       </header>
 
-      {/* المحتوى الرئيسي: إما المتجر أو صفحة إتمام الطلب */}
+      {/* المحتوى الرئيسي */}
       {view === "store" ? (
         <>
           {/* صورة عروض اليوم */}
@@ -913,7 +933,7 @@ ${receiptFile ? `• *إيصال التحويل:* تم إرفاقه (${receiptFi
                 </div>
               </div>
 
-              {/* سداد الديبوزت */}
+              {/* سداد الديبوزت مع أزرار النسخ */}
               <div className="bg-[#0a1428] border border-blue-900/50 rounded-2xl p-6 shadow-xl space-y-4">
                 <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
                   <CreditCard className="w-6 h-6 text-blue-400" />
@@ -923,7 +943,8 @@ ${receiptFile ? `• *إيصال التحويل:* تم إرفاقه (${receiptFi
                   يرجى تحويل مبلغ العربون لتأكيد أمر التوريد والبدء في التجهيز:
                 </p>
                 <div className="grid md:grid-cols-2 gap-4">
-                  <div className="relative overflow-hidden rounded-2xl border-2 border-red-600/50 min-h-[140px] p-5 flex flex-col justify-between shadow-xl group">
+                  {/* كارت فودافون كاش */}
+                  <div className="relative overflow-hidden rounded-2xl border-2 border-red-600/50 min-h-[160px] p-5 flex flex-col justify-between shadow-xl group">
                     <Image
                       src="https://i.ibb.co/GQkKT0n4/da825f86efb52423c2785be6a2dd9124.jpg"
                       alt="Vodafone Cash Background"
@@ -931,14 +952,28 @@ ${receiptFile ? `• *إيصال التحويل:* تم إرفاقه (${receiptFi
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                       unoptimized
                     />
-                    <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]" />
+                    <div className="absolute inset-0 bg-black/65 backdrop-blur-[1px]" />
                     <div className="relative z-10 flex justify-between items-center">
                       <Badge className="bg-red-600 hover:bg-red-700 text-white font-bold px-3 py-1 text-xs shadow-md">
                         Vodafone Cash
                       </Badge>
-                      <span className="text-xs text-slate-200 font-semibold bg-black/40 px-2.5 py-1 rounded-full">
-                        تحويل كاش
-                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleCopy("01010625349", "vodafone")}
+                        className="bg-black/60 hover:bg-red-700/80 text-white border border-red-500/40 px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow"
+                      >
+                        {copiedVodafone ? (
+                          <>
+                            <CheckCheck className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>تم النسخ!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3.5 h-3.5" />
+                            <span>نسخ الرقم</span>
+                          </>
+                        )}
+                      </button>
                     </div>
                     <div className="relative z-10 mt-3">
                       <p className="text-2xl sm:text-3xl font-black text-white tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
@@ -950,7 +985,8 @@ ${receiptFile ? `• *إيصال التحويل:* تم إرفاقه (${receiptFi
                     </div>
                   </div>
 
-                  <div className="relative overflow-hidden rounded-2xl border-2 border-purple-600/50 min-h-[140px] p-5 flex flex-col justify-between shadow-xl group">
+                  {/* كارت إنستاباي */}
+                  <div className="relative overflow-hidden rounded-2xl border-2 border-purple-600/50 min-h-[160px] p-5 flex flex-col justify-between shadow-xl group">
                     <Image
                       src="https://i.ibb.co/rKx9kD0r/images.jpg"
                       alt="InstaPay Background"
@@ -958,14 +994,28 @@ ${receiptFile ? `• *إيصال التحويل:* تم إرفاقه (${receiptFi
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                       unoptimized
                     />
-                    <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]" />
+                    <div className="absolute inset-0 bg-black/65 backdrop-blur-[1px]" />
                     <div className="relative z-10 flex justify-between items-center">
                       <Badge className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-3 py-1 text-xs shadow-md">
                         InstaPay
                       </Badge>
-                      <span className="text-xs text-slate-200 font-semibold bg-black/40 px-2.5 py-1 rounded-full">
-                        تحويل فوري
-                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleCopy("01144248804", "instapay")}
+                        className="bg-black/60 hover:bg-purple-700/80 text-white border border-purple-500/40 px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow"
+                      >
+                        {copiedInstapay ? (
+                          <>
+                            <CheckCheck className="w-3.5 h-3.5 text-emerald-400" />
+                            <span>تم النسخ!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3.5 h-3.5" />
+                            <span>نسخ الرقم</span>
+                          </>
+                        )}
+                      </button>
                     </div>
                     <div className="relative z-10 mt-3">
                       <p className="text-2xl sm:text-3xl font-black text-white tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
