@@ -51,7 +51,7 @@ const CATEGORIES: Category[] = [
     description: "سترات أمان عملية ومتينة مصممة لتوفير أعلى درجات الرؤية والسلامة في بيئات العمل المختلفة.",
     products: [
       {
-        id: "worker-vest-local",
+        id: "worker-vest-lemon-local",
         name: "فيست عمال ليموني (محلي)",
         description: "فيست أمان عمال لون ليموني فسفوري عالي الوضوح، تصنيع محلي بجودة ممتازة وخامة متينة.",
         price: 80,
@@ -61,7 +61,7 @@ const CATEGORIES: Category[] = [
         badge: "إنتاج محلي",
       },
       {
-        id: "worker-vest-imported",
+        id: "worker-vest-lemon-imported",
         name: "فيست عمال ليموني (مستورد)",
         description: "فيست أمان عمال لون ليموني فسفوري عالي الوضوح، خامات مستوردة ممتازة وتصميم مريح للعمل الشاق.",
         price: 90,
@@ -70,19 +70,291 @@ const CATEGORIES: Category[] = [
         features: ["خامة مستوردة فائقة المتانة", "أشرطة فسفورية عاكسة متطورة", "سحاب أمامي عملي وقوي"],
         badge: "مستورد",
       },
+      {
+        id: "worker-vest-orange-local",
+        name: "فيست عمال برتقالي (محلي)",
+        description: "فيست أمان عمال لون برتقالي ناصع، خامات متينة وأشرطة عاكسة للضوء تصنيع محلي عالي الجودة.",
+        price: 80,
+        image: "https://i.ibb.co/cXKFMsb7/Whats-App-Image-2026-10-11-at-3-09-24-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["لون برتقالي فاقع عالي الرؤية", "خطوط عاكسة مزدوجة", "تصنيع محلي متين"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "worker-vest-orange-imported",
+        name: "فيست عمال برتقالي (مستورد)",
+        description: "فيست أمان عمال برتقالي مستورد عالي الكفاءة، مقاوم للظروف القاسية مع أشرطة عاكسة ممتازة.",
+        price: 90,
+        image: "https://i.ibb.co/cXKFMsb7/Whats-App-Image-2026-10-11-at-3-09-24-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامة مستوردة ممتازة", "عاكس ضوء فائق القوة", "مريح وسهل الارتداء"],
+        badge: "مستورد",
+      },
+      {
+        id: "worker-vest-black-local",
+        name: "فيست عمال أسود (محلي)",
+        description: "فيست عمال لون أسود بتصميم أنيق ومقاوم للأتربة والاتساخ مع خطوط عاكسة واضحة تصنيع محلي.",
+        price: 100,
+        image: "https://i.ibb.co/FLvDPndN/Whats-App-Image-2026-10-11-at-3-09-59-PM-2.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["لون أسود مميز وعملي", "أشرطة فسفورية عاكسة للأمان", "قماش متين عالي التحمل"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "worker-vest-black-imported",
+        name: "فيست عمال أسود (مستورد)",
+        description: "فيست عمال أسود مستورد عالي الجودة، يجمع بين المظهر المهني والأمان التام داخل الموقع.",
+        price: 120,
+        image: "https://i.ibb.co/FLvDPndN/Whats-App-Image-2026-10-11-at-3-09-59-PM-2.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامة مستوردة فاخرة", "أشرطة عاكسة متينة", "سحاب قوي وخياطة معززة"],
+        badge: "مستورد",
+      },
+      {
+        id: "worker-vest-blue-local",
+        name: "فيست عمال أزرق (محلي)",
+        description: "فيست أمان عمال باللون الأزرق الميداني الأنيق، تصنيع محلي متقن مع أشرطة فسفورية للرؤية.",
+        price: 100,
+        image: "https://i.ibb.co/ccQ8PXjb/Whats-App-Image-2026-10-11-at-3-09-59-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["لون أزرق عملي وجذاب", "عاكس إضاءة عريض", "خامة محلية عالية الجودة"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "worker-vest-blue-imported",
+        name: "فيست عمال أزرق (مستورد)",
+        description: "فيست أمان عمال أزرق مستورد بخامات ممتازة وتصميم احترافي يوفر الراحة الكاملة أثناء العمل.",
+        price: 120,
+        image: "https://i.ibb.co/ccQ8PXjb/Whats-App-Image-2026-10-11-at-3-09-59-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامات مستوردة فائقة الجودة", "عواكس متطورة للرؤية الليلية", "تهوية وراحة أثناء الحركة"],
+        badge: "مستورد",
+      },
+      {
+        id: "worker-vest-red-local",
+        name: "فيست عمال أحمر (محلي)",
+        description: "فيست عمال لون أحمر ناصع للتمييز السريع ولفرق السلامة والطوارئ تصنيع محلي متميز.",
+        price: 100,
+        image: "https://i.ibb.co/ns3w2ct8/Whats-App-Image-2026-10-11-at-3-09-59-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["لون أحمر فاقع لسهولة التمييز", "خطوط فسفورية لامعة", "خياطة متينة ومقاومة"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "worker-vest-red-imported",
+        name: "فيست عمال أحمر (مستورد)",
+        description: "فيست عمال أحمر مستورد عالي الجودة بتصميم متين يناسب مهام العمل الصعبة وإدارة المواقع.",
+        price: 120,
+        image: "https://i.ibb.co/ns3w2ct8/Whats-App-Image-2026-10-11-at-3-09-59-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامات مستوردة عالية التحمل", "أشرطة عاكسة متطورة", "سحاب مريح وعملي"],
+        badge: "مستورد",
+      },
     ],
   },
   {
     id: "supervisors",
     title: "فيست مشرفين",
     description: "سترات متميزة بجيوب متعددة لحفظ الدفاتر والأدوات وتسهيل مهام الإشراف والمتابعة.",
-    products: [],
+    products: [
+      {
+        id: "sup-vest-lemon-local",
+        name: "فيست مشرفين ليموني (محلي)",
+        description: "فيست إشراف ميداني لون ليموني فسفوري مزود بجيوب عملية وأماكن مخصصة للأقلام والكروت تصنيع محلي.",
+        price: 140,
+        image: "https://i.ibb.co/ZpmnCmJq/Whats-App-Image-2026-10-11-at-3-10-27-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["جيوب أمامية متعددة وعميقة", "حامل بطاقة تعريفية", "قماش متين ولون عالي الوضوح"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "sup-vest-lemon-imported",
+        name: "فيست مشرفين ليموني (مستورد)",
+        description: "فيست مشرفين ليموني مستورد فاخر، جيوب متعددة وسحابات قوية مع عواكس ضوء ممتازة.",
+        price: 160,
+        image: "https://i.ibb.co/ZpmnCmJq/Whats-App-Image-2026-10-11-at-3-10-27-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامة مستوردة فاخرة", "جيوب مخصصة للراديو والأدوات", "أشرطة عاكسة عالية الجودة"],
+        badge: "مستورد",
+      },
+      {
+        id: "sup-vest-orange-local",
+        name: "فيست مشرفين برتقالي (محلي)",
+        description: "فيست إشراف لون برتقالي ناصع، مجهز بجيوب متعددة وحامل كارنيه تصنيع محلي ممتاز.",
+        price: 140,
+        image: "https://i.ibb.co/CszMnVCj/Whats-App-Image-2026-10-11-at-3-10-27-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["جيوب عملية ومريحة", "لون برتقالي فاقع واضح", "أشرطة عاكسة متينة"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "sup-vest-orange-imported",
+        name: "فيست مشرفين برتقالي (مستورد)",
+        description: "فيست إشراف برتقالي مستورد عالي الكفاءة، تصميم مريح وخامات فائقة التحمل بجيوب كاملة.",
+        price: 160,
+        image: "https://i.ibb.co/CszMnVCj/Whats-App-Image-2026-10-11-at-3-10-27-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامة مستوردة عالية الجودة", "تقسيمات جيوب ذكية وعملية", "خطوط عاكسة متطورة"],
+        badge: "مستورد",
+      },
+      {
+        id: "sup-vest-lemon-black-local",
+        name: "فيست مشرفين ليموني × أسود (محلي)",
+        description: "فيست إشراف أنيق يدمج بين الليموني الفسفوري والأسود لمظهر قيادي عملي وجيوب متعددة محلي.",
+        price: 130,
+        image: "https://i.ibb.co/Jjqq2XML/Whats-App-Image-2026-10-14-at-1-55-06-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["مزيج ليموني وأسود أنيق", "جيوب مخصصة للأجهزة والأقلام", "صناعة محلية متينة"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "sup-vest-lemon-black-imported",
+        name: "فيست مشرفين ليموني × أسود (مستورد)",
+        description: "فيست إشراف ليموني × أسود مستورد بجودة عالية، مظهر مميز يبرز طاقم الإشراف بالموقع.",
+        price: 150,
+        image: "https://i.ibb.co/Jjqq2XML/Whats-App-Image-2026-10-14-at-1-55-06-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامات مستوردة ممتازة", "أشرطة فسفورية متطورة", "سحابات متينة وعملية"],
+        badge: "مستورد",
+      },
+      {
+        id: "sup-vest-lemon-blue-local",
+        name: "فيست مشرفين ليموني × أزرق (محلي)",
+        description: "فيست إشراف ليموني مدمج مع الأزرق الداكن بتصميم عصري وجيوب تخزين ممتازة تصنيع محلي.",
+        price: 130,
+        image: "https://i.ibb.co/qL0cZFMW/Whats-App-Image-2026-10-14-at-1-55-06-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["ألوان متباينة عالية الوضوح", "جيوب إشراف متعددة", "خياطة محلية معززة"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "sup-vest-lemon-blue-imported",
+        name: "فيست مشرفين ليموني × أزرق (مستورد)",
+        description: "فيست مشرفين ليموني × أزرق مستورد فاخر، مناسب للمتابعة الميدانية والمهام الإشرافية الدقيقة.",
+        price: 150,
+        image: "https://i.ibb.co/qL0cZFMW/Whats-App-Image-2026-10-14-at-1-55-06-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامة مستوردة راقية", "جيوب كروت وأجهزة لاسلكية", "عواكس ليلية ممتازة"],
+        badge: "مستورد",
+      },
+      {
+        id: "sup-vest-lemon-orange-local",
+        name: "فيست مشرفين ليموني × برتقالي (محلي)",
+        description: "فيست إشراف بلونين فسفوريين عاليي الرؤية (ليموني وبرتقالي) مع جيوب كاملة تصنيع محلي.",
+        price: 130,
+        image: "https://i.ibb.co/p61yHtHW/Whats-App-Image-2026-10-14-at-1-55-06-PM-2.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["وضوح مضاعف بلونين فسفوريين", "جيوب متعددة الوظائف", "خامة محلية قوية"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "sup-vest-lemon-orange-imported",
+        name: "فيست مشرفين ليموني × برتقالي (مستورد)",
+        description: "فيست إشراف ليموني × برتقالي مستورد عالي الجودة، يضمن أقصى معايير السلامة المهنية للمشرفين.",
+        price: 150,
+        image: "https://i.ibb.co/p61yHtHW/Whats-App-Image-2026-10-14-at-1-55-06-PM-2.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامات مستوردة متطورة", "رؤية فائقة بالنهار والليل", "سحاب قوي وخياطة متينة"],
+        badge: "مستورد",
+      },
+    ],
   },
   {
     id: "engineers",
     title: "فيست مهندسين",
     description: "سترات احترافية فاخرة تجمع بين المظهر الهندسي الأنيق وأقصى درجات الأمان الميداني.",
-    products: [],
+    products: [
+      {
+        id: "eng-vest-4ref-lemon-black-local",
+        name: "فيست مهندسين 4 عاكس ليموني × أسود (محلي)",
+        description: "فيست مهندسين تنفيذي مزود بأربعة خطوط عاكسة متطورة، قماش فاخر وجيوب واسعة للرسومات والأدوات.",
+        price: 170,
+        image: "https://i.ibb.co/ycqLFDJD/Whats-App-Image-2026-10-11-at-3-12-09-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["4 خطوط عاكسة متطورة", "مظهر هندسي تنفيذي فاخر", "جيوب مخصصة للمخططات والموبايل"],
+        badge: "4 عاكس",
+      },
+      {
+        id: "eng-vest-4ref-lemon-blue-local",
+        name: "فيست مهندسين 4 عاكس ليموني × أزرق (محلي)",
+        description: "فيست مهندسين 4 عاكس بتنسيق ألوان ليموني وأزرق داكن راقٍ، خامات متينة وجيوب متعددة محلي.",
+        price: 170,
+        image: "https://i.ibb.co/84Gc7fMy/Whats-App-Image-2026-10-11-at-3-12-09-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["4 خطوط عاكسة قوية", "قصة أنيقة ومريحة للمهندسين", "خامات متينة ومقاومة للحرارة"],
+        badge: "4 عاكس",
+      },
+      {
+        id: "eng-vest-4ref-lemon-orange-local",
+        name: "فيست مهندسين 4 عاكس ليموني × برتقالي (محلي)",
+        description: "فيست مهندسين 4 عاكس بلونين ناصعين لتوفير أعلى مستوى رؤية وأناقة في المواقع الكبرى.",
+        price: 170,
+        image: "https://i.ibb.co/C5KynwMt/Whats-App-Image-2026-10-11-at-3-12-09-PM-2.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["4 أشرطة عاكسة للضوء", "مزيج فسفوري فائق الوضوح", "خياطة مزدوجة معززة"],
+        badge: "4 عاكس",
+      },
+      {
+        id: "eng-vest-3m-lemon-black-local",
+        name: "فيست مهندسين ثري إم (3M) ليموني × أسود (محلي)",
+        description: "فيست مهندسين فاخر مزود بأشرطة 3M العاكسة الأصلية لتوفير بريق عاكس قياسي عالمي محلي.",
+        price: 200,
+        image: "https://i.ibb.co/HTJjPgsn/Whats-App-Image-2026-10-11-at-3-12-35-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["شريط عاكس أصلي 3M", "قماش عالي الكثافة والجودة", "جيوب تنظيمية احترافية"],
+        badge: "عاكس 3M محلي",
+      },
+      {
+        id: "eng-vest-3m-lemon-black-imported",
+        name: "فيست مهندسين ثري إم (3M) ليموني × أسود (مستورد)",
+        description: "فيست مهندسين تنفيذي مستورد بأعلى معايير الجودة العالمية مع شرائط 3M العاكسة الأصلية.",
+        price: 250,
+        image: "https://i.ibb.co/HTJjPgsn/Whats-App-Image-2026-10-11-at-3-12-35-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["شريط عاكس معتمد 3M", "خامات مستوردة بريميوم", "تفصيل ومظهر قيادي فاخر"],
+        badge: "عاكس 3M مستورد",
+      },
+      {
+        id: "eng-vest-3m-lemon-blue-local",
+        name: "فيست مهندسين ثري إم (3M) ليموني × أزرق (محلي)",
+        description: "فيست مهندسين بلونين ليموني وأزرق مع أشرطة 3M المعتمدة، تصنيع محلي متميز وعملي للغاية.",
+        price: 200,
+        image: "https://i.ibb.co/zkxZxDq/Whats-App-Image-2026-10-11-at-3-12-36-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["عواكس 3M فائقة التوهج", "قماش جبردين عالي التحمل", "حلقات لتعليق اللاسلكي والمفاتيح"],
+        badge: "عاكس 3M محلي",
+      },
+      {
+        id: "eng-vest-3m-lemon-blue-imported",
+        name: "فيست مهندسين ثري إم (3M) ليموني × أزرق (مستورد)",
+        description: "فيست مهندسين مستورد بريميوم بشرائط 3M ليموني × أزرق لضمان أعلى مستويات الأمان والأناقة.",
+        price: 250,
+        image: "https://i.ibb.co/zkxZxDq/Whats-App-Image-2026-10-11-at-3-12-36-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["تقنية عاكس 3M المتطورة", "خامة مستوردة مقاومة للتآكل", "راحة تامة في التحرك والمطابقة"],
+        badge: "عاكس 3M مستورد",
+      },
+      {
+        id: "eng-vest-3m-lemon-orange-local",
+        name: "فيست مهندسين ثري إم (3M) ليموني × برتقالي (محلي)",
+        description: "فيست مهندسين مزود بشرائط 3M الأصلية بلوني السلامة المعتمدين ليموني وبرتقالي تصنيع محلي.",
+        price: 200,
+        image: "https://i.ibb.co/PvkGXDPV/Whats-App-Image-2026-10-11-at-3-12-36-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["أشرطة عاكسة أصلية 3M", "مزيج لوني عالي الوضوح", "خياطة متينة وجيوب شاملة"],
+        badge: "عاكس 3M محلي",
+      },
+      {
+        id: "eng-vest-3m-lemon-orange-imported",
+        name: "فيست مهندسين ثري إم (3M) ليموني × برتقالي (مستورد)",
+        description: "فيست مهندسين تنفيذي مستورد بشرائط 3M، تصميم متقن يوفر الحماية والمظهر المهني المتألق.",
+        price: 250,
+        image: "https://i.ibb.co/PvkGXDPV/Whats-App-Image-2026-10-11-at-3-12-36-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["شريط عاكس 3M مستورد", "أعلى معايير الجودة التنفيذية", "متانة قصوى في البيئات القاسية"],
+        badge: "عاكس 3M مستورد",
+      },
+    ],
   },
   {
     id: "helmets",
@@ -94,14 +366,8 @@ const CATEGORIES: Category[] = [
 
 export default function HomePage() {
   const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [selectedSizes, setSelectedSizes] = useState<{ [productId: string]: string }>({
-    "worker-vest-local": "XL",
-    "worker-vest-imported": "XL",
-  });
-  const [quantities, setQuantities] = useState<{ [productId: string]: number }>({
-    "worker-vest-local": 1,
-    "worker-vest-imported": 1,
-  });
+  const [selectedSizes, setSelectedSizes] = useState<{ [productId: string]: string }>({});
+  const [quantities, setQuantities] = useState<{ [productId: string]: number }>({});
   const [cart, setCart] = useState<CartItem[]>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("future_press_cart");
@@ -131,7 +397,7 @@ export default function HomePage() {
   };
 
   const addToCart = (product: Product) => {
-    const chosenSize = selectedSizes[product.id] || product.sizes[0];
+    const chosenSize = selectedSizes[product.id] || product.sizes[0] || "XL";
     const qtyToAdd = quantities[product.id] || 1;
     const cartItemId = `${product.id}-${chosenSize}`;
 
@@ -288,7 +554,7 @@ export default function HomePage() {
               {category.products.length > 0 ? (
                 <div className="grid md:grid-cols-2 gap-8">
                   {category.products.map((product) => {
-                    const currentSelectedSize = selectedSizes[product.id] || product.sizes[0];
+                    const currentSelectedSize = selectedSizes[product.id] || product.sizes[0] || "XL";
                     const currentQty = quantities[product.id] || 1;
 
                     return (
@@ -319,27 +585,29 @@ export default function HomePage() {
                             <p className="text-sm text-slate-300 mb-4">{product.description}</p>
 
                             {/* اختيار المقاس */}
-                            <div className="mb-4">
-                              <span className="text-xs font-semibold text-slate-400 block mb-2">
-                                المقاس:
-                              </span>
-                              <div className="flex gap-2">
-                                {product.sizes.map((size) => (
-                                  <button
-                                    key={size}
-                                    type="button"
-                                    onClick={() => handleSelectSize(product.id, size)}
-                                    className={`px-3 py-1.5 rounded-lg border text-sm font-semibold cursor-pointer ${
-                                      currentSelectedSize === size
-                                        ? "bg-blue-600 text-white border-blue-500 shadow-md"
-                                        : "bg-[#091428] text-slate-300 border-blue-900 hover:bg-blue-950"
-                                    }`}
-                                  >
-                                    {size}
-                                  </button>
-                                ))}
+                            {product.sizes && product.sizes.length > 0 && (
+                              <div className="mb-4">
+                                <span className="text-xs font-semibold text-slate-400 block mb-2">
+                                  المقاس:
+                                </span>
+                                <div className="flex gap-2">
+                                  {product.sizes.map((size) => (
+                                    <button
+                                      key={size}
+                                      type="button"
+                                      onClick={() => handleSelectSize(product.id, size)}
+                                      className={`px-3 py-1.5 rounded-lg border text-sm font-semibold cursor-pointer ${
+                                        currentSelectedSize === size
+                                          ? "bg-blue-600 text-white border-blue-500 shadow-md"
+                                          : "bg-[#091428] text-slate-300 border-blue-900 hover:bg-blue-950"
+                                      }`}
+                                    >
+                                      {size}
+                                    </button>
+                                  ))}
+                                </div>
                               </div>
-                            </div>
+                            )}
 
                             {/* خانة كتابة العدد */}
                             <div className="mb-4">
