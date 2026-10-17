@@ -206,7 +206,7 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            {/* 3. سداد الديبوزت */}
+            {/* 3. سداد الديبوزت بخلفيات الصور الكاملة */}
             <div className="bg-[#0a1428] border border-blue-900/50 rounded-2xl p-6 shadow-xl space-y-4">
               <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
                 <CreditCard className="w-6 h-6 text-blue-400" />
@@ -216,19 +216,70 @@ export default function CheckoutPage() {
                 يرجى تحويل مبلغ العربون لتأكيد أمر التوريد والبدء في التجهيز:
               </p>
               <div className="grid md:grid-cols-2 gap-4">
-                <div className="p-4 bg-[#081020] border border-blue-900 rounded-xl space-y-1">
-                  <Badge className="bg-red-600 text-white">Vodafone Cash</Badge>
-                  <p className="text-xl font-bold text-white tracking-widest">01010625349</p>
-                  <p className="text-xs text-slate-400">تحويل كاش إلى هذا الرقم</p>
+                {/* كارت فودافون كاش مع الصورة في المربع بالكامل */}
+                <div className="relative overflow-hidden rounded-2xl border-2 border-red-600/50 min-h-[140px] p-5 flex flex-col justify-between shadow-xl group">
+                  <Image
+                    src="https://i.ibb.co/GQkKT0n4/da825f86efb52423c2785be6a2dd9124.jpg"
+                    alt="Vodafone Cash Background"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    unoptimized
+                  />
+                  {/* طبقة تظليل للحفاظ على وضوح البيانات */}
+                  <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]" />
+
+                  <div className="relative z-10 flex justify-between items-center">
+                    <Badge className="bg-red-600 hover:bg-red-700 text-white font-bold px-3 py-1 text-xs shadow-md">
+                      Vodafone Cash
+                    </Badge>
+                    <span className="text-xs text-slate-200 font-semibold bg-black/40 px-2.5 py-1 rounded-full">
+                      تحويل كاش
+                    </span>
+                  </div>
+
+                  <div className="relative z-10 mt-3">
+                    <p className="text-2xl sm:text-3xl font-black text-white tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                      01010625349
+                    </p>
+                    <p className="text-xs text-slate-200 mt-1 font-medium drop-shadow-sm">
+                      تحويل كاش إلى هذا الرقم
+                    </p>
+                  </div>
                 </div>
-                <div className="p-4 bg-[#081020] border border-blue-900 rounded-xl space-y-1">
-                  <Badge className="bg-purple-600 text-white">InstaPay</Badge>
-                  <p className="text-xl font-bold text-white tracking-widest">01144248804</p>
-                  <p className="text-xs text-slate-400">تحويل فوري عبر تطبيق إنستاباي</p>
+
+                {/* كارت إنستاباي مع الصورة في المربع بالكامل */}
+                <div className="relative overflow-hidden rounded-2xl border-2 border-purple-600/50 min-h-[140px] p-5 flex flex-col justify-between shadow-xl group">
+                  <Image
+                    src="https://i.ibb.co/rKx9kD0r/images.jpg"
+                    alt="InstaPay Background"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    unoptimized
+                  />
+                  {/* طبقة تظليل للحفاظ على وضوح البيانات */}
+                  <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]" />
+
+                  <div className="relative z-10 flex justify-between items-center">
+                    <Badge className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-3 py-1 text-xs shadow-md">
+                      InstaPay
+                    </Badge>
+                    <span className="text-xs text-slate-200 font-semibold bg-black/40 px-2.5 py-1 rounded-full">
+                      تحويل فوري
+                    </span>
+                  </div>
+
+                  <div className="relative z-10 mt-3">
+                    <p className="text-2xl sm:text-3xl font-black text-white tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                      01144248804
+                    </p>
+                    <p className="text-xs text-slate-200 mt-1 font-medium drop-shadow-sm">
+                      تحويل فوري عبر تطبيق إنستاباي
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              {/* رفع اسكرين التحويل دون إجبار */}
+              {/* رفع اسكرين التحويل */}
               <div className="pt-2">
                 <label className="block text-sm font-semibold mb-2 text-slate-300">
                   إرفاق اسكرين من التحويل
