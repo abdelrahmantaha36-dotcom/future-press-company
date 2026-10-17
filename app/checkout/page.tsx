@@ -790,7 +790,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                                             currentSelectedSize === size
                                               ? "bg-blue-600 text-white border-blue-500 shadow-md"
                                               : "bg-[#091428] text-slate-300 border-blue-900 hover:bg-blue-950"
-                                            }`}
+                                          }`}
                                         >
                                           {size}
                                         </button>
@@ -926,10 +926,10 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                     />
                   </div>
 
-                  {/* قائمة المحافظات وسعر شحنها */}
+                  {/* قائمة المحافظات دون كتابة سعر الشحن بجانب الاسم */}
                   <div>
                     <label className="block text-sm font-semibold mb-2 text-slate-300">
-                      المحافظة * (يحدد سعر الشحن تلقائياً)
+                      المحافظة *
                     </label>
                     <select
                       value={formData.governorate}
@@ -938,7 +938,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                     >
                       {GOVERNORATES.map((gov) => (
                         <option key={gov.name} value={gov.name} className="bg-[#0a1428] text-white">
-                          {gov.name} - (شحن: {gov.fee} ج.م)
+                          {gov.name}
                         </option>
                       ))}
                     </select>
