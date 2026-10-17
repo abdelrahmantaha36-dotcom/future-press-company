@@ -1,20 +1,31 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
-  CreditCard,
-  Download,
-  FileText,
-  ArrowRight,
-  Phone,
-  MapPin,
-  Calendar,
+  Check,
+  ShoppingCart,
+  X,
   MessageCircle,
+  Facebook,
+  Instagram,
+  ArrowLeft,
+  Layers,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  sizes: string[];
+  features: string[];
+  badge?: string;
+}
 
 interface CartItem {
   id: string;
@@ -26,471 +37,782 @@ interface CartItem {
   quantity: number;
 }
 
-export default function CheckoutPage() {
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [formData, setFormData] = useState({
-    fullName: "",
-    address: "",
-    phone1: "",
-    phone2: "",
-  });
-  const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [receiptFile, setReceiptFile] = useState<File | null>(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [orderDate, setOrderDate] = useState("");
-  const [invoiceNumber, setInvoiceNumber] = useState("");
+interface Category {
+  id: string;
+  title: string;
+  description: string;
+  products: Product[];
+}
 
-  const shippingFee = 50; // رسوم الشحن
+const CATEGORIES: Category[] = [
+  {
+    id: "workers",
+    title: "فيست عمال",
+    description: "سترات أمان عملية ومتينة مصممة لتوفير أعلى درجات الرؤية والسلامة في بيئات العمل المختلفة.",
+    products: [
+      {
+        id: "worker-vest-lemon-local",
+        name: "فيست عمال ليموني (محلي)",
+        description: "فيست أمان عمال لون ليموني فسفوري عالي الوضوح، تصنيع محلي بجودة ممتازة وخامة متينة.",
+        price: 80,
+        image: "https://i.ibb.co/hxhfZXz0/Whats-App-Image-2026-10-11-at-3-09-23-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["لون ليموني عالي الوضوح", "خطوط عاكسة للضوء للأمان الليلي", "صناعة محلية عالية الجودة"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "worker-vest-lemon-imported",
+        name: "فيست عمال ليموني (مستورد)",
+        description: "فيست أمان عمال لون ليموني فسفوري عالي الوضوح، خامات مستوردة ممتازة وتصميم مريح للعمل الشاق.",
+        price: 90,
+        image: "https://i.ibb.co/hxhfZXz0/Whats-App-Image-2026-10-11-at-3-09-23-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامة مستوردة فائقة المتانة", "أشرطة فسفورية عاكسة متطورة", "سحاب أمامي عملي وقوي"],
+        badge: "مستورد",
+      },
+      {
+        id: "worker-vest-orange-local",
+        name: "فيست عمال برتقالي (محلي)",
+        description: "فيست أمان عمال لون برتقالي ناصع، خامات متينة وأشرطة عاكسة للضوء تصنيع محلي عالي الجودة.",
+        price: 80,
+        image: "https://i.ibb.co/cXKFMsb7/Whats-App-Image-2026-10-11-at-3-09-24-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["لون برتقالي فاقع عالي الرؤية", "خطوط عاكسة مزدوجة", "تصنيع محلي متين"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "worker-vest-orange-imported",
+        name: "فيست عمال برتقالي (مستورد)",
+        description: "فيست أمان عمال برتقالي مستورد عالي الكفاءة، مقاوم للظروف القاسية مع أشرطة عاكسة ممتازة.",
+        price: 90,
+        image: "https://i.ibb.co/cXKFMsb7/Whats-App-Image-2026-10-11-at-3-09-24-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامة مستوردة ممتازة", "عاكس ضوء فائق القوة", "مريح وسهل الارتداء"],
+        badge: "مستورد",
+      },
+      {
+        id: "worker-vest-black-local",
+        name: "فيست عمال أسود (محلي)",
+        description: "فيست عمال لون أسود بتصميم أنيق ومقاوم للأتربة والاتساخ مع خطوط عاكسة واضحة تصنيع محلي.",
+        price: 100,
+        image: "https://i.ibb.co/FLvDPndN/Whats-App-Image-2026-10-11-at-3-09-59-PM-2.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["لون أسود مميز وعملي", "أشرطة فسفورية عاكسة للأمان", "قماش متين عالي التحمل"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "worker-vest-black-imported",
+        name: "فيست عمال أسود (مستورد)",
+        description: "فيست عمال أسود مستورد عالي الجودة، يجمع بين المظهر المهني والأمان التام داخل الموقع.",
+        price: 120,
+        image: "https://i.ibb.co/FLvDPndN/Whats-App-Image-2026-10-11-at-3-09-59-PM-2.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامة مستوردة فاخرة", "أشرطة عاكسة متينة", "سحاب قوي وخياطة معززة"],
+        badge: "مستورد",
+      },
+      {
+        id: "worker-vest-blue-local",
+        name: "فيست عمال أزرق (محلي)",
+        description: "فيست أمان عمال باللون الأزرق الميداني الأنيق، تصنيع محلي متقن مع أشرطة فسفورية للرؤية.",
+        price: 100,
+        image: "https://i.ibb.co/ccQ8PXjb/Whats-App-Image-2026-10-11-at-3-09-59-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["لون أزرق عملي وجذاب", "عاكس إضاءة عريض", "خامة محلية عالية الجودة"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "worker-vest-blue-imported",
+        name: "فيست عمال أزرق (مستورد)",
+        description: "فيست أمان عمال أزرق مستورد بخامات ممتازة وتصميم احترافي يوفر الراحة الكاملة أثناء العمل.",
+        price: 120,
+        image: "https://i.ibb.co/ccQ8PXjb/Whats-App-Image-2026-10-11-at-3-09-59-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامات مستوردة فائقة الجودة", "عواكس متطورة للرؤية الليلية", "تهوية وراحة أثناء الحركة"],
+        badge: "مستورد",
+      },
+      {
+        id: "worker-vest-red-local",
+        name: "فيست عمال أحمر (محلي)",
+        description: "فيست عمال لون أحمر ناصع للتمييز السريع ولفرق السلامة والطوارئ تصنيع محلي متميز.",
+        price: 100,
+        image: "https://i.ibb.co/ns3w2ct8/Whats-App-Image-2026-10-11-at-3-09-59-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["لون أحمر فاقع لسهولة التمييز", "خطوط فسفورية لامعة", "خياطة متينة ومقاومة"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "worker-vest-red-imported",
+        name: "فيست عمال أحمر (مستورد)",
+        description: "فيست عمال أحمر مستورد عالي الجودة بتصميم متين يناسب مهام العمل الصعبة وإدارة المواقع.",
+        price: 120,
+        image: "https://i.ibb.co/ns3w2ct8/Whats-App-Image-2026-10-11-at-3-09-59-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامات مستوردة عالية التحمل", "أشرطة عاكسة متطورة", "سحاب مريح وعملي"],
+        badge: "مستورد",
+      },
+    ],
+  },
+  {
+    id: "supervisors",
+    title: "فيست مشرفين",
+    description: "سترات متميزة بجيوب متعددة لحفظ الدفاتر والأدوات وتسهيل مهام الإشراف والمتابعة.",
+    products: [
+      {
+        id: "sup-vest-lemon-local",
+        name: "فيست مشرفين ليموني (محلي)",
+        description: "فيست إشراف ميداني لون ليموني فسفوري مزود بجيوب عملية وأماكن مخصصة للأقلام والكروت تصنيع محلي.",
+        price: 140,
+        image: "https://i.ibb.co/ZpmnCmJq/Whats-App-Image-2026-10-11-at-3-10-27-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["جيوب أمامية متعددة وعميقة", "حامل بطاقة تعريفية", "قماش متين ولون عالي الوضوح"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "sup-vest-lemon-imported",
+        name: "فيست مشرفين ليموني (مستورد)",
+        description: "فيست مشرفين ليموني مستورد فاخر، جيوب متعددة وسحابات قوية مع عواكس ضوء ممتازة.",
+        price: 160,
+        image: "https://i.ibb.co/ZpmnCmJq/Whats-App-Image-2026-10-11-at-3-10-27-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامة مستوردة فاخرة", "جيوب مخصصة للراديو والأدوات", "أشرطة عاكسة عالية الجودة"],
+        badge: "مستورد",
+      },
+      {
+        id: "sup-vest-orange-local",
+        name: "فيست مشرفين برتقالي (محلي)",
+        description: "فيست إشراف لون برتقالي ناصع، مجهز بجيوب متعددة وحامل كارنيه تصنيع محلي ممتاز.",
+        price: 140,
+        image: "https://i.ibb.co/CszMnVCj/Whats-App-Image-2026-10-11-at-3-10-27-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["جيوب عملية ومريحة", "لون برتقالي فاقع واضح", "أشرطة عاكسة متينة"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "sup-vest-orange-imported",
+        name: "فيست مشرفين برتقالي (مستورد)",
+        description: "فيست إشراف برتقالي مستورد عالي الكفاءة، تصميم مريح وخامات فائقة التحمل بجيوب كاملة.",
+        price: 160,
+        image: "https://i.ibb.co/CszMnVCj/Whats-App-Image-2026-10-11-at-3-10-27-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامة مستوردة عالية الجودة", "تقسيمات جيوب ذكية وعملية", "خطوط عاكسة متطورة"],
+        badge: "مستورد",
+      },
+      {
+        id: "sup-vest-lemon-black-local",
+        name: "فيست مشرفين ليموني × أسود (محلي)",
+        description: "فيست إشراف أنيق يدمج بين الليموني الفسفوري والأسود لمظهر قيادي عملي وجيوب متعددة محلي.",
+        price: 130,
+        image: "https://i.ibb.co/Jjqq2XML/Whats-App-Image-2026-10-14-at-1-55-06-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["مزيج ليموني وأسود أنيق", "جيوب مخصصة للأجهزة والأقلام", "صناعة محلية متينة"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "sup-vest-lemon-black-imported",
+        name: "فيست مشرفين ليموني × أسود (مستورد)",
+        description: "فيست إشراف ليموني × أسود مستورد بجودة عالية، مظهر مميز يبرز طاقم الإشراف بالموقع.",
+        price: 150,
+        image: "https://i.ibb.co/Jjqq2XML/Whats-App-Image-2026-10-14-at-1-55-06-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامات مستوردة ممتازة", "أشرطة فسفورية متطورة", "سحابات متينة وعملية"],
+        badge: "مستورد",
+      },
+      {
+        id: "sup-vest-lemon-blue-local",
+        name: "فيست مشرفين ليموني × أزرق (محلي)",
+        description: "فيست إشراف ليموني مدمج مع الأزرق الداكن بتصميم عصري وجيوب تخزين ممتازة تصنيع محلي.",
+        price: 130,
+        image: "https://i.ibb.co/qL0cZFMW/Whats-App-Image-2026-10-14-at-1-55-06-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["ألوان متباينة عالية الوضوح", "جيوب إشراف متعددة", "خياطة محلية معززة"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "sup-vest-lemon-blue-imported",
+        name: "فيست مشرفين ليموني × أزرق (مستورد)",
+        description: "فيست مشرفين ليموني × أزرق مستورد فاخر، مناسب للمتابعة الميدانية والمهام الإشرافية الدقيقة.",
+        price: 150,
+        image: "https://i.ibb.co/qL0cZFMW/Whats-App-Image-2026-10-14-at-1-55-06-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامة مستوردة راقية", "جيوب كروت وأجهزة لاسلكية", "عواكس ليلية ممتازة"],
+        badge: "مستورد",
+      },
+      {
+        id: "sup-vest-lemon-orange-local",
+        name: "فيست مشرفين ليموني × برتقالي (محلي)",
+        description: "فيست إشراف بلونين فسفوريين عاليي الرؤية (ليموني وبرتقالي) مع جيوب كاملة تصنيع محلي.",
+        price: 130,
+        image: "https://i.ibb.co/p61yHtHW/Whats-App-Image-2026-10-14-at-1-55-06-PM-2.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["وضوح مضاعف بلونين فسفوريين", "جيوب متعددة الوظائف", "خامة محلية قوية"],
+        badge: "إنتاج محلي",
+      },
+      {
+        id: "sup-vest-lemon-orange-imported",
+        name: "فيست مشرفين ليموني × برتقالي (مستورد)",
+        description: "فيست إشراف ليموني × برتقالي مستورد عالي الجودة، يضمن أقصى معايير السلامة المهنية للمشرفين.",
+        price: 150,
+        image: "https://i.ibb.co/p61yHtHW/Whats-App-Image-2026-10-14-at-1-55-06-PM-2.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامات مستوردة متطورة", "رؤية فائقة بالنهار والليل", "سحاب قوي وخياطة متينة"],
+        badge: "مستورد",
+      },
+    ],
+  },
+  {
+    id: "engineers",
+    title: "فيست مهندسين",
+    description: "سترات احترافية فاخرة تجمع بين المظهر الهندسي الأنيق وأقصى درجات الأمان الميداني.",
+    products: [
+      {
+        id: "eng-vest-4ref-lemon-black-local",
+        name: "فيست مهندسين 4 عاكس ليموني × أسود (محلي)",
+        description: "فيست مهندسين تنفيذي مزود بأربعة خطوط عاكسة متطورة، قماش فاخر وجيوب واسعة للرسومات والأدوات.",
+        price: 170,
+        image: "https://i.ibb.co/ycqLFDJD/Whats-App-Image-2026-10-11-at-3-12-09-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["4 خطوط عاكسة متطورة", "مظهر هندسي تنفيذي فاخر", "جيوب مخصصة للمخططات والموبايل"],
+        badge: "4 عاكس",
+      },
+      {
+        id: "eng-vest-4ref-lemon-blue-local",
+        name: "فيست مهندسين 4 عاكس ليموني × أزرق (محلي)",
+        description: "فيست مهندسين 4 عاكس بتنسيق ألوان ليموني وأزرق داكن راقٍ، خامات متينة وجيوب متعددة محلي.",
+        price: 170,
+        image: "https://i.ibb.co/84Gc7fMy/Whats-App-Image-2026-10-11-at-3-12-09-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["4 خطوط عاكسة قوية", "قصة أنيقة ومريحة للمهندسين", "خامات متينة ومقاومة للحرارة"],
+        badge: "4 عاكس",
+      },
+      {
+        id: "eng-vest-4ref-lemon-orange-local",
+        name: "فيست مهندسين 4 عاكس ليموني × برتقالي (محلي)",
+        description: "فيست مهندسين 4 عاكس بلونين ناصعين لتوفير أعلى مستوى رؤية وأناقة في المواقع الكبرى.",
+        price: 170,
+        image: "https://i.ibb.co/C5KynwMt/Whats-App-Image-2026-10-11-at-3-12-09-PM-2.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["4 أشرطة عاكسة للضوء", "مزيج فسفوري فائق الوضوح", "خياطة مزدوجة معززة"],
+        badge: "4 عاكس",
+      },
+      {
+        id: "eng-vest-3m-lemon-black-local",
+        name: "فيست مهندسين ثري إم (3M) ليموني × أسود (محلي)",
+        description: "فيست مهندسين فاخر مزود بأشرطة 3M العاكسة الأصلية لتوفير بريق عاكس قياسي عالمي محلي.",
+        price: 200,
+        image: "https://i.ibb.co/HTJjPgsn/Whats-App-Image-2026-10-11-at-3-12-35-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["شريط عاكس أصلي 3M", "قماش عالي الكثافة والجودة", "جيوب تنظيمية احترافية"],
+        badge: "عاكس 3M محلي",
+      },
+      {
+        id: "eng-vest-3m-lemon-black-imported",
+        name: "فيست مهندسين ثري إم (3M) ليموني × أسود (مستورد)",
+        description: "فيست مهندسين تنفيذي مستورد بأعلى معايير الجودة العالمية مع شرائط 3M العاكسة الأصلية.",
+        price: 250,
+        image: "https://i.ibb.co/HTJjPgsn/Whats-App-Image-2026-10-11-at-3-12-35-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["شريط عاكس معتمد 3M", "خامات مستوردة بريميوم", "تفصيل ومظهر قيادي فاخر"],
+        badge: "عاكس 3M مستورد",
+      },
+      {
+        id: "eng-vest-3m-lemon-blue-local",
+        name: "فيست مهندسين ثري إم (3M) ليموني × أزرق (محلي)",
+        description: "فيست مهندسين بلونين ليموني وأزرق مع أشرطة 3M المعتمدة، تصنيع محلي متميز وعملي للغاية.",
+        price: 200,
+        image: "https://i.ibb.co/zkxZxDq/Whats-App-Image-2026-10-11-at-3-12-36-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["عواكس 3M فائقة التوهج", "قماش جبردين عالي التحمل", "حلقات لتعليق اللاسلكي والمفاتيح"],
+        badge: "عاكس 3M محلي",
+      },
+      {
+        id: "eng-vest-3m-lemon-blue-imported",
+        name: "فيست مهندسين ثري إم (3M) ليموني × أزرق (مستورد)",
+        description: "فيست مهندسين مستورد بريميوم بشرائط 3M ليموني × أزرق لضمان أعلى مستويات الأمان والأناقة.",
+        price: 250,
+        image: "https://i.ibb.co/zkxZxDq/Whats-App-Image-2026-10-11-at-3-12-36-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["تقنية عاكس 3M المتطورة", "خامة مستوردة مقاومة للتآكل", "راحة تامة في التحرك والمطابقة"],
+        badge: "عاكس 3M مستورد",
+      },
+      {
+        id: "eng-vest-3m-lemon-orange-local",
+        name: "فيست مهندسين ثري إم (3M) ليموني × برتقالي (محلي)",
+        description: "فيست مهندسين مزود بشرائط 3M الأصلية بلوني السلامة المعتمدين ليموني وبرتقالي تصنيع محلي.",
+        price: 200,
+        image: "https://i.ibb.co/PvkGXDPV/Whats-App-Image-2026-10-11-at-3-12-36-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["أشرطة عاكسة أصلية 3M", "مزيج لوني عالي الوضوح", "خياطة متينة وجيوب شاملة"],
+        badge: "عاكس 3M محلي",
+      },
+      {
+        id: "eng-vest-3m-lemon-orange-imported",
+        name: "فيست مهندسين ثري إم (3M) ليموني × برتقالي (مستورد)",
+        description: "فيست مهندسين تنفيذي مستورد بشرائط 3M، تصميم متقن يوفر الحماية والمظهر المهني المتألق.",
+        price: 250,
+        image: "https://i.ibb.co/PvkGXDPV/Whats-App-Image-2026-10-11-at-3-12-36-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["شريط عاكس 3M مستورد", "أعلى معايير الجودة التنفيذية", "متانة قصوى في البيئات القاسية"],
+        badge: "عاكس 3M مستورد",
+      },
+    ],
+  },
+  {
+    id: "helmets",
+    title: "خوذه",
+    description: "خوذات حماية للرأس مصممة لتحمل الصدمات وتوفير الحماية القصوى للأمان الميداني.",
+    products: [
+      {
+        id: "helmet-workers-white",
+        name: "خوذه عمال أبيض",
+        description: "خوذة أمان عمال لون أبيض، متينة ومقاومة للصدمات ومطابقة لمواصفات الأمان الميداني ومريحة للارتداء اليومي.",
+        price: 80,
+        image: "https://i.ibb.co/YFnvLy5h/Whats-App-Image-2026-10-11-at-3-13-12-PM-1.jpg",
+        sizes: ["مقاس موحد"],
+        features: ["مقاومة عالية للصدمات", "نظام تعليق داخلي لامتصاص الصدمات", "خفيفة ومريحة للاستخدام الطويل"],
+        badge: "عمال",
+      },
+      {
+        id: "helmet-workers-yellow",
+        name: "خوذه عمال أصفر",
+        description: "خوذة أمان عمال لون أصفر فاقع عالي الرؤية، توفر الحماية الميكانيكية للرأس في المواقع الإنشائية والصناعية.",
+        price: 80,
+        image: "https://i.ibb.co/nNZYDVFs/Whats-App-Image-2026-10-11-at-3-13-12-PM.jpg",
+        sizes: ["مقاس موحد"],
+        features: ["لون أصفر قياسي عالي الوضوح", "خامة قوية شديدة التحمل", "حزام تثبيت مريح وقابل للضبط"],
+        badge: "عمال",
+      },
+      {
+        id: "helmet-engineers-white-msa",
+        name: "خوذه مهندسين أبيض MSA",
+        description: "خوذة أمان مهندسين أبيض ماركة MSA الأصلية، خامات فائقة الجودة توفر أقصى درجات الحماية والأناقة الهندسية.",
+        price: 220,
+        image: "https://i.ibb.co/5b3fx0r/image.png",
+        sizes: ["مقاس موحد"],
+        features: ["ماركة MSA الأصلية", "تصميم هندسي متقدم عالي التحمل", "نظام ضبط قياس خلفي دقيق وسلس"],
+        badge: "MSA معتمدة",
+      },
+    ],
+  },
+];
 
-  useEffect(() => {
+export default function HomePage() {
+  const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [selectedSizes, setSelectedSizes] = useState<{ [productId: string]: string }>({});
+  const [quantities, setQuantities] = useState<{ [productId: string]: number }>({});
+  const [cart, setCart] = useState<CartItem[]>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("future_press_cart");
-      if (saved) {
-        setCart(JSON.parse(saved));
-      }
+      return saved ? JSON.parse(saved) : [];
     }
-    const now = new Date();
-    setOrderDate(
-      now.toLocaleDateString("ar-EG", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      })
-    );
-    setInvoiceNumber(`FP-${Math.floor(100000 + Math.random() * 900000)}`);
-  }, []);
+    return [];
+  });
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
-  const itemsTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const grandTotal = itemsTotal + shippingFee;
-
-  // دالة إنشاء رابط رسالة الواتساب وتجهيز تفاصيل الأوردر
-  const buildWhatsAppUrl = () => {
-    let itemsText = "";
-    cart.forEach((item, index) => {
-      itemsText += `\n${index + 1}- *${item.name}*\n   المقاس: ${item.size} | الكمية: ${item.quantity} | السعر: ${item.price * item.quantity} ج.م`;
-    });
-
-    const message = `*طلب جديد من موقع Future Press Company* 🔔
-----------------------------------
-📄 *رقم الفاتورة:* ${invoiceNumber}
-📅 *التاريخ:* ${orderDate}
-
-👤 *بيانات العميل:*
-• *الاسم:* ${formData.fullName}
-• *الهاتف:* ${formData.phone1} ${formData.phone2 ? `\n• *هاتف إضافي:* ${formData.phone2}` : ""}
-• *العنوان:* ${formData.address}
-${logoFile ? `• *لوجو الطباعة:* تم إرفاقه من العميل (${logoFile.name})` : "• *لوجو الطباعة:* لم يتم إرفاقه"}
-${receiptFile ? `• *إيصال التحويل:* تم إرفاقه (${receiptFile.name})` : "• *إيصال التحويل:* لم يتم إرفاقه"}
-
-📦 *تفاصيل المنتجات:*${itemsText}
-
-----------------------------------
-💰 *مجموع المنتجات:* ${itemsTotal} ج.م
-🚚 *مصاريف الشحن:* ${shippingFee} ج.م
-💵 *الإجمالي المطلوب:* ${grandTotal} ج.م
-----------------------------------
-برجاء تأكيد الطلب والبدء في التجهيز.`;
-
-    const encodedMessage = encodeURIComponent(message);
-    return `https://wa.me/201010625349?text=${encodedMessage}`;
+  const saveCart = (items: CartItem[]) => {
+    setCart(items);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("future_press_cart", JSON.stringify(items));
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.fullName || !formData.address || !formData.phone1) {
-      alert("يرجى ملء جميع الحقول المطلوبة");
-      return;
+  const handleSelectSize = (productId: string, size: string) => {
+    setSelectedSizes((prev) => ({ ...prev, [productId]: size }));
+  };
+
+  const handleQuantityChange = (productId: string, value: string) => {
+    const num = parseInt(value, 10);
+    setQuantities((prev) => ({
+      ...prev,
+      [productId]: isNaN(num) || num < 1 ? 1 : num,
+    }));
+  };
+
+  const addToCart = (product: Product) => {
+    const chosenSize = selectedSizes[product.id] || product.sizes[0] || "مقاس موحد";
+    const qtyToAdd = quantities[product.id] || 1;
+    const cartItemId = `${product.id}-${chosenSize}`;
+
+    const existingIndex = cart.findIndex((item) => item.id === cartItemId);
+    let updatedCart: CartItem[];
+
+    if (existingIndex > -1) {
+      updatedCart = [...cart];
+      updatedCart[existingIndex].quantity += qtyToAdd;
+    } else {
+      updatedCart = [
+        ...cart,
+        {
+          id: cartItemId,
+          productId: product.id,
+          name: product.name,
+          price: product.price,
+          size: chosenSize,
+          image: product.image,
+          quantity: qtyToAdd,
+        },
+      ];
     }
 
-    // إظهار الفاتورة أولاً
-    setIsSubmitted(true);
-
-    // توجيه العميل تلقائياً إلى محادثة الواتساب لإرسال تفاصيل طلبه
-    const waUrl = buildWhatsAppUrl();
-    window.open(waUrl, "_blank");
+    saveCart(updatedCart);
+    setIsCartOpen(true);
   };
 
-  const handlePrint = () => {
-    window.print();
+  const removeFromCart = (id: string) => {
+    saveCart(cart.filter((item) => item.id !== id));
   };
+
+  const totalItemsCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+  const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+  const displayedCategories =
+    activeCategory === "all"
+      ? CATEGORIES
+      : CATEGORIES.filter((category) => category.id === activeCategory);
 
   return (
-    <div className="min-h-screen bg-[#070d19] text-slate-100 py-10 px-4" dir="rtl">
-      <div className="max-w-4xl mx-auto space-y-8">
-        {/* زر الرجوع */}
-        {!isSubmitted && (
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-semibold"
-          >
-            <ArrowRight className="w-5 h-5" />
-            العودة للمتجر
-          </Link>
-        )}
+    <div className="min-h-screen bg-[#070d19] text-slate-100" dir="rtl">
+      {/* Header */}
+      <header className="border-b border-blue-900/40 sticky top-0 bg-[#0a1324]/90 backdrop-blur-md z-40">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-blue-500/40 shadow-md shrink-0">
+                <Image
+                  src="https://i.ibb.co/NdnYZ3Pp/Whats-App-Image-2026-10-14-at-5-53-58-AM.jpg"
+                  alt="Future Press Company Logo"
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+                Future Press Company
+              </h1>
+            </div>
 
-        {!isSubmitted ? (
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* 1. استعراض منتجات السلة */}
-            <div className="bg-[#0a1428] border border-blue-900/50 rounded-2xl p-6 shadow-xl">
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-                <FileText className="w-6 h-6 text-blue-400" />
-                المنتجات في سلة المشتريات
-              </h2>
-              {cart.length === 0 ? (
-                <div className="text-center py-6 text-slate-400">
-                  <p>لا توجد منتجات بالسلة حالياً.</p>
-                  <Link href="/" className="text-blue-400 underline mt-2 inline-block">
-                    تصفح المنتجات وأضف ما تحتاجه
-                  </Link>
+            <Button
+              variant="outline"
+              className="relative cursor-pointer flex items-center gap-2 border-blue-500/40 bg-blue-950/40 text-blue-200 hover:bg-blue-900/60 hover:text-white"
+              onClick={() => setIsCartOpen(true)}
+            >
+              <ShoppingCart className="w-5 h-5 text-blue-400" />
+              <span className="hidden sm:inline font-semibold">سلة المشتريات</span>
+              {totalItemsCount > 0 && (
+                <span className="bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                  {totalItemsCount}
+                </span>
+              )}
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* صورة عروض اليوم */}
+      <section className="container mx-auto px-4 pt-6">
+        <div className="relative w-full h-48 sm:h-72 md:h-96 rounded-2xl overflow-hidden border border-blue-900/50 shadow-2xl bg-[#0a1428]">
+          <Image
+            src="https://i.ibb.co/xK3CccpF/Whats-App-Image-2026-10-14-at-1-29-11-PM.jpg"
+            alt="عروض اليوم - Future Press Company"
+            fill
+            className="object-cover"
+            priority
+            unoptimized
+          />
+        </div>
+      </section>
+
+      {/* قائمة اختيار الأقسام */}
+      <section className="container mx-auto px-4 pt-8">
+        <div className="bg-[#0a1428]/80 border border-blue-900/50 rounded-2xl p-4 sm:p-6 shadow-xl">
+          <div className="flex items-center gap-2 mb-4 text-blue-400 font-bold text-lg">
+            <Layers className="w-5 h-5" />
+            <span>اختر القسم لعرض المنتجات:</span>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={() => setActiveCategory("all")}
+              className={`px-5 py-2.5 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 cursor-pointer border ${
+                activeCategory === "all"
+                  ? "bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-950"
+                  : "bg-[#081020] text-slate-300 border-blue-900 hover:bg-blue-950 hover:text-white"
+              }`}
+            >
+              كل الأقسام
+            </button>
+
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setActiveCategory(cat.id)}
+                className={`px-5 py-2.5 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 cursor-pointer border ${
+                  activeCategory === cat.id
+                    ? "bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-950"
+                    : "bg-[#081020] text-slate-300 border-blue-900 hover:bg-blue-950 hover:text-white"
+                }`}
+              >
+                {cat.title}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* عرض الأقسام والمنتجات */}
+      <main className="py-10">
+        <div className="container mx-auto px-4 space-y-16">
+          {displayedCategories.map((category) => (
+            <section
+              key={category.id}
+              id={category.id}
+              className="bg-[#0a1428]/60 border border-blue-900/40 rounded-3xl p-6 sm:p-10 shadow-2xl"
+            >
+              <div className="border-b border-blue-900/50 pb-6 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-3xl sm:text-4xl font-black text-white tracking-wide">
+                    {category.title}
+                  </h3>
+                  <p className="text-slate-400 text-base mt-2">{category.description}</p>
+                </div>
+                <span className="text-sm font-semibold bg-blue-950 px-4 py-2 rounded-full border border-blue-800 text-blue-300 w-fit">
+                  {category.products.length} {category.products.length === 1 ? "منتج متاح" : "منتجات متاحة"}
+                </span>
+              </div>
+
+              {category.products.length > 0 ? (
+                <div className="grid md:grid-cols-2 gap-8">
+                  {category.products.map((product) => {
+                    const currentSelectedSize = selectedSizes[product.id] || product.sizes[0] || "مقاس موحد";
+                    const currentQty = quantities[product.id] || 1;
+
+                    return (
+                      <div
+                        key={product.id}
+                        className="border border-blue-900/60 rounded-2xl overflow-hidden bg-[#0c1830] text-slate-100 flex flex-col sm:flex-row hover:border-blue-500/50 transition-all duration-300 shadow-lg"
+                      >
+                        <div className="relative sm:w-1/2 aspect-square bg-[#081020]">
+                          <Image
+                            src={product.image}
+                            alt={product.name}
+                            fill
+                            className="object-cover"
+                            unoptimized
+                          />
+                          {product.badge && (
+                            <div className="absolute top-3 right-3">
+                              <Badge className="bg-blue-600 text-white font-semibold">
+                                {product.badge}
+                              </Badge>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="p-6 sm:w-1/2 flex flex-col justify-between space-y-4">
+                          <div>
+                            <h4 className="text-xl font-bold mb-2 text-white">{product.name}</h4>
+                            <p className="text-sm text-slate-300 mb-4">{product.description}</p>
+
+                            {/* اختيار المقاس */}
+                            {product.sizes && product.sizes.length > 0 && (
+                              <div className="mb-4">
+                                <span className="text-xs font-semibold text-slate-400 block mb-2">
+                                  المقاس:
+                                </span>
+                                <div className="flex flex-wrap gap-2">
+                                  {product.sizes.map((size) => (
+                                    <button
+                                      key={size}
+                                      type="button"
+                                      onClick={() => handleSelectSize(product.id, size)}
+                                      className={`px-3 py-1.5 rounded-lg border text-sm font-semibold cursor-pointer ${
+                                        currentSelectedSize === size
+                                          ? "bg-blue-600 text-white border-blue-500 shadow-md"
+                                          : "bg-[#091428] text-slate-300 border-blue-900 hover:bg-blue-950"
+                                      }`}
+                                    >
+                                      {size}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* خانة كتابة العدد */}
+                            <div className="mb-4">
+                              <label className="text-xs font-semibold text-slate-400 block mb-2">
+                                اكتب العدد المطلوب:
+                              </label>
+                              <input
+                                type="number"
+                                min="1"
+                                value={currentQty}
+                                onChange={(e) => handleQuantityChange(product.id, e.target.value)}
+                                className="w-full bg-[#081020] border border-blue-900 rounded-lg px-3 py-2 text-white font-bold text-center focus:border-blue-500 focus:outline-none"
+                              />
+                            </div>
+
+                            {/* المميزات */}
+                            <ul className="text-xs space-y-1 text-slate-300">
+                              {product.features.map((feature, idx) => (
+                                <li key={idx} className="flex items-center gap-2">
+                                  <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                                  <span>{feature}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          <div className="pt-4 border-t border-blue-900/50">
+                            <div className="flex items-center justify-between mb-4">
+                              <span className="text-xs text-slate-400">سعر القطعة:</span>
+                              <span className="text-2xl font-black text-blue-400">
+                                {product.price} ج.م
+                              </span>
+                            </div>
+                            <Button
+                              onClick={() => addToCart(product)}
+                              className="w-full cursor-pointer bg-blue-600 hover:bg-blue-500 text-white font-bold py-5"
+                            >
+                              <ShoppingCart className="w-4 h-4 ml-2" />
+                              أضف ({currentQty}) إلى السلة
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               ) : (
-                <div className="divide-y divide-blue-900/40">
-                  {cart.map((item) => (
-                    <div key={item.id} className="py-3 flex justify-between items-center text-sm">
-                      <div>
-                        <p className="font-bold text-white">{item.name}</p>
-                        <p className="text-slate-400 text-xs">
-                          المقاس: <span className="text-blue-300 font-semibold">{item.size}</span> | الكمية: <span className="text-blue-300 font-semibold">{item.quantity}</span>
-                        </p>
-                      </div>
-                      <div className="text-left font-bold text-blue-400">
-                        {item.price * item.quantity} ج.م
-                      </div>
-                    </div>
-                  ))}
-                  <div className="pt-3 flex justify-between font-bold text-slate-300 text-sm">
-                    <span>رسوم الشحن والتوصيل:</span>
-                    <span>{shippingFee} ج.م</span>
-                  </div>
-                  <div className="pt-3 flex justify-between font-black text-lg text-white">
-                    <span>الإجمالي الكلي:</span>
-                    <span className="text-blue-400">{grandTotal} ج.م</span>
-                  </div>
+                <div className="py-12 text-center border border-dashed border-blue-900/70 rounded-2xl bg-[#081020]/50 text-slate-400">
+                  قريباً - سيتم توفير منتجات هذا القسم فور توفرها
                 </div>
               )}
-            </div>
+            </section>
+          ))}
+        </div>
+      </main>
 
-            {/* 2. بيانات العميل */}
-            <div className="bg-[#0a1428] border border-blue-900/50 rounded-2xl p-6 shadow-xl space-y-4">
-              <h2 className="text-2xl font-bold text-white mb-2">بيانات العميل والشحن</h2>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-slate-300">
-                    الاسم بالكامل *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.fullName}
-                    onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                    className="w-full bg-[#081020] border border-blue-900 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500"
-                    placeholder="اكتب اسمك ثلاثي أو رباعي"
-                  />
+      {/* سلة المشتريات الجانبية */}
+      {isCartOpen && (
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/70 backdrop-blur-sm">
+          <div className="w-full max-w-md bg-[#0a1428] text-slate-100 border-l border-blue-900/70 h-full p-6 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between pb-4 border-b border-blue-900/50">
+                <div className="flex items-center gap-2">
+                  <ShoppingCart className="w-5 h-5 text-blue-400" />
+                  <h3 className="text-lg font-bold text-white">سلة المشتريات</h3>
+                  <Badge className="bg-blue-600 text-white">{totalItemsCount}</Badge>
                 </div>
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-slate-300">
-                    رقم التليفون *
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    value={formData.phone1}
-                    onChange={(e) => setFormData({ ...formData, phone1: e.target.value })}
-                    className="w-full bg-[#081020] border border-blue-900 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500"
-                    placeholder="رقم الهاتف الأساسي"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-slate-300">
-                    رقم تليفون ثاني (اختياري)
-                  </label>
-                  <input
-                    type="tel"
-                    value={formData.phone2}
-                    onChange={(e) => setFormData({ ...formData, phone2: e.target.value })}
-                    className="w-full bg-[#081020] border border-blue-900 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500"
-                    placeholder="رقم هاتف إضافي للطوارئ"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-slate-300">
-                    لوجو الطباعة على الفيست
-                  </label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setLogoFile(e.target.files?.[0] || null)}
-                    className="w-full bg-[#081020] border border-blue-900 rounded-lg p-2.5 text-xs text-slate-400 file:ml-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-blue-600 file:text-white"
-                  />
-                  {logoFile && (
-                    <p className="text-xs text-emerald-400 mt-1">تم اختيار ملف الشعار: {logoFile.name}</p>
-                  )}
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-semibold mb-2 text-slate-300">
-                    العنوان بالتفصيل *
-                  </label>
-                  <textarea
-                    required
-                    rows={2}
-                    value={formData.address}
-                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                    className="w-full bg-[#081020] border border-blue-900 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500"
-                    placeholder="المحافظة، المدينة، اسم المنطقة، اسم الشارع، رقم العمارة والدور"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* 3. سداد الديبوزت بخلفيات الصور الكاملة */}
-            <div className="bg-[#0a1428] border border-blue-900/50 rounded-2xl p-6 shadow-xl space-y-4">
-              <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
-                <CreditCard className="w-6 h-6 text-blue-400" />
-                سداد ديبوزت (عربون تأكيد الطلب)
-              </h2>
-              <p className="text-sm text-slate-300">
-                يرجى تحويل مبلغ العربون لتأكيد أمر التوريد والبدء في التجهيز:
-              </p>
-              <div className="grid md:grid-cols-2 gap-4">
-                {/* كارت فودافون كاش مع الصورة في المربع بالكامل */}
-                <div className="relative overflow-hidden rounded-2xl border-2 border-red-600/50 min-h-[140px] p-5 flex flex-col justify-between shadow-xl group">
-                  <Image
-                    src="https://i.ibb.co/GQkKT0n4/da825f86efb52423c2785be6a2dd9124.jpg"
-                    alt="Vodafone Cash Background"
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    unoptimized
-                  />
-                  <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]" />
-
-                  <div className="relative z-10 flex justify-between items-center">
-                    <Badge className="bg-red-600 hover:bg-red-700 text-white font-bold px-3 py-1 text-xs shadow-md">
-                      Vodafone Cash
-                    </Badge>
-                    <span className="text-xs text-slate-200 font-semibold bg-black/40 px-2.5 py-1 rounded-full">
-                      تحويل كاش
-                    </span>
-                  </div>
-
-                  <div className="relative z-10 mt-3">
-                    <p className="text-2xl sm:text-3xl font-black text-white tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                      01010625349
-                    </p>
-                    <p className="text-xs text-slate-200 mt-1 font-medium drop-shadow-sm">
-                      تحويل كاش إلى هذا الرقم
-                    </p>
-                  </div>
-                </div>
-
-                {/* كارت إنستاباي مع الصورة في المربع بالكامل */}
-                <div className="relative overflow-hidden rounded-2xl border-2 border-purple-600/50 min-h-[140px] p-5 flex flex-col justify-between shadow-xl group">
-                  <Image
-                    src="https://i.ibb.co/rKx9kD0r/images.jpg"
-                    alt="InstaPay Background"
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    unoptimized
-                  />
-                  <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]" />
-
-                  <div className="relative z-10 flex justify-between items-center">
-                    <Badge className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-3 py-1 text-xs shadow-md">
-                      InstaPay
-                    </Badge>
-                    <span className="text-xs text-slate-200 font-semibold bg-black/40 px-2.5 py-1 rounded-full">
-                      تحويل فوري
-                    </span>
-                  </div>
-
-                  <div className="relative z-10 mt-3">
-                    <p className="text-2xl sm:text-3xl font-black text-white tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                      01144248804
-                    </p>
-                    <p className="text-xs text-slate-200 mt-1 font-medium drop-shadow-sm">
-                      تحويل فوري عبر تطبيق إنستاباي
-                    </p>
-                  </div>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsCartOpen(false)}
+                  className="p-1 rounded-md text-slate-400 hover:text-white"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
 
-              {/* رفع اسكرين التحويل */}
-              <div className="pt-2">
-                <label className="block text-sm font-semibold mb-2 text-slate-300">
-                  إرفاق اسكرين من التحويل
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => setReceiptFile(e.target.files?.[0] || null)}
-                  className="w-full bg-[#081020] border border-blue-900 rounded-lg p-2.5 text-xs text-slate-400 file:ml-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-blue-600 file:text-white"
-                />
-                {receiptFile && (
-                  <p className="text-xs text-emerald-400 mt-2">تم إرفاق إيصال التحويل: {receiptFile.name}</p>
+              <div className="overflow-y-auto max-h-[60vh] py-4 space-y-4">
+                {cart.length === 0 ? (
+                  <p className="text-center text-slate-500 py-10">سلة المشتريات فارغة</p>
+                ) : (
+                  cart.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between gap-4 p-3 bg-[#0d1a35] border border-blue-900/60 rounded-xl"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <h5 className="font-semibold text-sm truncate text-white">{item.name}</h5>
+                        <p className="text-xs text-slate-400">المقاس: {item.size}</p>
+                        <p className="text-xs text-slate-400">العدد: {item.quantity}</p>
+                        <p className="text-sm font-bold text-blue-400 mt-1">
+                          {item.price * item.quantity} ج.م
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeFromCart(item.id)}
+                        className="text-red-400 hover:bg-red-950/40 p-2 rounded cursor-pointer"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))
                 )}
               </div>
             </div>
 
-            <Button
-              type="submit"
-              disabled={cart.length === 0}
-              className="w-full py-6 text-lg font-bold bg-[#25D366] hover:bg-[#20ba59] text-white shadow-xl cursor-pointer flex items-center justify-center gap-2"
-            >
-              <MessageCircle className="w-6 h-6" />
-              تأكيد الطلب وإرساله عبر الواتساب
-            </Button>
-          </form>
-        ) : (
-          /* 4. تصميم الفاتورة الرسمي */
-          <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-[#0a1428] p-4 rounded-xl border border-blue-900 gap-4">
-              <div>
-                <h2 className="text-xl font-bold text-white">تم استلام طلبك بنجاح!</h2>
-                <p className="text-xs text-slate-400">يمكنك إرسال تفاصيل الطلب عبر الواتساب أو حفظ الفاتورة وطباعتها</p>
-              </div>
-              <div className="flex flex-wrap gap-2 w-full sm:w-auto">
-                <a
-                  href={buildWhatsAppUrl()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 sm:flex-none"
-                >
-                  <Button className="w-full bg-[#25D366] hover:bg-[#20ba59] text-white flex items-center justify-center gap-2 font-bold cursor-pointer">
-                    <MessageCircle className="w-4 h-4" />
-                    إرسال للواتساب
+            {cart.length > 0 && (
+              <div className="border-t border-blue-900/50 pt-4 space-y-4">
+                <div className="flex justify-between items-center text-lg font-bold">
+                  <span className="text-slate-300">الإجمالي:</span>
+                  <span className="text-blue-400 text-2xl font-black">{totalPrice} ج.م</span>
+                </div>
+                <Link href="/checkout" className="block w-full">
+                  <Button className="w-full text-base py-6 cursor-pointer bg-blue-600 hover:bg-blue-500 text-white font-bold">
+                    متابعة إتمام الطلب
+                    <ArrowLeft className="w-5 h-5 mr-2" />
                   </Button>
-                </a>
-                <Button
-                  onClick={handlePrint}
-                  className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center gap-2 font-bold cursor-pointer"
-                >
-                  <Download className="w-4 h-4" />
-                  تحميل / طباعة
-                </Button>
+                </Link>
               </div>
-            </div>
-
-            {/* قالب الفاتورة الرسمي */}
-            <div
-              id="invoice-print-area"
-              className="bg-white text-slate-900 p-8 sm:p-12 rounded-2xl shadow-2xl border border-slate-200"
-            >
-              {/* ترويسة الفاتورة */}
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-8 border-b-2 border-slate-900 gap-4">
-                <div className="flex items-center gap-4">
-                  <div className="relative w-16 h-16 rounded-full overflow-hidden border border-slate-300 shadow-sm shrink-0">
-                    <Image
-                      src="https://i.ibb.co/NdnYZ3Pp/Whats-App-Image-2026-10-14-at-5-53-58-AM.jpg"
-                      alt="Logo"
-                      fill
-                      className="object-cover"
-                      unoptimized
-                    />
-                  </div>
-                  <div>
-                    <h1 className="text-2xl font-black tracking-tight text-slate-900">
-                      Future Press Company
-                    </h1>
-                    <p className="text-xs text-slate-500">للطباعة وتوريدات الأمان الصناعي والمهني</p>
-                  </div>
-                </div>
-
-                <div className="text-left font-sans">
-                  <span className="text-3xl font-black text-slate-900 tracking-wider">INVOICE</span>
-                  <p className="text-xs font-bold text-slate-600 mt-1">رقم الفاتورة: {invoiceNumber}</p>
-                </div>
-              </div>
-
-              {/* بيانات الشركة والعميل */}
-              <div className="grid grid-cols-2 gap-6 py-6 border-b border-slate-200 text-sm">
-                <div>
-                  <h4 className="font-bold text-slate-900 mb-2">بيانات الشركة:</h4>
-                  <p className="text-slate-800 font-semibold">Future Press Company</p>
-                  <p className="text-slate-600 flex items-center gap-1 mt-1">
-                    <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                    القاهرة - حلوان
-                  </p>
-                  <p className="text-slate-600 flex items-center gap-1 mt-1">
-                    <Phone className="w-3.5 h-3.5 text-slate-400" />
-                    01010625349
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-slate-900 mb-2">فاتورة إلى (بيانات العميل):</h4>
-                  <p className="text-slate-800 font-semibold">{formData.fullName}</p>
-                  <p className="text-slate-600 flex items-center gap-1 mt-1">
-                    <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                    {formData.address}
-                  </p>
-                  <p className="text-slate-600 flex items-center gap-1 mt-1">
-                    <Phone className="w-3.5 h-3.5 text-slate-400" />
-                    {formData.phone1} {formData.phone2 ? ` - ${formData.phone2}` : ""}
-                  </p>
-                  <p className="text-slate-600 flex items-center gap-1 mt-1 text-xs">
-                    <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                    التاريخ: {orderDate}
-                  </p>
-                </div>
-              </div>
-
-              {/* جدول المنتجات وسعر كل منتج */}
-              <div className="py-6">
-                <table className="w-full text-right border-collapse">
-                  <thead>
-                    <tr className="border-b-2 border-slate-900 text-xs uppercase font-bold text-slate-700">
-                      <th className="py-3">المنتج / البيان</th>
-                      <th className="py-3 text-center">المقاس</th>
-                      <th className="py-3 text-center">الكمية</th>
-                      <th className="py-3 text-center">سعر الوحدة</th>
-                      <th className="py-3 text-left">الإجمالي</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-200 text-sm">
-                    {cart.map((item, idx) => (
-                      <tr key={idx}>
-                        <td className="py-3 font-medium text-slate-900">{item.name}</td>
-                        <td className="py-3 text-center text-slate-600">{item.size}</td>
-                        <td className="py-3 text-center text-slate-600">{item.quantity}</td>
-                        <td className="py-3 text-center text-slate-600">{item.price} ج.م</td>
-                        <td className="py-3 text-left font-bold text-slate-900">
-                          {item.price * item.quantity} ج.م
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* إجماليات الفاتورة ورسوم الشحن */}
-              <div className="border-t-2 border-slate-900 pt-4 flex justify-end">
-                <div className="w-72 space-y-2 text-sm">
-                  <div className="flex justify-between text-slate-600">
-                    <span>مجموع المنتجات:</span>
-                    <span>{itemsTotal} ج.م</span>
-                  </div>
-                  <div className="flex justify-between text-slate-600">
-                    <span>رسوم الشحن والتوصيل:</span>
-                    <span>{shippingFee} ج.م</span>
-                  </div>
-                  <div className="flex justify-between text-base font-black border-t-2 border-slate-900 pt-2 text-slate-900">
-                    <span>الإجمالي النهائي المطلوب:</span>
-                    <span>{grandTotal} ج.م</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* تذييل الفاتورة */}
-              <div className="mt-12 pt-6 border-t border-slate-200 text-center text-xs text-slate-500 space-y-1">
-                <p className="font-semibold text-slate-700">
-                  شكراً لتعاملكم مع Future Press Company
-                </p>
-                <p>سيقوم فريق العمل بالتواصل معكم هاتفياً لتأكيد الشحن والتوصيل ومراجعة تصميم الشعار.</p>
-              </div>
-            </div>
+            )}
           </div>
-        )}
+        </div>
+      )}
+
+      {/* زر سلة المشتريات العائم - أسفل اليمين */}
+      <div className="fixed bottom-6 right-6 z-40">
+        <button
+          type="button"
+          onClick={() => setIsCartOpen(true)}
+          className="relative w-14 h-14 rounded-full bg-blue-600 text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform cursor-pointer border-2 border-blue-400/40"
+          title="سلة المشتريات"
+        >
+          <ShoppingCart className="w-6 h-6" />
+          {totalItemsCount > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+              {totalItemsCount}
+            </span>
+          )}
+        </button>
+      </div>
+
+      {/* أزرار التواصل العائمة (واتساب، فيسبوك، إنستجرام) - أسفل اليسار */}
+      <div className="fixed bottom-6 left-6 z-40 flex flex-col gap-3">
+        {/* واتساب */}
+        <a
+          href="https://wa.me/201010625349"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-14 h-14 rounded-full bg-[#25D366] text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform cursor-pointer"
+          title="تواصل معنا عبر واتساب"
+        >
+          <MessageCircle className="w-7 h-7" />
+        </a>
+
+        {/* فيسبوك */}
+        <a
+          href="https://www.facebook.com/profile.php?id=61565194104813"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-14 h-14 rounded-full bg-[#1877F2] text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform cursor-pointer"
+          title="صفحتنا على فيسبوك"
+        >
+          <Facebook className="w-7 h-7" />
+        </a>
+
+        {/* إنستجرام */}
+        <a
+          href="https://instagram.com/future.press1?stkn=MTI1azk0dzZsMnp1dw%3D%3D"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform cursor-pointer"
+          title="تابعنا على إنستجرام"
+        >
+          <Instagram className="w-7 h-7" />
+        </a>
       </div>
     </div>
   );
