@@ -908,10 +908,11 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                 )}
               </div>
 
-              {/* بيانات العميل والشحن */}
+              {/* بيانات العميل والشحن بالترتيب الجديد */}
               <div className="bg-[#0a1428] border border-blue-900/50 rounded-2xl p-6 shadow-xl space-y-4">
                 <h2 className="text-2xl font-bold text-white mb-2">بيانات العميل والشحن</h2>
                 <div className="grid md:grid-cols-2 gap-4">
+                  {/* 1. الاسم بالكامل */}
                   <div>
                     <label className="block text-sm font-semibold mb-2 text-slate-300">
                       الاسم بالكامل *
@@ -926,7 +927,36 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                     />
                   </div>
 
-                  {/* قائمة المحافظات دون كتابة سعر الشحن بجانب الاسم */}
+                  {/* 2. رقم التليفون الأساسي بجانب الاسم */}
+                  <div>
+                    <label className="block text-sm font-semibold mb-2 text-slate-300">
+                      رقم التليفون *
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      value={formData.phone1}
+                      onChange={(e) => setFormData({ ...formData, phone1: e.target.value })}
+                      className="w-full bg-[#081020] border border-blue-900 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500"
+                      placeholder="رقم الهاتف الأساسي"
+                    />
+                  </div>
+
+                  {/* 3. رقم تليفون ثاني (اختياري) */}
+                  <div>
+                    <label className="block text-sm font-semibold mb-2 text-slate-300">
+                      رقم تليفون ثاني (اختياري)
+                    </label>
+                    <input
+                      type="tel"
+                      value={formData.phone2}
+                      onChange={(e) => setFormData({ ...formData, phone2: e.target.value })}
+                      className="w-full bg-[#081020] border border-blue-900 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500"
+                      placeholder="رقم هاتف إضافي للطوارئ"
+                    />
+                  </div>
+
+                  {/* 4. المحافظة بجانب رقم التليفون الإضافي */}
                   <div>
                     <label className="block text-sm font-semibold mb-2 text-slate-300">
                       المحافظة *
@@ -944,31 +974,22 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                     </select>
                   </div>
 
-                  <div>
+                  {/* 5. العنوان بالتفصيل */}
+                  <div className="md:col-span-2">
                     <label className="block text-sm font-semibold mb-2 text-slate-300">
-                      رقم التليفون *
+                      العنوان بالتفصيل *
                     </label>
-                    <input
-                      type="tel"
+                    <textarea
                       required
-                      value={formData.phone1}
-                      onChange={(e) => setFormData({ ...formData, phone1: e.target.value })}
+                      rows={2}
+                      value={formData.address}
+                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                       className="w-full bg-[#081020] border border-blue-900 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500"
-                      placeholder="رقم الهاتف الأساسي"
+                      placeholder="المدينة / المركز، اسم المنطقة، اسم الشارع، رقم العمارة والدور"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-semibold mb-2 text-slate-300">
-                      رقم تليفون ثاني (اختياري)
-                    </label>
-                    <input
-                      type="tel"
-                      value={formData.phone2}
-                      onChange={(e) => setFormData({ ...formData, phone2: e.target.value })}
-                      className="w-full bg-[#081020] border border-blue-900 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500"
-                      placeholder="رقم هاتف إضافي للطوارئ"
-                    />
-                  </div>
+
+                  {/* 6. لوجو الطباعة على الفيست */}
                   <div className="md:col-span-2">
                     <label className="block text-sm font-semibold mb-2 text-slate-300">
                       لوجو الطباعة على الفيست
@@ -982,19 +1003,6 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                     {logoFile && (
                       <p className="text-xs text-emerald-400 mt-1">تم اختيار ملف الشعار: {logoFile.name}</p>
                     )}
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-semibold mb-2 text-slate-300">
-                      العنوان بالتفصيل *
-                    </label>
-                    <textarea
-                      required
-                      rows={2}
-                      value={formData.address}
-                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                      className="w-full bg-[#081020] border border-blue-900 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500"
-                      placeholder="المدينة / المركز، اسم المنطقة، اسم الشارع، رقم العمارة والدور"
-                    />
                   </div>
                 </div>
               </div>
