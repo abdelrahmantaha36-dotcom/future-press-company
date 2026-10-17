@@ -411,7 +411,6 @@ export default function HomePage() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [view, setView] = useState<"store" | "checkout">("store");
 
-  // بيانات فورم إتمام الطلب
   const [formData, setFormData] = useState({
     fullName: "",
     address: "",
@@ -424,13 +423,13 @@ export default function HomePage() {
   const [orderDate, setOrderDate] = useState("");
   const [invoiceNumber, setInvoiceNumber] = useState("");
 
-  // حالات النسخ لرقمي فودافون كاش وإنستاباي
   const [copiedVodafone, setCopiedVodafone] = useState(false);
   const [copiedInstapay, setCopiedInstapay] = useState(false);
 
   const shippingFee = 50;
 
   useEffect(() => {
+    document.title = "Future Press Company";
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("future_press_cart");
       if (saved) {
@@ -511,7 +510,6 @@ export default function HomePage() {
   const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const grandTotal = totalPrice + shippingFee;
 
-  // دالة النسخ إلى الحافظة
   const handleCopy = (text: string, type: "vodafone" | "instapay") => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
       navigator.clipboard.writeText(text);
@@ -525,45 +523,68 @@ export default function HomePage() {
     }
   };
 
-  // تجهيز رابط الواتساب
-  const buildWhatsAppUrl = () => {
+  // نص رسالة الطلب
+  const generateOrderMessage = () => {
     let itemsText = "";
     cart.forEach((item, index) => {
-      itemsText += `\n${index + 1}- *${item.name}*\n   المقاس: ${item.size} | الكمية: ${item.quantity} | السعر: ${item.price * item.quantity} ج.م`;
+      itemsText += `\n${index + 1}- ${item.name} | المقاس: ${item.size} | الكمية: ${item.quantity} | السعر: ${item.price * item.quantity} ج.م`;
     });
 
-    const message = `*طلب جديد من موقع Future Press Company* 🔔
+    return `*طلب جديد من موقع Future Press Company* 🔔
 ----------------------------------
-📄 *رقم الفاتورة:* ${invoiceNumber}
-📅 *التاريخ:* ${orderDate}
+📄 رقم الفاتورة: ${invoiceNumber}
+📅 التاريخ: ${orderDate}
 
-👤 *بيانات العميل:*
-- *الاسم:* ${formData.fullName}
-- *الهاتف:* ${formData.phone1} ${formData.phone2 ? `\n• *هاتف إضافي:* ${formData.phone2}` : ""}
-- *العنوان:* ${formData.address}
-${logoFile ? `• *لوجو الطباعة:* تم إرفاقه (${logoFile.name})` : "• *لوجو الطباعة:* لم يتم إرفاقه"}
-${receiptFile ? `• *إيصال التحويل:* تم إرفاقه (${receiptFile.name})` : "• *إيصال التحويل:* لم يتم إرفاقه"}
+👤 بيانات العميل:
+• الاسم: ${formData.fullName}
+• الهاتف: ${formData.phone1} ${formData.phone2 ? `\n• هاتف إضافي: ${formData.phone2}` : ""}
+• العنوان: ${formData.address}
+${logoFile ? `• لوجو الطباعة: تم إرفاقه (${logoFile.name})` : "• لوجو الطباعة: لم يتم إرفاقه"}
+${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile.name})` : "• إيصال التحويل: لم يتم إرفاقه"}
 
-📦 *تفاصيل المنتجات:*${itemsText}
+📦 تفاصيل المنتجات:${itemsText}
 
 ----------------------------------
-💰 *مجموع المنتجات:* ${totalPrice} ج.م
-🚚 *مصاريف الشحن:* ${shippingFee} ج.م
-💵 *الإجمالي المطلوب:* ${grandTotal} ج.م
+💰 مجموع المنتجات: ${totalPrice} ج.م
+🚚 مصاريف الشحن: ${shippingFee} ج.م
+💵 الإجمالي المطلوب: ${grandTotal} ج.م
 ----------------------------------
 برجاء تأكيد الطلب والبدء في التجهيز.`;
+  };
 
+  // إرسال الإشعار التلقائي عبر بوت CallMeBot (Gus)
+  const sendGusBotNotification = async (msg: string) => {
+    try {
+      const apiKey = "6877639";
+      const phone = "201010625349";
+      const url = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${encodeURIComponent(msg)}&apikey=${apiKey}`;
+      await fetch(url, { mode: "no-cors" });
+    } catch {
+      // تجاهل أخطاء الشبكة لضمان عدم توقف واجهة المستخدم
+    }
+  };
+
+  const buildWhatsAppUrl = () => {
+    const message = generateOrderMessage();
     return `https://wa.me/201010625349?text=${encodeURIComponent(message)}`;
   };
 
-  const handleCheckoutSubmit = (e: React.FormEvent) => {
+  const handleCheckoutSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.fullName || !formData.address || !formData.phone1) {
       alert("يرجى ملء جميع الحقول الإلزامية");
       return;
     }
 
+    const orderMsg = generateOrderMessage();
+
+    // 1. إرسال الرسالة تلقائياً إلى واتسابك عن طريق Gus (CallMeBot)
+    await sendGusBotNotification(orderMsg);
+
+    // 2. إظهار الفاتورة
     setIsInvoiceReady(true);
+
+    // 3. فتح شات الواتساب العادي للعميل للتأكيد
     const waUrl = buildWhatsAppUrl();
     window.open(waUrl, "_blank");
   };
@@ -808,7 +829,7 @@ ${receiptFile ? `• *إيصال التحويل:* تم إرفاقه (${receiptFi
           </main>
         </>
       ) : (
-        /* شاشة إتمام الطلب والفاتورة المدمجة بالكامل */
+        /* شاشة إتمام الطلب والفاتورة المدمجة */
         <div className="max-w-4xl mx-auto py-10 px-4 space-y-8">
           <button
             type="button"
@@ -1059,7 +1080,7 @@ ${receiptFile ? `• *إيصال التحويل:* تم إرفاقه (${receiptFi
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-[#0a1428] p-4 rounded-xl border border-blue-900 gap-4">
                 <div>
                   <h2 className="text-xl font-bold text-white">تم استلام طلبك بنجاح!</h2>
-                  <p className="text-xs text-slate-400">يمكنك إرسال تفاصيل الطلب عبر الواتساب أو حفظ الفاتورة وطباعتها</p>
+                  <p className="text-xs text-slate-400">تم إرسال إشعار الطلب للبوت، ويمكنك أيضاً إرساله مباشرة من الواتساب أو طباعة الفاتورة</p>
                 </div>
                 <div className="flex flex-wrap gap-2 w-full sm:w-auto">
                   <a
