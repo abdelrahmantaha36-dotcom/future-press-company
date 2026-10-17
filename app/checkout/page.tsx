@@ -599,11 +599,6 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
     }
   };
 
-  const buildWhatsAppUrl = () => {
-    const message = generateOrderMessage();
-    return `https://wa.me/201010625349?text=${encodeURIComponent(message)}`;
-  };
-
   const handleCheckoutSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.fullName || !formData.address || !formData.phone1 || !formData.governorate) {
@@ -616,12 +611,8 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
     // 1. إرسال الرسالة تلقائياً إلى واتسابك عن طريق Gus (CallMeBot)
     await sendGusBotNotification(orderMsg);
 
-    // 2. إظهار الفاتورة
+    // 2. إظهار الفاتورة للعميل فقط دون تحويله إلى الواتساب
     setIsInvoiceReady(true);
-
-    // 3. فتح شات الواتساب العادي للعميل للتأكيد
-    const waUrl = buildWhatsAppUrl();
-    window.open(waUrl, "_blank");
   };
 
   const displayedCategories =
@@ -799,7 +790,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                                             currentSelectedSize === size
                                               ? "bg-blue-600 text-white border-blue-500 shadow-md"
                                               : "bg-[#091428] text-slate-300 border-blue-900 hover:bg-blue-950"
-                                          }`}
+                                            }`}
                                         >
                                           {size}
                                         </button>
@@ -1122,10 +1113,9 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
               <Button
                 type="submit"
                 disabled={cart.length === 0}
-                className="w-full py-6 text-lg font-bold bg-[#25D366] hover:bg-[#20ba59] text-white shadow-xl cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-6 text-lg font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-xl cursor-pointer flex items-center justify-center gap-2"
               >
-                <MessageCircle className="w-6 h-6" />
-                تأكيد الطلب وإرساله عبر الواتساب
+                تأكيد الطلب وعرض الفاتورة
               </Button>
             </form>
           ) : (
@@ -1134,26 +1124,15 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-[#0a1428] p-4 rounded-xl border border-blue-900 gap-4">
                 <div>
                   <h2 className="text-xl font-bold text-white">تم استلام طلبك بنجاح!</h2>
-                  <p className="text-xs text-slate-400">تم إرسال إشعار الطلب للبوت، ويمكنك أيضاً إرساله مباشرة من الواتساب أو طباعة الفاتورة</p>
+                  <p className="text-xs text-slate-400">تم تسجيل طلبك بنجاح، يمكنك الآن حفظ الفاتورة أو طباعتها</p>
                 </div>
                 <div className="flex flex-wrap gap-2 w-full sm:w-auto">
-                  <a
-                    href={buildWhatsAppUrl()}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 sm:flex-none"
-                  >
-                    <Button className="w-full bg-[#25D366] hover:bg-[#20ba59] text-white flex items-center justify-center gap-2 font-bold cursor-pointer">
-                      <MessageCircle className="w-4 h-4" />
-                      إرسال للواتساب
-                    </Button>
-                  </a>
                   <Button
                     onClick={() => window.print()}
-                    className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center gap-2 font-bold cursor-pointer"
+                    className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center gap-2 font-bold cursor-pointer"
                   >
                     <Download className="w-4 h-4" />
-                    تحميل / طباعة
+                    تحميل / طباعة الفاتورة
                   </Button>
                 </div>
               </div>
