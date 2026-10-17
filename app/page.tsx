@@ -6,12 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import {
   Check,
   ShoppingCart,
-  ShieldCheck,
   X,
   MessageCircle,
   Facebook,
   Instagram,
   ArrowLeft,
+  Layers,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -86,13 +86,14 @@ const CATEGORIES: Category[] = [
   },
   {
     id: "helmets",
-    title: "خوذات",
+    title: "خوذ",
     description: "خوذات حماية للرأس مصممة لتحمل الصدمات وتوفير الحماية القصوى للأمان الميداني.",
     products: [],
   },
 ];
 
 export default function HomePage() {
+  const [activeCategory, setActiveCategory] = useState<string>("all");
   const [selectedSizes, setSelectedSizes] = useState<{ [productId: string]: string }>({
     "worker-vest-local": "XL",
     "worker-vest-imported": "XL",
@@ -166,6 +167,12 @@ export default function HomePage() {
   const totalItemsCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
+  // تصفية الأقسام بناءً على القسم المختار
+  const displayedCategories =
+    activeCategory === "all"
+      ? CATEGORIES
+      : CATEGORIES.filter((category) => category.id === activeCategory);
+
   return (
     <div className="min-h-screen bg-[#070d19] text-slate-100" dir="rtl">
       {/* Header */}
@@ -204,23 +211,63 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-b from-[#0b1730] to-[#070d19] border-b border-blue-900/30 text-center px-4">
-        <Badge className="mb-4 bg-blue-900/60 text-blue-300 border border-blue-600/40 px-3 py-1">
-          تجهيزات أمان صناعي وميداني
-        </Badge>
-        <h2 className="text-3xl sm:text-5xl font-extrabold mb-4 text-white">
-          تجهيزات السلامة من <span className="text-blue-400">Future Press Company</span>
-        </h2>
-        <p className="text-slate-300 max-w-2xl mx-auto text-base sm:text-lg">
-          نوفر أحدث تجهيزات الأمان الميدانية مع إمكانية طباعة وتطريز الشعار الخاص بشركتكم.
-        </p>
+      {/* صورة عروض اليوم */}
+      <section className="container mx-auto px-4 pt-6">
+        <div className="relative w-full h-48 sm:h-72 md:h-96 rounded-2xl overflow-hidden border border-blue-900/50 shadow-2xl bg-[#0a1428]">
+          <Image
+            src="https://i.ibb.co/xK3CccpF/Whats-App-Image-2026-10-14-at-1-29-11-PM.jpg"
+            alt="عروض اليوم - Future Press Company"
+            fill
+            className="object-cover"
+            priority
+            unoptimized
+          />
+        </div>
       </section>
 
-      {/* Main Categories Section */}
-      <main className="py-16">
-        <div className="container mx-auto px-4 space-y-24">
-          {CATEGORIES.map((category) => (
+      {/* قائمة اختيار الأقسام التفاعلية في أول الصفحة فوق المنتجات */}
+      <section className="container mx-auto px-4 pt-8">
+        <div className="bg-[#0a1428]/80 border border-blue-900/50 rounded-2xl p-4 sm:p-6 shadow-xl">
+          <div className="flex items-center gap-2 mb-4 text-blue-400 font-bold text-lg">
+            <Layers className="w-5 h-5" />
+            <span>اختر القسم لعرض المنتجات:</span>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={() => setActiveCategory("all")}
+              className={`px-5 py-2.5 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 cursor-pointer border ${
+                activeCategory === "all"
+                  ? "bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-950"
+                  : "bg-[#081020] text-slate-300 border-blue-900 hover:bg-blue-950 hover:text-white"
+              }`}
+            >
+              كل الأقسام
+            </button>
+
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setActiveCategory(cat.id)}
+                className={`px-5 py-2.5 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 cursor-pointer border ${
+                  activeCategory === cat.id
+                    ? "bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-950"
+                    : "bg-[#081020] text-slate-300 border-blue-900 hover:bg-blue-950 hover:text-white"
+                }`}
+              >
+                {cat.title}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* عرض الأقسام والمنتجات */}
+      <main className="py-10">
+        <div className="container mx-auto px-4 space-y-16">
+          {displayedCategories.map((category) => (
             <section
               key={category.id}
               id={category.id}
@@ -341,7 +388,7 @@ export default function HomePage() {
                 </div>
               ) : (
                 <div className="py-12 text-center border border-dashed border-blue-900/70 rounded-2xl bg-[#081020]/50 text-slate-400">
-                  قريباً - سيتم توفير منتجات هذا القسم قريباً
+                  قريباً - سيتم توفير منتجات هذا القسم فور توفرها
                 </div>
               )}
             </section>
