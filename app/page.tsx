@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -407,6 +407,11 @@ export default function HomePage() {
     return [];
   });
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  // تحديث عنوان التبويب في المتصفح تلقائياً عند فتح الصفحة
+  useEffect(() => {
+    document.title = "Future Press Company";
+  }, []);
 
   const saveCart = (items: CartItem[]) => {
     setCart(items);
