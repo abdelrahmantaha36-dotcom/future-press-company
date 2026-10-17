@@ -358,9 +358,40 @@ const CATEGORIES: Category[] = [
   },
   {
     id: "helmets",
-    title: "خوذ",
+    title: "خوذه",
     description: "خوذات حماية للرأس مصممة لتحمل الصدمات وتوفير الحماية القصوى للأمان الميداني.",
-    products: [],
+    products: [
+      {
+        id: "helmet-workers-white",
+        name: "خوذه عمال أبيض",
+        description: "خوذة أمان عمال لون أبيض، متينة ومقاومة للصدمات ومطابقة لمواصفات الأمان الميداني ومريحة للارتداء اليومي.",
+        price: 80,
+        image: "https://i.ibb.co/YFnvLy5h/Whats-App-Image-2026-10-11-at-3-13-12-PM-1.jpg",
+        sizes: ["مقاس موحد"],
+        features: ["مقاومة عالية للصدمات", "نظام تعليق داخلي لامتصاص الصدمات", "خفيفة ومريحة للاستخدام الطويل"],
+        badge: "عمال",
+      },
+      {
+        id: "helmet-workers-yellow",
+        name: "خوذه عمال أصفر",
+        description: "خوذة أمان عمال لون أصفر فاقع عالي الرؤية، توفر الحماية الميكانيكية للرأس في المواقع الإنشائية والصناعية.",
+        price: 80,
+        image: "https://i.ibb.co/nNZYDVFs/Whats-App-Image-2026-10-11-at-3-13-12-PM.jpg",
+        sizes: ["مقاس موحد"],
+        features: ["لون أصفر قياسي عالي الوضوح", "خامة قوية شديدة التحمل", "حزام تثبيت مريح وقابل للضبط"],
+        badge: "عمال",
+      },
+      {
+        id: "helmet-engineers-white-msa",
+        name: "خوذه مهندسين أبيض MSA",
+        description: "خوذة أمان مهندسين أبيض ماركة MSA الأصلية، خامات فائقة الجودة توفر أقصى درجات الحماية والأناقة الهندسية.",
+        price: 220,
+        image: "https://i.ibb.co/5b3fx0r/image.png",
+        sizes: ["مقاس موحد"],
+        features: ["ماركة MSA الأصلية", "تصميم هندسي متقدم عالي التحمل", "نظام ضبط قياس خلفي دقيق وسلس"],
+        badge: "MSA معتمدة",
+      },
+    ],
   },
 ];
 
@@ -397,7 +428,7 @@ export default function HomePage() {
   };
 
   const addToCart = (product: Product) => {
-    const chosenSize = selectedSizes[product.id] || product.sizes[0] || "XL";
+    const chosenSize = selectedSizes[product.id] || product.sizes[0] || "مقاس موحد";
     const qtyToAdd = quantities[product.id] || 1;
     const cartItemId = `${product.id}-${chosenSize}`;
 
@@ -554,7 +585,7 @@ export default function HomePage() {
               {category.products.length > 0 ? (
                 <div className="grid md:grid-cols-2 gap-8">
                   {category.products.map((product) => {
-                    const currentSelectedSize = selectedSizes[product.id] || product.sizes[0] || "XL";
+                    const currentSelectedSize = selectedSizes[product.id] || product.sizes[0] || "مقاس موحد";
                     const currentQty = quantities[product.id] || 1;
 
                     return (
@@ -590,7 +621,7 @@ export default function HomePage() {
                                 <span className="text-xs font-semibold text-slate-400 block mb-2">
                                   المقاس:
                                 </span>
-                                <div className="flex gap-2">
+                                <div className="flex flex-wrap gap-2">
                                   {product.sizes.map((size) => (
                                     <button
                                       key={size}
