@@ -52,6 +52,37 @@ interface Category {
   products: Product[];
 }
 
+// قائمة المحافظات ورسوم الشحن لكل منها
+const GOVERNORATES = [
+  { name: "القاهرة", fee: 100 },
+  { name: "الجيزة", fee: 100 },
+  { name: "الإسكندرية", fee: 100 },
+  { name: "القليوبية", fee: 100 },
+  { name: "الشرقية", fee: 100 },
+  { name: "الدقهلية", fee: 100 },
+  { name: "البحيرة", fee: 100 },
+  { name: "الغربية", fee: 100 },
+  { name: "المنوفية", fee: 100 },
+  { name: "دمياط", fee: 100 },
+  { name: "كفر الشيخ", fee: 100 },
+  { name: "الإسماعيلية", fee: 100 },
+  { name: "السويس", fee: 100 },
+  { name: "بورسعيد", fee: 100 },
+  { name: "الفيوم", fee: 130 },
+  { name: "بني سويف", fee: 130 },
+  { name: "المنيا", fee: 130 },
+  { name: "أسيوط", fee: 130 },
+  { name: "سوهاج", fee: 130 },
+  { name: "قنا", fee: 130 },
+  { name: "الأقصر", fee: 130 },
+  { name: "أسوان", fee: 130 },
+  { name: "مطروح", fee: 130 },
+  { name: "الوادي الجديد", fee: 130 },
+  { name: "البحر الأحمر", fee: 130 },
+  { name: "جنوب سيناء", fee: 130 },
+  { name: "شمال سيناء", fee: 130 },
+];
+
 const CATEGORIES: Category[] = [
   {
     id: "workers",
@@ -413,6 +444,7 @@ export default function HomePage() {
 
   const [formData, setFormData] = useState({
     fullName: "",
+    governorate: "القاهرة",
     address: "",
     phone1: "",
     phone2: "",
@@ -426,7 +458,9 @@ export default function HomePage() {
   const [copiedVodafone, setCopiedVodafone] = useState(false);
   const [copiedInstapay, setCopiedInstapay] = useState(false);
 
-  const shippingFee = 50;
+  // حساب مصاريف الشحن ديناميكياً بناءً على المحافظة المختارة
+  const selectedGov = GOVERNORATES.find((g) => g.name === formData.governorate);
+  const shippingFee = selectedGov ? selectedGov.fee : 100;
 
   useEffect(() => {
     document.title = "Future Press Company";
@@ -523,7 +557,7 @@ export default function HomePage() {
     }
   };
 
-  // نص رسالة الطلب
+  // نص رسالة الطلب متضمناً المحافظة ومصاريف الشحن الخاصة بها
   const generateOrderMessage = () => {
     let itemsText = "";
     cart.forEach((item, index) => {
@@ -537,6 +571,7 @@ export default function HomePage() {
 
 👤 بيانات العميل:
 • الاسم: ${formData.fullName}
+• المحافظة: ${formData.governorate}
 • الهاتف: ${formData.phone1} ${formData.phone2 ? `\n• هاتف إضافي: ${formData.phone2}` : ""}
 • العنوان: ${formData.address}
 ${logoFile ? `• لوجو الطباعة: تم إرفاقه (${logoFile.name})` : "• لوجو الطباعة: لم يتم إرفاقه"}
@@ -546,7 +581,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
 
 ----------------------------------
 💰 مجموع المنتجات: ${totalPrice} ج.م
-🚚 مصاريف الشحن: ${shippingFee} ج.م
+🚚 مصاريف شحن (${formData.governorate}): ${shippingFee} ج.م
 💵 الإجمالي المطلوب: ${grandTotal} ج.م
 ----------------------------------
 برجاء تأكيد الطلب والبدء في التجهيز.`;
@@ -571,8 +606,8 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
 
   const handleCheckoutSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.fullName || !formData.address || !formData.phone1) {
-      alert("يرجى ملء جميع الحقول الإلزامية");
+    if (!formData.fullName || !formData.address || !formData.phone1 || !formData.governorate) {
+      alert("يرجى ملء جميع الحقول الإلزامية واختيار المحافظة");
       return;
     }
 
@@ -871,7 +906,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                       </div>
                     ))}
                     <div className="pt-3 flex justify-between font-bold text-slate-300 text-sm">
-                      <span>رسوم الشحن والتوصيل:</span>
+                      <span>رسوم الشحن والتوصيل ({formData.governorate}):</span>
                       <span>{shippingFee} ج.م</span>
                     </div>
                     <div className="pt-3 flex justify-between font-black text-lg text-white">
@@ -882,7 +917,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                 )}
               </div>
 
-              {/* بيانات العميل */}
+              {/* بيانات العميل والشحن */}
               <div className="bg-[#0a1428] border border-blue-900/50 rounded-2xl p-6 shadow-xl space-y-4">
                 <h2 className="text-2xl font-bold text-white mb-2">بيانات العميل والشحن</h2>
                 <div className="grid md:grid-cols-2 gap-4">
@@ -899,6 +934,25 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                       placeholder="اكتب اسمك ثلاثي أو رباعي"
                     />
                   </div>
+
+                  {/* قائمة المحافظات وسعر شحنها */}
+                  <div>
+                    <label className="block text-sm font-semibold mb-2 text-slate-300">
+                      المحافظة * (يحدد سعر الشحن تلقائياً)
+                    </label>
+                    <select
+                      value={formData.governorate}
+                      onChange={(e) => setFormData({ ...formData, governorate: e.target.value })}
+                      className="w-full bg-[#081020] border border-blue-900 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500 font-semibold"
+                    >
+                      {GOVERNORATES.map((gov) => (
+                        <option key={gov.name} value={gov.name} className="bg-[#0a1428] text-white">
+                          {gov.name} - (شحن: {gov.fee} ج.م)
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
                   <div>
                     <label className="block text-sm font-semibold mb-2 text-slate-300">
                       رقم التليفون *
@@ -924,7 +978,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                       placeholder="رقم هاتف إضافي للطوارئ"
                     />
                   </div>
-                  <div>
+                  <div className="md:col-span-2">
                     <label className="block text-sm font-semibold mb-2 text-slate-300">
                       لوجو الطباعة على الفيست
                     </label>
@@ -948,7 +1002,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                       value={formData.address}
                       onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                       className="w-full bg-[#081020] border border-blue-900 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500"
-                      placeholder="المحافظة، المدينة، اسم المنطقة، اسم الشارع، رقم العمارة والدور"
+                      placeholder="المدينة / المركز، اسم المنطقة، اسم الشارع، رقم العمارة والدور"
                     />
                   </div>
                 </div>
@@ -1150,9 +1204,9 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                   <div>
                     <h4 className="font-bold text-slate-900 mb-2">فاتورة إلى (بيانات العميل):</h4>
                     <p className="text-slate-800 font-semibold">{formData.fullName}</p>
-                    <p className="text-slate-600 flex items-center gap-1 mt-1">
+                    <p className="text-slate-600 flex items-center gap-1 mt-1 font-medium text-xs">
                       <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                      {formData.address}
+                      المحافظة: {formData.governorate} | {formData.address}
                     </p>
                     <p className="text-slate-600 flex items-center gap-1 mt-1">
                       <Phone className="w-3.5 h-3.5 text-slate-400" />
@@ -1199,7 +1253,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                       <span>{totalPrice} ج.م</span>
                     </div>
                     <div className="flex justify-between text-slate-600">
-                      <span>رسوم الشحن والتوصيل:</span>
+                      <span>رسوم الشحن والتوصيل ({formData.governorate}):</span>
                       <span>{shippingFee} ج.م</span>
                     </div>
                     <div className="flex justify-between text-base font-black border-t-2 border-slate-900 pt-2 text-slate-900">
