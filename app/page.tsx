@@ -73,6 +73,12 @@ const LEMON_WORKER_LOCAL_IMG = "https://i.ibb.co/8gKN8hzP/file-0000000094448210a
 
 const HERO_SHOWCASE_IMAGES = [
   {
+    url: "https://i.ibb.co/S7PprHnh/Whats-App-Image-2026-10-18-at-10-13-20-PM-3.jpg",
+    title: "فيست عمال ليموني مطبوع (الصدر)",
+    badge: "طباعة حية معتمدة",
+    category: "عمال",
+  },
+  {
     url: "https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg",
     title: "فيست عمال ليموني مطبوع (الظهر)",
     badge: "طباعة الظهر عريضة",
@@ -474,7 +480,7 @@ const CATEGORIES: Category[] = [
         id: "eng-vest-3m-lemon-blue-local",
         name: "فيست مهندسين بلونين ليموني وأزرق مع أشرطة 3M المعتمدة، تصنيع محلي متميز وعملي للغاية.",
         price: 200,
-        image: "https://i.ibb.co/zkxZxDq/Whats-App-Image-2026-10-11-at-3-12-36-PM.jpg",
+        image: "https://i.ibb.co/zkxZxDq/Whats-App-Image-2026-10-11-at-3-12-36-PM-1.jpg",
         sizes: ["XL", "2XL", "3XL"],
         features: ["عواكس 3M فائقة التوهج", "قماش جبردين عالي التحمل", "حلقات لتعليق اللاسلكي والمفاتيح"],
         badge: "عاكس 3M محلي",
@@ -509,7 +515,7 @@ const CATEGORIES: Category[] = [
         id: "eng-vest-3m-lemon-blue-imported",
         name: "فيست مهندسين مستورد بريميوم بشرائط 3M ليموني × أزرق لضمان أعلى مستويات الأمان والأناقة.",
         price: 250,
-        image: "https://i.ibb.co/zkxZxDq/Whats-App-Image-2026-10-11-at-3-12-36-PM.jpg",
+        image: "https://i.ibb.co/zkxZxDq/Whats-App-Image-2026-10-11-at-3-12-36-PM-1.jpg",
         sizes: ["XL", "2XL", "3XL"],
         features: ["تقنية عاكس 3M المتطورة", "خامة مستوردة مقاومة للتآكل", "راحة تامة في التحرك والمطابقة"],
         badge: "عاكس 3M مستورد",
@@ -1355,7 +1361,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-6 gap-1.5 mt-3">
+                  <div className="grid grid-cols-7 gap-1.5 mt-3">
                     {HERO_SHOWCASE_IMAGES.map((img, idx) => (
                       <button
                         key={idx}
@@ -1402,7 +1408,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                 </a>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
                 {HERO_SHOWCASE_IMAGES.map((item, index) => (
                   <div
                     key={index}
