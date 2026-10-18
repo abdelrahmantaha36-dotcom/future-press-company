@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -25,7 +25,13 @@ import {
   ShieldCheck,
   Truck,
   Printer,
-  ChevronDown,
+  Search,
+  SlidersHorizontal,
+  Star,
+  Building2,
+  Tag,
+  Eye,
+  Sparkles,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -398,8 +404,7 @@ const CATEGORIES: Category[] = [
       },
       {
         id: "eng-vest-3m-lemon-blue-local",
-        name: "فيست مهندسين ثري إم (3M) ليموني × أزرق (محلي)",
-        description: "فيست مهندسين بلونين ليموني وأزرق مع أشرطة 3M المعتمدة، تصنيع محلي متميز وعملي للغاية.",
+        name: "فيست مهندسين بلونين ليموني وأزرق مع أشرطة 3M المعتمدة، تصنيع محلي متميز وعملي للغاية.",
         price: 200,
         image: "https://i.ibb.co/zkxZxDq/Whats-App-Image-2026-10-11-at-3-12-36-PM.jpg",
         sizes: ["XL", "2XL", "3XL"],
@@ -409,8 +414,7 @@ const CATEGORIES: Category[] = [
       },
       {
         id: "eng-vest-3m-lemon-orange-local",
-        name: "فيست مهندسين ثري إم (3M) ليموني × برتقالي (محلي)",
-        description: "فيست مهندسين مزود بشرائط 3M الأصلية بلوني السلامة المعتمدين ليموني وبرتقالي تصنيع محلي.",
+        name: "فيست مهندسين مزود بشرائط 3M الأصلية بلوني السلامة المعتمدين ليموني وبرتقالي تصنيع محلي.",
         price: 200,
         image: "https://i.ibb.co/PvkGXDPV/Whats-App-Image-2026-10-11-at-3-12-36-PM-1.jpg",
         sizes: ["XL", "2XL", "3XL"],
@@ -431,8 +435,7 @@ const CATEGORIES: Category[] = [
       },
       {
         id: "eng-vest-3m-lemon-blue-imported",
-        name: "فيست مهندسين ثري إم (3M) ليموني × أزرق (مستورد)",
-        description: "فيست مهندسين مستورد بريميوم بشرائط 3M ليموني × أزرق لضمان أعلى مستويات الأمان والأناقة.",
+        name: "فيست مهندسين مستورد بريميوم بشرائط 3M ليموني × أزرق لضمان أعلى مستويات الأمان والأناقة.",
         price: 250,
         image: "https://i.ibb.co/zkxZxDq/Whats-App-Image-2026-10-11-at-3-12-36-PM.jpg",
         sizes: ["XL", "2XL", "3XL"],
@@ -499,6 +502,13 @@ export default function HomePage() {
     engineers: "all",
   });
 
+  // ميزات البحث والفرز المتقدم
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<"default" | "price-asc" | "price-desc">("default");
+
+  // إشعار الإضافة السريعة (Toast notification)
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
   const [selectedSizes, setSelectedSizes] = useState<{ [productId: string]: string }>({});
   const [quantities, setQuantities] = useState<{ [productId: string]: number }>({});
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -513,6 +523,7 @@ export default function HomePage() {
     phone2: "",
   });
   const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(null);
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [isInvoiceReady, setIsInvoiceReady] = useState(false);
   const [orderDate, setOrderDate] = useState("");
@@ -548,6 +559,24 @@ export default function HomePage() {
     );
     setInvoiceNumber(`FP-${Math.floor(100000 + Math.random() * 900000)}`);
   }, []);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 3200);
+  };
+
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setLogoFile(file);
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setLogoPreviewUrl(url);
+    } else {
+      setLogoPreviewUrl(null);
+    }
+  };
 
   const saveCart = (items: CartItem[]) => {
     setCart(items);
@@ -595,15 +624,25 @@ export default function HomePage() {
     }
 
     saveCart(updatedCart);
-    setIsCartOpen(true);
+    showToast(`تمت إضافة "${product.name}" بنجاح إلى السلة`);
   };
 
   const removeFromCart = (id: string) => {
     saveCart(cart.filter((item) => item.id !== id));
   };
 
+  // حاسبة خصم الكميات الذكية (Tiered Bulk Discount)
   const totalItemsCount = cart.reduce((acc, item) => acc + item.quantity, 0);
-  const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const rawTotalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+  const discountRate = useMemo(() => {
+    if (totalItemsCount >= 50) return 0.15; // 15% خصم
+    if (totalItemsCount >= 10) return 0.05; // 5% خصم
+    return 0;
+  }, [totalItemsCount]);
+
+  const discountAmount = Math.round(rawTotalPrice * discountRate);
+  const totalPrice = rawTotalPrice - discountAmount;
   const grandTotal = totalPrice + shippingFee;
 
   const handleCopy = (text: string, type: "vodafone" | "instapay") => {
@@ -643,7 +682,8 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
 📦 تفاصيل المنتجات:${itemsText}
 
 ----------------------------------
-💰 مجموع المنتجات: ${totalPrice} ج.م
+💰 إجمالي المنتجات قبل الخصم: ${rawTotalPrice} ج.م
+${discountAmount > 0 ? `🎁 خصم الكميات (${discountRate * 100}%): -${discountAmount} ج.م\n` : ""}💰 الإجمالي بعد الخصم: ${totalPrice} ج.م
 🚚 مصاريف شحن (${formData.governorate}): ${shippingFee} ج.م
 💵 الإجمالي المطلوب: ${grandTotal} ج.م
 ----------------------------------
@@ -673,14 +713,43 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
     setIsInvoiceReady(true);
   };
 
-  const displayedCategories =
+  // فلترة وترتيب المنتجات
+  const filterAndSortProducts = (products: Product[]) => {
+    let result = products.filter((p) => {
+      const q = searchQuery.toLowerCase().trim();
+      if (!q) return true;
+      return (
+        p.name.toLowerCase().includes(q) ||
+        p.description.toLowerCase().includes(q) ||
+        p.features.some((f) => f.toLowerCase().includes(q))
+      );
+    });
+
+    if (sortBy === "price-asc") {
+      result.sort((a, b) => a.price - b.price);
+    } else if (sortBy === "price-desc") {
+      result.sort((a, b) => b.price - a.price);
+    }
+
+    return result;
+  };
+
+  const displayedCategories = (
     activeCategory === "all"
       ? CATEGORIES
-      : CATEGORIES.filter((category) => category.id === activeCategory);
+      : CATEGORIES.filter((category) => category.id === activeCategory)
+  ).map((cat) => ({
+    ...cat,
+    products: filterAndSortProducts(cat.products),
+  })).filter((cat) => cat.products.length > 0 || !searchQuery);
 
   const renderProductCard = (product: Product, isHelmet: boolean) => {
     const currentSelectedSize = selectedSizes[product.id] || product.sizes[0] || "مقاس موحد";
     const currentQty = quantities[product.id] || 1;
+
+    // حساب الخصم التقديري للكمية
+    const potentialDiscount = currentQty >= 50 ? 0.15 : currentQty >= 10 ? 0.05 : 0;
+    const finalItemPrice = Math.round(product.price * (1 - potentialDiscount));
 
     return (
       <div
@@ -742,9 +811,19 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
               </div>
             )}
 
-            {/* خانة كتابة العدد */}
+            {/* خانة كتابة العدد + تنبيه خصم الكمية */}
             <div className="mt-4">
-              <label className="text-xs font-semibold text-slate-300 block mb-1.5">الكمية:</label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-xs font-semibold text-slate-300">الكمية:</label>
+                {potentialDiscount > 0 ? (
+                  <span className="text-[11px] font-bold text-emerald-400 flex items-center gap-1">
+                    <Sparkles className="w-3 h-3" />
+                    خصم {potentialDiscount * 100}% مطبق
+                  </span>
+                ) : (
+                  <span className="text-[10px] text-slate-400">10+ قطع لخصم 5%</span>
+                )}
+              </div>
               <div className="flex items-center gap-2 max-w-[140px]">
                 <button
                   type="button"
@@ -780,6 +859,15 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
               </div>
             </div>
 
+            {/* جدول أسعار الكميات المصغر */}
+            {!product.isOffer && (
+              <div className="mt-3 py-1.5 px-2.5 rounded-lg bg-slate-950/70 border border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
+                <span>1-9 قطع: <strong className="text-slate-200">{product.price} ج.م</strong></span>
+                <span>10+: <strong className="text-emerald-400">{Math.round(product.price * 0.95)} ج.م</strong></span>
+                <span>50+: <strong className="text-emerald-400">{Math.round(product.price * 0.85)} ج.م</strong></span>
+              </div>
+            )}
+
             {/* المميزات */}
             <ul className="mt-4 space-y-1.5">
               {product.features.map((feature, idx) => (
@@ -794,11 +882,14 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
           <div className="pt-4 border-t border-slate-800 space-y-3">
             <div className="flex items-baseline justify-between">
               <span className="text-xs text-slate-400">
-                {product.isOffer ? "إجمالي العرض:" : "السعر للقطعة:"}
+                {product.isOffer ? "إجمالي العرض:" : "السعر المقدر للقطعة:"}
               </span>
-              <div className="text-left">
-                <span className="text-2xl font-black text-blue-400">{product.price}</span>
-                <span className="text-xs text-slate-400 mr-1">ج.م</span>
+              <div className="text-left flex items-baseline gap-1.5">
+                {potentialDiscount > 0 && (
+                  <span className="text-xs line-through text-slate-500">{product.price} ج.م</span>
+                )}
+                <span className="text-2xl font-black text-blue-400">{finalItemPrice}</span>
+                <span className="text-xs text-slate-400">ج.م</span>
               </div>
             </div>
 
@@ -811,7 +902,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
 
             <Button
               onClick={() => addToCart(product)}
-              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20"
+              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20 active:scale-95"
             >
               <ShoppingCart className="w-4 h-4" />
               أضف ({currentQty}) إلى السلة
@@ -823,7 +914,15 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
   };
 
   return (
-    <div className="min-h-screen bg-[#090d16] text-slate-100 antialiased selection:bg-blue-500 selection:text-white" dir="rtl">
+    <div className="min-h-screen bg-[#090d16] text-slate-100 antialiased selection:bg-blue-500 selection:text-white pb-16 md:pb-0" dir="rtl">
+      {/* Toast Notification العائم */}
+      {toastMessage && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-blue-600 text-white px-5 py-2.5 rounded-full shadow-2xl flex items-center gap-2 text-xs sm:text-sm font-bold animate-in fade-in slide-in-from-top-4 duration-300">
+          <Check className="w-4 h-4 text-emerald-300" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
       {/* 1. Header محسّن وعصري */}
       <header className="sticky top-0 z-40 bg-[#090d16]/90 backdrop-blur-md border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
@@ -893,12 +992,15 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
             >
               مهندسين
             </button>
+            <a href="#reviews" className="hover:text-blue-400 transition-colors">
+              آراء العملاء
+            </a>
             <a href="#footer" className="hover:text-blue-400 transition-colors">
               تواصل معنا
             </a>
           </nav>
 
-          {/* الجانب الأيسر: زر سلة المشتريات البسيط والأنيق */}
+          {/* الجانب الأيسر: زر سلة المشتريات */}
           <div className="flex items-center gap-3">
             <button
               type="button"
@@ -921,14 +1023,14 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
       {/* المحتوى الرئيسي */}
       {view === "store" ? (
         <>
-          {/* 2. Hero Section احترافي مع CTA صريح ومساحات تنفس */}
+          {/* 2. Hero Section */}
           <section className="relative overflow-hidden bg-gradient-to-b from-blue-950/20 via-transparent to-transparent border-b border-slate-800/60 py-12 sm:py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="grid lg:grid-cols-12 gap-8 items-center">
                 <div className="lg:col-span-7 space-y-6 text-center lg:text-right">
                   <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-950/80 border border-blue-800/50 text-blue-300 text-xs font-semibold">
                     <Flame className="w-4 h-4 text-amber-400" />
-                    أقوى عروض التوريدات لعام 2026 للشركات والمصانع
+                    خصومات توريد فورية تصل إلى 15% للكميات والمصانع
                   </div>
 
                   <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight">
@@ -939,7 +1041,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                   </h1>
 
                   <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                    نوفر لشركتكم سترات أمان مهندسين وعمال وخوذات معتمدة بمواصفات عالية، وخامات محلية ومستوردة تدوم في أصعب ظروف العمل.
+                    نوفر لشركتكم سترات أمان مهندسين وعمال وخوذات معتمدة بمواصفات قياسية، وخامات محلية ومستوردة تدوم في أصعب ظروف العمل.
                   </p>
 
                   <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
@@ -957,11 +1059,11 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                       className="px-5 py-3 rounded-xl border border-slate-700 bg-slate-900/60 text-slate-200 hover:text-white hover:bg-slate-800 text-sm font-semibold transition-colors flex items-center gap-2"
                     >
                       <MessageCircle className="w-4 h-4 text-emerald-400" />
-                      طلب عرض سعر خاص
+                      طلب مقايسة أو عرض سعر
                     </a>
                   </div>
 
-                  {/* شريط المميزات السريع */}
+                  {/* شريط المميزات */}
                   <div className="grid grid-cols-3 gap-4 pt-6 border-t border-slate-800/80 max-w-lg mx-auto lg:mx-0 text-right">
                     <div className="flex items-center gap-2 text-xs text-slate-300 font-medium">
                       <Truck className="w-4 h-4 text-blue-400 shrink-0" />
@@ -969,11 +1071,11 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                     </div>
                     <div className="flex items-center gap-2 text-xs text-slate-300 font-medium">
                       <Printer className="w-4 h-4 text-blue-400 shrink-0" />
-                      <span>طباعة لوجو احترافية</span>
+                      <span>طباعة لوجو دقيقة</span>
                     </div>
                     <div className="flex items-center gap-2 text-xs text-slate-300 font-medium">
-                      <ShieldCheck className="w-4 h-4 text-blue-400 shrink-0" />
-                      <span>جودة خامات معتمدة</span>
+                      <Tag className="w-4 h-4 text-blue-400 shrink-0" />
+                      <span>خصومات كميات فورية</span>
                     </div>
                   </div>
                 </div>
@@ -991,7 +1093,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-5">
                       <div className="text-white">
                         <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block">
-                          العرض الأكثر طلباً
+                          العرض الأكثر طلباً للمصانع
                         </span>
                         <p className="font-bold text-base sm:text-lg">عرض 50 فيست عمال + طباعة الشعار</p>
                       </div>
@@ -1002,164 +1104,267 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
             </div>
           </section>
 
-          {/* 3. شريط التصنيفات بنمط منظم يبدأ من اليمين */}
+          {/* 3. شريط البحث والفلترة السريع المطور */}
           <section className="sticky top-18 z-30 bg-[#090d16]/95 backdrop-blur-md border-b border-slate-800/80 py-4 shadow-sm">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center justify-between gap-4 overflow-x-auto pb-1 scrollbar-none">
-                <div className="flex items-center gap-2 shrink-0">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+              {/* حقل البحث والترتيب */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="relative w-full sm:w-80">
+                  <Search className="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="text"
+                    placeholder="ابحث بالاسم، اللون، أو الخامة (مثال: 3M)..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full bg-slate-900 border border-slate-700 rounded-xl pr-10 pl-3 py-2 text-xs sm:text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                  <SlidersHorizontal className="w-4 h-4 text-slate-400" />
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as any)}
+                    className="bg-slate-900 border border-slate-700 text-xs sm:text-sm text-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-blue-500 cursor-pointer"
+                  >
+                    <option value="default">الترتيب التلقائي</option>
+                    <option value="price-asc">السعر: من الأقل للأعلى</option>
+                    <option value="price-desc">السعر: من الأعلى للأقل</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* أزرار الأقسام */}
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                <button
+                  type="button"
+                  onClick={() => setActiveCategory("all")}
+                  className={`px-4 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer border shrink-0 ${
+                    activeCategory === "all"
+                      ? "bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-900/30"
+                      : "bg-slate-900/80 text-slate-300 border-slate-800 hover:border-slate-700 hover:text-white"
+                  }`}
+                >
+                  كل الأقسام
+                </button>
+
+                {CATEGORIES.map((cat) => (
                   <button
+                    key={cat.id}
                     type="button"
-                    onClick={() => setActiveCategory("all")}
-                    className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer border ${
-                      activeCategory === "all"
+                    onClick={() => setActiveCategory(cat.id)}
+                    className={`px-4 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer border flex items-center gap-1.5 shrink-0 ${
+                      activeCategory === cat.id
                         ? "bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-900/30"
                         : "bg-slate-900/80 text-slate-300 border-slate-800 hover:border-slate-700 hover:text-white"
                     }`}
                   >
-                    كل الأقسام
+                    {cat.id === "offers" && <Flame className="w-3.5 h-3.5 text-amber-400" />}
+                    {cat.title}
                   </button>
-
-                  {CATEGORIES.map((cat) => (
-                    <button
-                      key={cat.id}
-                      type="button"
-                      onClick={() => setActiveCategory(cat.id)}
-                      className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer border flex items-center gap-1.5 ${
-                        activeCategory === cat.id
-                          ? "bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-900/30"
-                          : "bg-slate-900/80 text-slate-300 border-slate-800 hover:border-slate-700 hover:text-white"
-                      }`}
-                    >
-                      {cat.id === "offers" && <Flame className="w-3.5 h-3.5 text-amber-400" />}
-                      {cat.title}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400 shrink-0">
-                  <Layers className="w-3.5 h-3.5" />
-                  <span>تصفح حسب الفئة</span>
-                </div>
+                ))}
               </div>
             </div>
           </section>
 
-          {/* قائمة المنتجات المعروضة */}
+          {/* قائمة المنتجات */}
           <main className="py-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-              {displayedCategories.map((category) => {
-                const isHelmet = category.id === "helmets";
-                const isVestCategory = ["workers", "supervisors", "engineers"].includes(category.id);
-                const currentFilter = subCategoryFilter[category.id] || "all";
-
-                const localProducts = category.products.filter((p) => p.origin === "local");
-                const importedProducts = category.products.filter((p) => p.origin === "imported");
-
-                return (
-                  <section
-                    key={category.id}
-                    id={category.id}
-                    className="space-y-6"
+              {displayedCategories.length === 0 ? (
+                <div className="text-center py-20 space-y-3">
+                  <p className="text-slate-400 text-lg">لم يتم العثور على أي منتج يطابق بحثك &quot;{searchQuery}&quot;</p>
+                  <Button
+                    onClick={() => setSearchQuery("")}
+                    variant="outline"
+                    className="border-slate-700 text-slate-200"
                   >
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-slate-800">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          {category.id === "offers" && <Flame className="w-6 h-6 text-amber-400" />}
-                          <h2 className="text-2xl sm:text-3xl font-black text-white">
-                            {category.title}
-                          </h2>
+                    إعادة ضبط البحث
+                  </Button>
+                </div>
+              ) : (
+                displayedCategories.map((category) => {
+                  const isHelmet = category.id === "helmets";
+                  const isVestCategory = ["workers", "supervisors", "engineers"].includes(category.id);
+                  const currentFilter = subCategoryFilter[category.id] || "all";
+
+                  const localProducts = category.products.filter((p) => p.origin === "local");
+                  const importedProducts = category.products.filter((p) => p.origin === "imported");
+
+                  return (
+                    <section key={category.id} id={category.id} className="space-y-6">
+                      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-slate-800">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            {category.id === "offers" && <Flame className="w-6 h-6 text-amber-400" />}
+                            <h2 className="text-2xl sm:text-3xl font-black text-white">
+                              {category.title}
+                            </h2>
+                          </div>
+                          <p className="text-slate-400 text-sm mt-1">{category.description}</p>
                         </div>
-                        <p className="text-slate-400 text-sm mt-1">{category.description}</p>
+
+                        {/* تصفية محلي / مستورد */}
+                        {isVestCategory && (
+                          <div className="flex items-center bg-slate-900 p-1 rounded-xl border border-slate-800 w-fit">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setSubCategoryFilter((prev) => ({ ...prev, [category.id]: "all" }))
+                              }
+                              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                                currentFilter === "all"
+                                  ? "bg-blue-600 text-white shadow-sm"
+                                  : "text-slate-400 hover:text-white"
+                              }`}
+                            >
+                              الكل ({category.products.length})
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setSubCategoryFilter((prev) => ({ ...prev, [category.id]: "local" }))
+                              }
+                              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                                currentFilter === "local"
+                                  ? "bg-emerald-600 text-white shadow-sm"
+                                  : "text-slate-400 hover:text-white"
+                              }`}
+                            >
+                              محلي ({localProducts.length})
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setSubCategoryFilter((prev) => ({ ...prev, [category.id]: "imported" }))
+                              }
+                              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                                currentFilter === "imported"
+                                  ? "bg-cyan-600 text-white shadow-sm"
+                                  : "text-slate-400 hover:text-white"
+                              }`}
+                            >
+                              مستورد ({importedProducts.length})
+                            </button>
+                          </div>
+                        )}
                       </div>
 
-                      {/* فلترة داخلي: محلي / مستورد */}
-                      {isVestCategory && (
-                        <div className="flex items-center bg-slate-900 p-1 rounded-xl border border-slate-800 w-fit">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setSubCategoryFilter((prev) => ({ ...prev, [category.id]: "all" }))
-                            }
-                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                              currentFilter === "all"
-                                ? "bg-blue-600 text-white shadow-sm"
-                                : "text-slate-400 hover:text-white"
-                            }`}
-                          >
-                            الكل ({category.products.length})
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setSubCategoryFilter((prev) => ({ ...prev, [category.id]: "local" }))
-                            }
-                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                              currentFilter === "local"
-                                ? "bg-emerald-600 text-white shadow-sm"
-                                : "text-slate-400 hover:text-white"
-                            }`}
-                          >
-                            محلي ({localProducts.length})
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setSubCategoryFilter((prev) => ({ ...prev, [category.id]: "imported" }))
-                            }
-                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                              currentFilter === "imported"
-                                ? "bg-cyan-600 text-white shadow-sm"
-                                : "text-slate-400 hover:text-white"
-                            }`}
-                          >
-                            مستورد ({importedProducts.length})
-                          </button>
+                      {/* عرض المنتجات العادية أو الخوذ */}
+                      {!isVestCategory && (
+                        <div className="grid md:grid-cols-2 gap-6">
+                          {category.products.map((product) => renderProductCard(product, isHelmet))}
                         </div>
                       )}
-                    </div>
 
-                    {/* عرض الخوذات أو العروض */}
-                    {!isVestCategory && (
-                      <div className="grid md:grid-cols-2 gap-6">
-                        {category.products.map((product) => renderProductCard(product, isHelmet))}
-                      </div>
-                    )}
+                      {/* عرض الفيستات حسب المحلي والمستورد */}
+                      {isVestCategory && (
+                        <div className="space-y-10">
+                          {(currentFilter === "all" || currentFilter === "local") && localProducts.length > 0 && (
+                            <div className="space-y-4">
+                              <div className="flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                <h3 className="text-lg font-bold text-emerald-400">تصنيع محلي</h3>
+                                <span className="text-xs text-slate-500">({localProducts.length} نوع)</span>
+                              </div>
+                              <div className="grid md:grid-cols-2 gap-6">
+                                {localProducts.map((product) => renderProductCard(product, false))}
+                              </div>
+                            </div>
+                          )}
 
-                    {/* عرض الفيستات بحسب التصنيف المحلي / المستورد */}
-                    {isVestCategory && (
-                      <div className="space-y-10">
-                        {(currentFilter === "all" || currentFilter === "local") && localProducts.length > 0 && (
-                          <div className="space-y-4">
-                            <div className="flex items-center gap-2">
-                              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                              <h3 className="text-lg font-bold text-emerald-400">تصنيع محلي</h3>
-                              <span className="text-xs text-slate-500">({localProducts.length} نوع)</span>
+                          {(currentFilter === "all" || currentFilter === "imported") && importedProducts.length > 0 && (
+                            <div className="space-y-4">
+                              <div className="flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-cyan-500"></span>
+                                <h3 className="text-lg font-bold text-cyan-400">خامات مستوردة</h3>
+                                <span className="text-xs text-slate-500">({importedProducts.length} نوع)</span>
+                              </div>
+                              <div className="grid md:grid-cols-2 gap-6">
+                                {importedProducts.map((product) => renderProductCard(product, false))}
+                              </div>
                             </div>
-                            <div className="grid md:grid-cols-2 gap-6">
-                              {localProducts.map((product) => renderProductCard(product, false))}
-                            </div>
-                          </div>
-                        )}
-
-                        {(currentFilter === "all" || currentFilter === "imported") && importedProducts.length > 0 && (
-                          <div className="space-y-4">
-                            <div className="flex items-center gap-2">
-                              <span className="w-2 h-2 rounded-full bg-cyan-500"></span>
-                              <h3 className="text-lg font-bold text-cyan-400">خامات مستوردة</h3>
-                              <span className="text-xs text-slate-500">({importedProducts.length} نوع)</span>
-                            </div>
-                            <div className="grid md:grid-cols-2 gap-6">
-                              {importedProducts.map((product) => renderProductCard(product, false))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </section>
-                );
-              })}
+                          )}
+                        </div>
+                      )}
+                    </section>
+                  );
+                })
+              )}
             </div>
           </main>
+
+          {/* 4. سابقة الأعمال وآراء العملاء (Social Proof & Reviews) */}
+          <section id="reviews" className="py-16 bg-slate-950/80 border-t border-slate-800">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+              <div className="text-center space-y-3">
+                <Badge className="bg-blue-600/20 text-blue-400 border border-blue-500/30 px-3 py-1 text-xs">
+                  شركاء النجاح والثقة
+                </Badge>
+                <h3 className="text-2xl sm:text-3xl font-black text-white">
+                  موثوق به من كبرى شركات المقاولات والمصانع
+                </h3>
+                <p className="text-slate-400 text-xs sm:text-sm max-w-xl mx-auto">
+                  قمنا بتجهيز أطقم الأمان المهني وتوريد السترات المطبوعة لمئات المشروعات الهندسية والمصانع على مستوى مصر.
+                </p>
+              </div>
+
+              {/* آراء العملاء */}
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
+                  <div className="flex text-amber-400 gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-amber-400" />
+                    ))}
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    &quot;تم استلام دفعة 100 فيست مهندسين ثري إم لموقع التجمع. خامة القماش محملة وجودة طباعة اللوجو ممتازة والتسليم في الميعاد المحدد.&quot;
+                  </p>
+                  <div className="pt-2 border-t border-slate-800/80">
+                    <p className="font-bold text-xs text-white">م. أحمد سامي</p>
+                    <p className="text-[11px] text-slate-500">مدير مشتريات شركة مقاولات</p>
+                  </div>
+                </div>
+
+                <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
+                  <div className="flex text-amber-400 gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-amber-400" />
+                    ))}
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    &quot;عرض الـ 50 فيست وفر معانا كتير في تجهيز العمال بالمصنع، العواكس بتلمع جداً بالإضاءة الليلية وشغل محترم جداً.&quot;
+                  </p>
+                  <div className="pt-2 border-t border-slate-800/80">
+                    <p className="font-bold text-xs text-white">أ. محمد الشريف</p>
+                    <p className="text-[11px] text-slate-500">مدير مصنع صناعات غذائية - العاشر</p>
+                  </div>
+                </div>
+
+                <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
+                  <div className="flex text-amber-400 gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-amber-400" />
+                    ))}
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    &quot;التعامل راقي جداً وسهولة تجهيز الفاتورة من الموقع بتخليك تتأكد من مواصفات طلبك قبل الدفع. شكراً جزيلاً.&quot;
+                  </p>
+                  <div className="pt-2 border-t border-slate-800/80">
+                    <p className="font-bold text-xs text-white">م. كريم عادل</p>
+                    <p className="text-[11px] text-slate-500">مسؤول السلامة والصحة المهنية (HSE)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </>
       ) : (
         /* شاشة الفاتورة وإتمام الطلب */
@@ -1178,11 +1383,11 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
 
           {!isInvoiceReady ? (
             <form onSubmit={handleCheckoutSubmit} className="space-y-6">
-              {/* ملخص السلة */}
+              {/* ملخص السلة + تنبيه خصم الكميات */}
               <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 shadow-xl">
                 <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                   <FileText className="w-5 h-5 text-blue-400" />
-                  مراجعة المنتجات المختارة
+                  مراجعة المنتجات وسعر التوريد
                 </h2>
                 {cart.length === 0 ? (
                   <p className="text-center py-6 text-slate-400 text-sm">سلتك فارغة حالياً</p>
@@ -1200,12 +1405,26 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                         <div className="font-bold text-blue-400">{item.price * item.quantity} ج.م</div>
                       </div>
                     ))}
+
                     <div className="pt-3 flex justify-between text-slate-300 text-sm">
+                      <span>إجمالي المنتجات:</span>
+                      <span>{rawTotalPrice} ج.م</span>
+                    </div>
+
+                    {discountAmount > 0 && (
+                      <div className="pt-2 flex justify-between text-emerald-400 font-bold text-sm">
+                        <span>خصم الكميات ({discountRate * 100}%):</span>
+                        <span>-{discountAmount} ج.م</span>
+                      </div>
+                    )}
+
+                    <div className="pt-2 flex justify-between text-slate-300 text-sm">
                       <span>تكلفة الشحن لـ ({formData.governorate}):</span>
                       <span className="font-semibold">{shippingFee} ج.م</span>
                     </div>
-                    <div className="pt-3 flex justify-between font-black text-lg text-white">
-                      <span>الإجمالي المطلوب:</span>
+
+                    <div className="pt-3 flex justify-between font-black text-lg text-white border-t border-slate-800">
+                      <span>الإجمالي النهائي المطلوب:</span>
                       <span className="text-blue-400">{grandTotal} ج.م</span>
                     </div>
                   </div>
@@ -1226,13 +1445,13 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                       value={formData.fullName}
                       onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                       className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
-                      placeholder="اسم المستلم ثلاثي"
+                      placeholder="اسم المستلم ثلاثي أو اسم المنشأة"
                     />
                   </div>
 
                   <div>
                     <label className="block text-xs font-semibold mb-1.5 text-slate-300">
-                      رقم الهاتف للتواصل *
+                      رقم الهاتف الأساسي للتواصل *
                     </label>
                     <input
                       type="tel"
@@ -1253,7 +1472,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                       value={formData.phone2}
                       onChange={(e) => setFormData({ ...formData, phone2: e.target.value })}
                       className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
-                      placeholder="رقم آخر للطوارئ"
+                      placeholder="رقم مسؤول الاستلام أو الطوارئ"
                     />
                   </div>
 
@@ -1284,22 +1503,53 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                       value={formData.address}
                       onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                       className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
-                      placeholder="المنطقة، الشارع، رقم العمارة أو الموقع الهندسي"
+                      placeholder="المدينة / المركز، اسم الشارع، رقم المبنى أو الموقع الإنشائي"
                     />
                   </div>
 
-                  <div className="md:col-span-2">
-                    <label className="block text-xs font-semibold mb-1.5 text-slate-300">
-                      إرفاق لوجو الطباعة (اختياري - يمكنك إرساله أيضاً عبر الواتساب)
+                  {/* رفع اللوجو + معاينة فورية (Mockup) */}
+                  <div className="md:col-span-2 space-y-3">
+                    <label className="block text-xs font-semibold text-slate-300">
+                      لوجو الطباعة على الفيست (اختياري - يمكنك إرفاقه هنا أو إرساله واتساب)
                     </label>
                     <input
                       type="file"
                       accept="image/*"
-                      onChange={(e) => setLogoFile(e.target.files?.[0] || null)}
-                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs text-slate-400 file:ml-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-blue-600 file:text-white"
+                      onChange={handleLogoUpload}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs text-slate-400 file:ml-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-blue-600 file:text-white cursor-pointer"
                     />
-                    {logoFile && (
-                      <p className="text-xs text-emerald-400 mt-1">الملف المحدد: {logoFile.name}</p>
+
+                    {/* المعاينة الحية للشعار على الفيست */}
+                    {logoPreviewUrl && (
+                      <div className="p-4 rounded-xl bg-slate-950 border border-blue-900/60 flex flex-col sm:flex-row items-center gap-4">
+                        <div className="relative w-28 h-28 rounded-lg overflow-hidden border border-slate-700 bg-slate-900 shrink-0">
+                          {/* صورة فيست افتراضية */}
+                          <Image
+                            src="https://i.ibb.co/hxhfZXz0/Whats-App-Image-2026-10-11-at-3-09-23-PM.jpg"
+                            alt="Vest Mockup"
+                            fill
+                            className="object-cover opacity-80"
+                            unoptimized
+                          />
+                          {/* الشعار المرفوع مطبوعاً في الصدر */}
+                          <div className="absolute top-7 right-4 w-9 h-9 bg-white/90 p-0.5 rounded shadow-md flex items-center justify-center">
+                            <img
+                              src={logoPreviewUrl}
+                              alt="Uploaded Logo Preview"
+                              className="max-h-full max-w-full object-contain"
+                            />
+                          </div>
+                        </div>
+                        <div className="space-y-1 text-center sm:text-right">
+                          <span className="text-xs font-bold text-emerald-400 flex items-center gap-1 justify-center sm:justify-start">
+                            <Eye className="w-3.5 h-3.5" />
+                            معاينة تقريبية لمكان طباعة الشعار
+                          </span>
+                          <p className="text-[11px] text-slate-400 leading-relaxed">
+                            سيقوم قسم الجرافيك لدينا بمراجعة جودة الملف وإرسال بروفا نهائية لكم عبر واتساب قبل الطباعة.
+                          </p>
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -1309,10 +1559,10 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
               <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
                 <h2 className="text-xl font-bold text-white mb-1 flex items-center gap-2">
                   <CreditCard className="w-5 h-5 text-blue-400" />
-                  سداد عربون تأكيد أمر الشغل
+                  سداد عربون تأكيد أمر التوريد
                 </h2>
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  لتجهيز وطباعة الشعار، يرجى تحويل مبلغ جدية التعاقد (العربون) عبر فودافون كاش أو إنستاباي:
+                  لبدء سحب الكميات وطباعة الشعار، يرجى تحويل مبلغ جدية التعاقد عبر فودافون كاش أو إنستاباي:
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-4 pt-1">
@@ -1374,9 +1624,9 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
               <Button
                 type="submit"
                 disabled={cart.length === 0}
-                className="w-full py-6 text-base font-bold bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-lg shadow-blue-600/20 cursor-pointer"
+                className="w-full py-6 text-base font-bold bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-lg shadow-blue-600/20 cursor-pointer active:scale-95 transition-transform"
               >
-                تأكيد الطلب وعرض الفاتورة
+                تأكيد أمر الشغل وإصدار الفاتورة
               </Button>
             </form>
           ) : (
@@ -1472,15 +1722,24 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                 </div>
 
                 <div className="border-t-2 border-slate-900 pt-4 flex justify-end">
-                  <div className="w-64 space-y-1.5 text-xs">
+                  <div className="w-72 space-y-1.5 text-xs">
                     <div className="flex justify-between text-slate-600">
                       <span>إجمالي المنتجات:</span>
-                      <span>{totalPrice} ج.م</span>
+                      <span>{rawTotalPrice} ج.م</span>
                     </div>
+
+                    {discountAmount > 0 && (
+                      <div className="flex justify-between text-emerald-600 font-bold">
+                        <span>خصم الكميات ({discountRate * 100}%):</span>
+                        <span>-{discountAmount} ج.م</span>
+                      </div>
+                    )}
+
                     <div className="flex justify-between text-slate-600">
                       <span>الشحن والتوصيل ({formData.governorate}):</span>
                       <span>{shippingFee} ج.م</span>
                     </div>
+
                     <div className="flex justify-between text-sm font-black border-t border-slate-900 pt-2 text-slate-900">
                       <span>الإجمالي النهائي:</span>
                       <span>{grandTotal} ج.م</span>
@@ -1489,7 +1748,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                 </div>
 
                 <div className="mt-8 pt-4 border-t border-slate-200 text-center text-[11px] text-slate-500">
-                  <p>شكراً لتعاملكم مع Future Press Company. سيتم التواصل معكم فوراً للمطابقة والتسليم.</p>
+                  <p>شكراً لتعاملكم مع Future Press Company. سيتم التواصل معكم هاتفياً لتأكيد الشحن والتسليم.</p>
                 </div>
               </div>
             </div>
@@ -1517,7 +1776,18 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                 </button>
               </div>
 
-              <div className="overflow-y-auto max-h-[65vh] py-4 space-y-3">
+              {/* شريط التقدم للحصول على خصم أكبر */}
+              {totalItemsCount < 50 && (
+                <div className="mt-3 p-2.5 rounded-lg bg-blue-950/40 border border-blue-900/50 text-[11px] text-blue-300">
+                  {totalItemsCount < 10 ? (
+                    <p>أضف <strong>{10 - totalItemsCount}</strong> قطع إضافية لتحصل على خصم 5% توريدات!</p>
+                  ) : (
+                    <p>أضف <strong>{50 - totalItemsCount}</strong> قطعة إضافية لتحصل على خصم الجملة الأكبر 15%!</p>
+                  )}
+                </div>
+              )}
+
+              <div className="overflow-y-auto max-h-[60vh] py-4 space-y-3">
                 {cart.length === 0 ? (
                   <p className="text-center text-slate-500 py-12 text-sm">السلة فارغة حالياً</p>
                 ) : (
@@ -1551,6 +1821,12 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
 
             {cart.length > 0 && (
               <div className="border-t border-slate-800 pt-4 space-y-3">
+                {discountAmount > 0 && (
+                  <div className="flex justify-between items-center text-xs text-emerald-400 font-bold">
+                    <span>خصم الكميات المطبق ({discountRate * 100}%):</span>
+                    <span>-{discountAmount} ج.م</span>
+                  </div>
+                )}
                 <div className="flex justify-between items-center text-sm font-bold">
                   <span className="text-slate-400">إجمالي السلة:</span>
                   <span className="text-blue-400 text-xl font-black">{totalPrice} ج.م</span>
@@ -1572,8 +1848,8 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
         </div>
       )}
 
-      {/* 4. زر واتساب عائم وحيد وواضح لتقليل التشتت البصري */}
-      <div className="fixed bottom-6 left-6 z-40">
+      {/* 5. زر واتساب عائم */}
+      <div className="hidden md:block fixed bottom-6 left-6 z-40">
         <a
           href="https://wa.me/201010625349?text=مرحبا، أود الاستفسار عن منتجات Future Press"
           target="_blank"
@@ -1588,7 +1864,44 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
         </a>
       </div>
 
-      {/* 5. تذييل الموقع (Footer) يضم منصات التواصل والمعلومات الرسمية */}
+      {/* 6. شريط سفلي خاص بالهواتف المحمولة (Mobile Bottom App Bar) */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#090d16]/95 backdrop-blur-md border-t border-slate-800 px-4 py-2 flex items-center justify-around text-xs">
+        <button
+          onClick={() => {
+            setView("store");
+            setActiveCategory("all");
+          }}
+          className="flex flex-col items-center gap-1 text-slate-400 hover:text-white"
+        >
+          <Layers className="w-5 h-5" />
+          <span>الرئيسية</span>
+        </button>
+
+        <button
+          onClick={() => setIsCartOpen(true)}
+          className="relative flex flex-col items-center gap-1 text-slate-400 hover:text-white"
+        >
+          <ShoppingCart className="w-5 h-5 text-blue-400" />
+          <span>السلة</span>
+          {totalItemsCount > 0 && (
+            <span className="absolute -top-1 right-2 bg-blue-600 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
+              {totalItemsCount}
+            </span>
+          )}
+        </button>
+
+        <a
+          href="https://wa.me/201010625349?text=مرحبا، أود الاستفسار عن منتجات Future Press"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex flex-col items-center gap-1 text-emerald-400"
+        >
+          <MessageCircle className="w-5 h-5" />
+          <span>واتساب</span>
+        </a>
+      </div>
+
+      {/* 7. تذييل الموقع (Footer) */}
       <footer id="footer" className="bg-slate-950 border-t border-slate-800/80 mt-20 pt-12 pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-slate-800/80 text-sm">
