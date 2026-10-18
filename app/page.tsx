@@ -18,24 +18,20 @@ import {
   Download,
   MapPin,
   Phone,
-  Calendar,
   Copy,
   CheckCheck,
   Flame,
-  ShieldCheck,
   Truck,
   Printer,
   Search,
   SlidersHorizontal,
   Star,
-  Building2,
   Tag,
   Eye,
   Sparkles,
   Ruler,
   HelpCircle,
   ChevronDown,
-  Award,
   FileSpreadsheet,
   ChevronRight,
 } from "lucide-react";
@@ -73,12 +69,13 @@ interface Category {
   products: Product[];
 }
 
-// مصفوفة الصور المنظمة بدقة حسب النوع والموك آب والتنفيذ الواقعي
+const LEMON_WORKER_LOCAL_IMG = "https://i.ibb.co/8gKN8hzP/file-0000000094448210a19f4e941d1adf40.png";
+
 const HERO_SHOWCASE_IMAGES = [
   {
-    url: "https://i.ibb.co/S7PprHnh/Whats-App-Image-2026-10-18-at-10-13-20-PM-3.jpg",
-    title: "فيست عمال ليموني مطبوع (الوجه الأمامي)",
-    badge: "طباعة الصدر والأمان",
+    url: LEMON_WORKER_LOCAL_IMG,
+    title: "فيست عمال ليموني محلي معتمد",
+    badge: "إنتاج محلي عالي الجودة",
     category: "عمال",
   },
   {
@@ -158,11 +155,11 @@ const CATEGORIES: Category[] = [
       {
         id: "offer-50-vests",
         name: "عرض 50 فيست عمال ليموني بالطباعة",
-        description: "باقة توفير كبرى تشمل 50 فيست عمال فسفوري عالي الجودة مع طباعة الشعار الخاص بشركتكم بسعر خاص جداً.",
+        description: "باقة توفير كبرى تشمل 50 فيست عمال فسفوري عالي الجودة مع طباعة الشعار الخاص بشركتكم بدقة متناهية.",
         price: 3500,
-        image: "https://i.ibb.co/S7PprHnh/Whats-App-Image-2026-10-18-at-10-13-20-PM-3.jpg",
+        image: LEMON_WORKER_LOCAL_IMG,
         gallery: [
-          "https://i.ibb.co/S7PprHnh/Whats-App-Image-2026-10-18-at-10-13-20-PM-3.jpg",
+          LEMON_WORKER_LOCAL_IMG,
           "https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg",
           "https://i.ibb.co/nqVj983V/Whats-App-Image-2026-10-18-at-10-13-18-PM-3.jpg",
           "https://i.ibb.co/3H5hPsv/Whats-App-Image-2026-10-18-at-10-13-42-PM-1.jpg",
@@ -170,9 +167,9 @@ const CATEGORIES: Category[] = [
         sizes: ["مقاسات مشكلة (XL/2XL/3XL)", "XL", "2XL", "3XL"],
         features: [
           "50 فيست عمال فسفوري عالي الوضوح",
-          "شامل طباعة الشعار بدقة عالية مجاناً",
-          "أشرطة عاكسة متطورة للأمان الليلي",
-          "سعر حصري وموفر للمصانع والشركات",
+          "شامل طباعة الشعار بدقة وثبات عالي",
+          "أشرطة عاكسة متطورة للأمان الميداني والنهاري والليلي",
+          "سعر تنافسي مخصص للمصانع والشركات",
         ],
         badge: "عرض خاص لفترة محدودة",
         isOffer: true,
@@ -189,14 +186,14 @@ const CATEGORIES: Category[] = [
         name: "فيست عمال ليموني (محلي)",
         description: "فيست أمان عمال لون ليموني فسفوري عالي الوضوح، تصنيع محلي بجودة ممتازة وخامة متينة.",
         price: 80,
-        image: "https://i.ibb.co/S7PprHnh/Whats-App-Image-2026-10-18-at-10-13-20-PM-3.jpg",
+        image: LEMON_WORKER_LOCAL_IMG,
         gallery: [
-          "https://i.ibb.co/S7PprHnh/Whats-App-Image-2026-10-18-at-10-13-20-PM-3.jpg",
+          LEMON_WORKER_LOCAL_IMG,
           "https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg",
           "https://i.ibb.co/3H5hPsv/Whats-App-Image-2026-10-18-at-10-13-42-PM-1.jpg",
         ],
         sizes: ["XL", "2XL", "3XL"],
-        features: ["لون ليموني عالي الوضوح", "خطوط عاكسة للضوء للأمان الليلي", "صناعة محلية عالية الجودة"],
+        features: ["لون ليموني عالي الوضوح", "خطوط عاكسة للضوء للأمان الميداني", "صناعة محلية عالية الجودة"],
         badge: "إنتاج محلي",
         origin: "local",
       },
@@ -578,7 +575,7 @@ const CATEGORIES: Category[] = [
 const FAQS = [
   {
     q: "ما هي جودة الطباعة وهل تتأثر بالغسيل المتكرر في المواقع؟",
-    a: "نستخدم أحدث تقنيات الطباعة الحرارية والسلك سكرين بأحبار صناعية معالجة حرارياً لا تتشقق ولا تبهت مع الغسيل المتكرر وتتحمل درجات الحرارة والأتربة.",
+    a: "نستخدم أحدث تقنيات الطباعة الحرارية والسلك سكرين بأحبار صناعية معالجة حرارياً لا تتشقق ولا تبهت مع الغسيل المتكرر وتتحمل درجات الحرارة والأتربة الميدانية.",
   },
   {
     q: "كيف أتأكد من ضبط وتناسق الشعار الخاص بشركتي قبل طباعة الكمية كاملة؟",
@@ -606,18 +603,14 @@ export default function HomePage() {
   const [sortBy, setSortBy] = useState<"default" | "price-asc" | "price-desc">("default");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // السلايدر التفاعلي لصور البانر الرئيسي
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
 
-  // نوافذ منبثقة تفاعلية
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
   const [isQuotationModalOpen, setIsQuotationModalOpen] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
-  // خيارات موضع الطباعة للمنتجات
   const [printLocations, setPrintLocations] = useState<{ [productId: string]: "chest" | "back" | "both" }>({});
-
   const [selectedSizes, setSelectedSizes] = useState<{ [productId: string]: string }>({});
   const [quantities, setQuantities] = useState<{ [productId: string]: number }>({});
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -670,7 +663,6 @@ export default function HomePage() {
     setInvoiceNumber(`FP-${Math.floor(100000 + Math.random() * 900000)}`);
   }, []);
 
-  // التبديل التلقائي لصور البانر كل 5 ثوانٍ
   useEffect(() => {
     const timer = setInterval(() => {
       setHeroSlideIndex((prev) => (prev + 1) % HERO_SHOWCASE_IMAGES.length);
@@ -754,9 +746,10 @@ export default function HomePage() {
   const totalItemsCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const rawTotalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
+  // تعديل نسبة الخصم: من أول 20 قطعة خصم 5%، ومن 50 قطعة فأكثر 15%
   const discountRate = useMemo(() => {
     if (totalItemsCount >= 50) return 0.15;
-    if (totalItemsCount >= 10) return 0.05;
+    if (totalItemsCount >= 20) return 0.05;
     return 0;
   }, [totalItemsCount]);
 
@@ -823,7 +816,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
       const url = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${encodeURIComponent(msg)}&apikey=${apiKey}`;
       await fetch(url, { mode: "no-cors" });
     } catch {
-      // تجاهل أخطاء الشبكة
+      // ignore
     }
   };
 
@@ -873,7 +866,8 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
     const currentQty = quantities[product.id] || 1;
     const currentPrintLocation = printLocations[product.id] || "both";
 
-    const potentialDiscount = currentQty >= 50 ? 0.15 : currentQty >= 10 ? 0.05 : 0;
+    // الخصم يبدأ من 20 قطعة
+    const potentialDiscount = currentQty >= 50 ? 0.15 : currentQty >= 20 ? 0.05 : 0;
     const finalItemPrice = Math.round(product.price * (1 - potentialDiscount));
 
     return (
@@ -996,7 +990,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                     خصم {potentialDiscount * 100}% مطبق
                   </span>
                 ) : (
-                  <span className="text-[10px] text-slate-400">10+ قطع لخصم 5%</span>
+                  <span className="text-[10px] text-slate-400">20+ قطعة لخصم 5%</span>
                 )}
               </div>
               <div className="flex items-center gap-2 max-w-[140px]">
@@ -1036,8 +1030,8 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
 
             {!product.isOffer && (
               <div className="mt-3 py-1.5 px-2.5 rounded-lg bg-slate-950/70 border border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
-                <span>1-9 قطع: <strong className="text-slate-200">{product.price} ج.م</strong></span>
-                <span>10+: <strong className="text-emerald-400">{Math.round(product.price * 0.95)} ج.م</strong></span>
+                <span>1-19 قطعة: <strong className="text-slate-200">{product.price} ج.م</strong></span>
+                <span>20+: <strong className="text-emerald-400">{Math.round(product.price * 0.95)} ج.م</strong></span>
                 <span>50+: <strong className="text-emerald-400">{Math.round(product.price * 0.85)} ج.م</strong></span>
               </div>
             )}
@@ -1069,7 +1063,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
             {!isHelmet && (
               <p className="text-xs text-emerald-400 font-medium flex items-center justify-end gap-1">
                 <Check className="w-3.5 h-3.5" />
-                شامل طباعة الشعار بدقة عالية
+                شامل طباعة الشعار بدقة وثبات عالي
               </p>
             )}
 
@@ -1088,8 +1082,44 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
 
   return (
     <div className="min-h-screen bg-[#090d16] text-slate-100 antialiased selection:bg-blue-500 selection:text-white pb-16 md:pb-0" dir="rtl">
+      {/* تضمين تنسيقات الطباعة لضمان طباعة صفحة واحدة فقط بدون عناصر الواجهة */}
+      <style jsx global>{`
+        @media print {
+          body, html {
+            background: #ffffff !important;
+            color: #000000 !important;
+            height: auto !important;
+          }
+          @page {
+            size: A4 portrait;
+            margin: 10mm;
+          }
+          header, footer, nav, .no-print, [role="banner"], [id="showcase"], [id="reviews"], [id="faqs"], .fixed {
+            display: none !important;
+          }
+          .printable-single-page {
+            display: block !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            background: #ffffff !important;
+            color: #0f172a !important;
+            box-shadow: none !important;
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            page-break-after: avoid !important;
+            page-break-inside: avoid !important;
+          }
+          .printable-single-page * {
+            color: #0f172a !important;
+          }
+        }
+      `}</style>
+
       {/* شريط الإعلانات التفاعلي العلوي */}
-      <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-900 text-white py-1.5 px-4 text-center text-xs font-semibold border-b border-blue-700/40 overflow-hidden">
+      <div className="no-print bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-900 text-white py-1.5 px-4 text-center text-xs font-semibold border-b border-blue-700/40 overflow-hidden">
         <div className="inline-flex items-center gap-3">
           <span className="flex items-center gap-1 text-amber-300">
             <Sparkles className="w-3.5 h-3.5" />
@@ -1098,19 +1128,19 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
           <span className="hidden sm:inline text-blue-200">|</span>
           <span className="hidden sm:inline">🚚 شحن سريع لكافة مواقع المشروعات بجميع المحافظات</span>
           <span className="hidden md:inline text-blue-200">|</span>
-          <span className="hidden md:inline text-emerald-300 font-bold">✨ طباعة الشعار مجاناً على الكميات</span>
+          <span className="hidden md:inline text-emerald-300 font-bold">✨ أعلى دقة طباعة للشعار للشركات والمصانع</span>
         </div>
       </div>
 
       {toastMessage && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-blue-600 text-white px-5 py-2.5 rounded-full shadow-2xl flex items-center gap-2 text-xs sm:text-sm font-bold animate-in fade-in slide-in-from-top-4 duration-300">
+        <div className="no-print fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-blue-600 text-white px-5 py-2.5 rounded-full shadow-2xl flex items-center gap-2 text-xs sm:text-sm font-bold animate-in fade-in slide-in-from-top-4 duration-300">
           <Check className="w-4 h-4 text-emerald-300" />
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* الهيدر العلوي */}
-      <header className="sticky top-0 z-40 bg-[#090d16]/90 backdrop-blur-md border-b border-slate-800">
+      <header className="no-print sticky top-0 z-40 bg-[#090d16]/90 backdrop-blur-md border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
           <div
             className="flex items-center gap-3 cursor-pointer group"
@@ -1218,20 +1248,19 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
       {/* المحتوى الرئيسي */}
       {view === "store" ? (
         <>
-          {/* 2. Hero Section مع السلايدر التفاعلي لصور النماذج الحية والموك آب */}
           <section className="relative overflow-hidden bg-gradient-to-b from-blue-950/30 via-transparent to-transparent border-b border-slate-800/60 py-12 sm:py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="grid lg:grid-cols-12 gap-8 items-center">
                 <div className="lg:col-span-7 space-y-6 text-center lg:text-right">
                   <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-950/80 border border-blue-800/60 text-blue-300 text-xs font-semibold">
                     <Flame className="w-4 h-4 text-amber-400" />
-                    خصومات توريد فورية تصل إلى 15% للكميات والمصانع
+                    خصومات توريد فورية: 5% من أول 20 قطعة و 15% من أول 50 قطعة
                   </div>
 
                   <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight">
                     تجهيزات السلامة المهنية الميدانية <br />
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-amber-300">
-                      مع طباعة شعار شركتكم مجاناً
+                      مع طباعة احترافية فائقة الدقة للشعار
                     </span>
                   </h1>
 
@@ -1257,7 +1286,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                     </button>
                   </div>
 
-                  {/* شريط المميزات */}
                   <div className="grid grid-cols-3 gap-4 pt-6 border-t border-slate-800/80 max-w-lg mx-auto lg:mx-0 text-right">
                     <div className="flex items-center gap-2 text-xs text-slate-300 font-medium">
                       <Truck className="w-4 h-4 text-blue-400 shrink-0" />
@@ -1274,7 +1302,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                   </div>
                 </div>
 
-                {/* معرض صور البانر المطبوعة مع أزرار تنقل */}
                 <div className="lg:col-span-5">
                   <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-slate-700/80 shadow-2xl bg-slate-900 group">
                     <Image
@@ -1305,7 +1332,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                         </p>
                       </div>
 
-                      {/* أزرار السلايدر */}
                       <div className="flex items-center gap-1.5 z-10">
                         <button
                           type="button"
@@ -1335,7 +1361,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                     </div>
                   </div>
 
-                  {/* صور مصغرة للتنقل السريع داخل البانر */}
                   <div className="grid grid-cols-7 gap-1.5 mt-3">
                     {HERO_SHOWCASE_IMAGES.map((img, idx) => (
                       <button
@@ -1358,7 +1383,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
             </div>
           </section>
 
-          {/* معرض نماذج الطباعة والتنفيذ الحي (Real Production Showcase) */}
           <section id="showcase" className="py-12 bg-slate-950/60 border-b border-slate-800/80">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -1408,7 +1432,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
             </div>
           </section>
 
-          {/* عداد الأرقام التفاعلي وسابقة الأعمال */}
           <section className="bg-slate-950/90 py-8 border-b border-slate-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
@@ -1432,7 +1455,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
             </div>
           </section>
 
-          {/* 3. شريط البحث والفلترة السريع المطور */}
           <section className="sticky top-18 z-30 bg-[#090d16]/95 backdrop-blur-md border-b border-slate-800/80 py-4 shadow-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -1501,7 +1523,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
             </div>
           </section>
 
-          {/* قائمة المنتجات */}
           <main className="py-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
               {displayedCategories.length === 0 ? (
@@ -1624,7 +1645,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
             </div>
           </main>
 
-          {/* 4. سابقة الأعمال وآراء العملاء */}
           <section id="reviews" className="py-16 bg-slate-950/80 border-t border-slate-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
               <div className="text-center space-y-3">
@@ -1688,7 +1708,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
             </div>
           </section>
 
-          {/* 5. قسم الأسئلة الشائعة الأكورديون (FAQ) */}
           <section id="faqs" className="py-16 bg-slate-900/40 border-t border-slate-800">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-8">
               <div className="text-center space-y-2">
@@ -1739,7 +1758,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
               setView("store");
               setIsInvoiceReady(false);
             }}
-            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-semibold text-sm cursor-pointer"
+            className="no-print inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-semibold text-sm cursor-pointer"
           >
             <ArrowRight className="w-4 h-4" />
             الرجوع للتسوق وإضافة منتجات أخرى
@@ -1801,7 +1820,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                 )}
               </div>
 
-              {/* بيانات العميل والشركة */}
               <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
                 <h2 className="text-xl font-bold text-white mb-2">بيانات الشحن والتوريد</h2>
                 <div className="grid md:grid-cols-2 gap-4">
@@ -1890,7 +1908,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                     />
                   </div>
 
-                  {/* رفع ملف اللوجو للطباعة مع الموك آب المحدث */}
                   <div className="md:col-span-2 space-y-3">
                     <label className="block text-xs font-semibold text-slate-300">
                       لوجو الطباعة على الفيست (اختياري - يمكنك إرفاقه هنا أو إرساله واتساب)
@@ -1935,7 +1952,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                 </div>
               </div>
 
-              {/* سداد العربون */}
               <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
                 <h2 className="text-xl font-bold text-white mb-1 flex items-center gap-2">
                   <CreditCard className="w-5 h-5 text-blue-400" />
@@ -2008,9 +2024,9 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
               </Button>
             </form>
           ) : (
-            /* الفاتورة الرسمية */
+            /* الفاتورة الرسمية المصممة لطباعة صفحة A4 واحدة نقية */
             <div className="space-y-6">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-900 p-4 rounded-xl border border-slate-800 gap-4">
+              <div className="no-print flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-900 p-4 rounded-xl border border-slate-800 gap-4">
                 <div>
                   <h3 className="text-lg font-bold text-white">تم استلام أمر التوريد والطباعة بنجاح!</h3>
                   <p className="text-xs text-slate-400">
@@ -2022,17 +2038,17 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                   className="bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-2 font-bold cursor-pointer"
                 >
                   <Download className="w-4 h-4" />
-                  طباعة أو حفظ الفاتورة PDF
+                  طباعة أو حفظ الفاتورة PDF (صفحة واحدة)
                 </Button>
               </div>
 
               <div
                 id="invoice-print-area"
-                className="bg-white text-slate-900 p-8 sm:p-12 rounded-2xl shadow-xl border border-slate-200"
+                className="printable-single-page bg-white text-slate-900 p-6 sm:p-8 rounded-2xl shadow-xl border border-slate-200"
               >
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b-2 border-slate-900 gap-4">
+                <div className="flex flex-row justify-between items-center pb-4 border-b-2 border-slate-900">
                   <div className="flex items-center gap-3">
-                    <div className="relative w-14 h-14 rounded-full overflow-hidden border border-slate-300 shrink-0">
+                    <div className="relative w-12 h-12 rounded-full overflow-hidden border border-slate-300 shrink-0">
                       <Image
                         src="https://i.ibb.co/NdnYZ3Pp/Whats-App-Image-2026-10-14-at-5-53-58-AM.jpg"
                         alt="Logo"
@@ -2042,66 +2058,61 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                       />
                     </div>
                     <div>
-                      <h2 className="text-xl font-black text-slate-900">Future Press Company</h2>
-                      <p className="text-xs text-slate-500">للطباعة ومهمات السلامة المهنية المعتمدة</p>
+                      <h2 className="text-lg font-black text-slate-900">Future Press Company</h2>
+                      <p className="text-[11px] text-slate-500">للطباعة ومهمات السلامة المهنية المعتمدة</p>
                     </div>
                   </div>
 
                   <div className="text-left font-sans">
-                    <span className="text-2xl font-black text-slate-900 tracking-wider">فاتورة مبيعات</span>
-                    <p className="text-xs font-bold text-slate-600 mt-1">كود الطلب: {invoiceNumber}</p>
+                    <span className="text-xl font-black text-slate-900 tracking-wider">فاتورة مبيعات</span>
+                    <p className="text-xs font-bold text-slate-600 mt-0.5">كود: {invoiceNumber}</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6 py-6 border-b border-slate-200 text-xs">
+                <div className="grid grid-cols-2 gap-4 py-4 border-b border-slate-200 text-xs">
                   <div>
-                    <h4 className="font-bold text-slate-900 mb-1">الجهة الموردة:</h4>
+                    <h4 className="font-bold text-slate-900 mb-0.5">الجهة الموردة:</h4>
                     <p className="text-slate-700 font-semibold">Future Press Company</p>
-                    <p className="text-slate-500 mt-0.5">القاهرة - حلوان</p>
-                    <p className="text-slate-500">هاتف: 01010625349</p>
+                    <p className="text-slate-500">القاهرة - حلوان | هاتف: 01010625349</p>
                   </div>
 
                   <div>
-                    <h4 className="font-bold text-slate-900 mb-1">بيانات العميل والجهة:</h4>
-                    <p className="text-slate-700 font-semibold">{formData.fullName}</p>
-                    {formData.companyName && (
-                      <p className="text-blue-600 font-bold">{formData.companyName}</p>
-                    )}
-                    <p className="text-slate-500 mt-0.5">
-                      {formData.governorate} - {formData.address}
+                    <h4 className="font-bold text-slate-900 mb-0.5">بيانات العميل:</h4>
+                    <p className="text-slate-700 font-semibold">{formData.fullName} {formData.companyName && `(${formData.companyName})`}</p>
+                    <p className="text-slate-500">
+                      {formData.governorate} - {formData.address} | هاتف: {formData.phone1}
                     </p>
-                    <p className="text-slate-500">هاتف: {formData.phone1}</p>
-                    <p className="text-slate-500">التاريخ: {orderDate}</p>
+                    <p className="text-slate-500 text-[10px]">التاريخ: {orderDate}</p>
                   </div>
                 </div>
 
-                <div className="py-6">
+                <div className="py-4">
                   <table className="w-full text-right border-collapse text-xs">
                     <thead>
                       <tr className="border-b-2 border-slate-900 font-bold text-slate-700">
-                        <th className="py-2.5">المنتج / البيان</th>
-                        <th className="py-2.5 text-center">المقاس</th>
-                        <th className="py-2.5 text-center">موضع الطباعة</th>
-                        <th className="py-2.5 text-center">الكمية</th>
-                        <th className="py-2.5 text-center">السعر</th>
-                        <th className="py-2.5 text-left">الإجمالي</th>
+                        <th className="py-1.5">المنتج / البيان</th>
+                        <th className="py-1.5 text-center">المقاس</th>
+                        <th className="py-1.5 text-center">موضع الطباعة</th>
+                        <th className="py-1.5 text-center">الكمية</th>
+                        <th className="py-1.5 text-center">السعر</th>
+                        <th className="py-1.5 text-left">الإجمالي</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-200">
                       {cart.map((item, idx) => (
                         <tr key={idx}>
-                          <td className="py-2.5 font-medium text-slate-800">{item.name}</td>
-                          <td className="py-2.5 text-center text-slate-600">{item.size}</td>
-                          <td className="py-2.5 text-center text-slate-600">
+                          <td className="py-1.5 font-medium text-slate-800">{item.name}</td>
+                          <td className="py-1.5 text-center text-slate-600">{item.size}</td>
+                          <td className="py-1.5 text-center text-slate-600">
                             {item.printLocation === "chest"
                               ? "الصدر فقط"
                               : item.printLocation === "back"
                               ? "الظهر فقط"
                               : "الصدر والظهر"}
                           </td>
-                          <td className="py-2.5 text-center text-slate-600">{item.quantity}</td>
-                          <td className="py-2.5 text-center text-slate-600">{item.price} ج.م</td>
-                          <td className="py-2.5 text-left font-bold text-slate-900">
+                          <td className="py-1.5 text-center text-slate-600">{item.quantity}</td>
+                          <td className="py-1.5 text-center text-slate-600">{item.price} ج.م</td>
+                          <td className="py-1.5 text-left font-bold text-slate-900">
                             {item.price * item.quantity} ج.م
                           </td>
                         </tr>
@@ -2110,8 +2121,8 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                   </table>
                 </div>
 
-                <div className="border-t-2 border-slate-900 pt-4 flex justify-end">
-                  <div className="w-72 space-y-1.5 text-xs">
+                <div className="border-t-2 border-slate-900 pt-3 flex justify-end">
+                  <div className="w-64 space-y-1 text-xs">
                     <div className="flex justify-between text-slate-600">
                       <span>إجمالي المنتجات:</span>
                       <span>{rawTotalPrice} ج.م</span>
@@ -2119,7 +2130,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
 
                     {discountAmount > 0 && (
                       <div className="flex justify-between text-emerald-600 font-bold">
-                        <span>خصم الكميات المطبق ({discountRate * 100}%):</span>
+                        <span>خصم الكميات ({discountRate * 100}%):</span>
                         <span>-{discountAmount} ج.م</span>
                       </div>
                     )}
@@ -2129,14 +2140,14 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                       <span>{shippingFee} ج.م</span>
                     </div>
 
-                    <div className="flex justify-between text-sm font-black border-t border-slate-900 pt-2 text-slate-900">
+                    <div className="flex justify-between text-sm font-black border-t border-slate-900 pt-1.5 text-slate-900">
                       <span>الإجمالي النهائي:</span>
                       <span>{grandTotal} ج.م</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-8 pt-4 border-t border-slate-200 text-center text-[11px] text-slate-500">
+                <div className="mt-6 pt-3 border-t border-slate-200 text-center text-[10px] text-slate-500">
                   <p>شكراً لتعاملكم مع Future Press Company. سيتم التواصل معكم هاتفياً لتأكيد الشحن والتسليم.</p>
                 </div>
               </div>
@@ -2147,7 +2158,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
 
       {/* سلة المشتريات الجانبية Drawer */}
       {isCartOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm">
+        <div className="no-print fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm">
           <div className="w-full max-w-md bg-slate-900 text-slate-100 border-l border-slate-800 h-full p-6 flex flex-col justify-between shadow-2xl">
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-slate-800">
@@ -2167,8 +2178,8 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
 
               {totalItemsCount < 50 && (
                 <div className="mt-3 p-2.5 rounded-lg bg-blue-950/40 border border-blue-900/50 text-[11px] text-blue-300">
-                  {totalItemsCount < 10 ? (
-                    <p>أضف <strong>{10 - totalItemsCount}</strong> قطع إضافية لتحصل على خصم 5% توريدات!</p>
+                  {totalItemsCount < 20 ? (
+                    <p>أضف <strong>{20 - totalItemsCount}</strong> قطع إضافية لتحصل على خصم 5% توريدات!</p>
                   ) : (
                     <p>أضف <strong>{50 - totalItemsCount}</strong> قطعة إضافية لتحصل على خصم الجملة الأكبر 15%!</p>
                   )}
@@ -2257,7 +2268,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
 
       {/* نافذة المعاينة السريعة للمنتج (Quick View Modal) */}
       {quickViewProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+        <div className="no-print fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
           <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full p-6 text-slate-100 max-h-[90vh] overflow-y-auto space-y-4">
             <div className="flex justify-between items-center border-b border-slate-800 pb-3">
               <h3 className="font-bold text-lg text-white">{quickViewProduct.name}</h3>
@@ -2317,7 +2328,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
 
       {/* نافذة دليل المقاسات الذكي (Interactive Size Guide) */}
       {isSizeGuideOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+        <div className="no-print fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
           <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 text-slate-100 space-y-5">
             <div className="flex justify-between items-center border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
@@ -2380,24 +2391,24 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
         </div>
       )}
 
-      {/* نافذة استخراج عرض الأسعار الرسمي للشركات (B2B Quotation Modal) */}
+      {/* نافذة استخراج عرض الأسعار الرسمي للشركات (صفحة واحدة A4 بدون تكرار) */}
       {isQuotationModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="bg-white text-slate-900 rounded-3xl max-w-3xl w-full p-6 sm:p-10 max-h-[92vh] overflow-y-auto space-y-6 shadow-2xl">
-            <div className="flex justify-between items-start border-b-2 border-slate-900 pb-4">
+          <div className="printable-single-page bg-white text-slate-900 rounded-3xl max-w-3xl w-full p-6 sm:p-8 max-h-[92vh] overflow-y-auto space-y-5 shadow-2xl">
+            <div className="flex justify-between items-start border-b-2 border-slate-900 pb-3">
               <div>
                 <span className="text-xl font-black text-slate-900">Future Press Company</span>
-                <p className="text-xs text-slate-600">قطاع التوريدات الهندسية والطباعة الصناعية</p>
+                <p className="text-[11px] text-slate-600">قطاع التوريدات الهندسية والطباعة الصناعية</p>
               </div>
               <div className="text-left">
-                <span className="text-lg font-black bg-slate-900 text-white px-3 py-1 rounded">
+                <span className="text-base font-black bg-slate-900 text-white px-3 py-1 rounded">
                   عرض أسعار ومقايسة توريد
                 </span>
-                <p className="text-xs text-slate-500 mt-1">التاريخ: {orderDate}</p>
+                <p className="text-[11px] text-slate-500 mt-1">التاريخ: {orderDate}</p>
               </div>
             </div>
 
-            <div className="space-y-4 text-xs">
+            <div className="space-y-3 text-xs">
               <p className="text-slate-700 font-medium leading-relaxed">
                 السادة مديري المشتريات والمشروعات المحترمين، يسر شركة <strong>Future Press Company</strong> أن تقدم لسيادتكم مقايسة الأسعار الرسمية بناءً على المنتجات المحددة في السلة مع ضمان أعلى دقة في طباعة الشعار:
               </p>
@@ -2425,7 +2436,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                 </tbody>
               </table>
 
-              <div className="border-t border-slate-300 pt-3 flex justify-end">
+              <div className="border-t border-slate-300 pt-2 flex justify-end">
                 <div className="w-64 space-y-1">
                   <div className="flex justify-between">
                     <span>إجمالي الأصناف:</span>
@@ -2446,13 +2457,13 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
 
               <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1 text-[11px] text-slate-600">
                 <p>📌 <strong>شروط التوريد والاعتماد:</strong></p>
-                <p>1. الأسعار تشمل إعداد وتجهيز فيلم الطباعة والأحبار المعتمدة.</p>
+                <p>1. الأسعار تشمل إعداد وتجهيز فيلم الطباعة والأحبار المعتمدة للشركات.</p>
                 <p>2. مدة سريان هذا العرض 15 يوماً من تاريخ إصداره أعلاه.</p>
                 <p>3. يتم سداد 30% دفعة مقدمة عند التعاقد والباقي عند الفحص والاستلام.</p>
               </div>
             </div>
 
-            <div className="flex justify-between items-center pt-4 border-t border-slate-200">
+            <div className="no-print flex justify-between items-center pt-3 border-t border-slate-200">
               <Button
                 onClick={() => setIsQuotationModalOpen(false)}
                 variant="outline"
@@ -2465,7 +2476,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                 className="bg-slate-900 hover:bg-slate-800 text-white font-bold flex items-center gap-1.5"
               >
                 <Download className="w-4 h-4" />
-                تحميل / طباعة المقايسة
+                تحميل / طباعة المقايسة (PDF)
               </Button>
             </div>
           </div>
@@ -2473,7 +2484,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
       )}
 
       {/* زر واتساب عائم */}
-      <div className="hidden md:block fixed bottom-6 left-6 z-40">
+      <div className="no-print hidden md:block fixed bottom-6 left-6 z-40">
         <a
           href="https://wa.me/201010625349?text=مرحبا، أود الاستفسار عن تفاصيل طباعة وتوريدات Future Press"
           target="_blank"
@@ -2489,7 +2500,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
       </div>
 
       {/* شريط سفلي للهواتف المحمولة */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#090d16]/95 backdrop-blur-md border-t border-slate-800 px-4 py-2 flex items-center justify-around text-xs">
+      <div className="no-print md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#090d16]/95 backdrop-blur-md border-t border-slate-800 px-4 py-2 flex items-center justify-around text-xs">
         <button
           onClick={() => {
             setView("store");
@@ -2526,7 +2537,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
       </div>
 
       {/* تذييل الموقع (Footer) */}
-      <footer id="footer" className="bg-slate-950 border-t border-slate-800/80 mt-20 pt-12 pb-8">
+      <footer id="footer" className="no-print bg-slate-950 border-t border-slate-800/80 mt-20 pt-12 pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-slate-800/80 text-sm">
             <div className="space-y-3 md:col-span-2">
