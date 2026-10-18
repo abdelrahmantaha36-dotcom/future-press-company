@@ -73,37 +73,49 @@ interface Category {
   products: Product[];
 }
 
-// صور التسليمات الحية والطباعة الفعلية على الفيستات
+// مصفوفة الصور المنظمة بدقة حسب النوع والموك آب والتنفيذ الواقعي
 const HERO_SHOWCASE_IMAGES = [
   {
-    url: "https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg",
-    title: "فيست مهندسين 3M مع طباعة الشعار",
-    badge: "طباعة فائقة الدقة",
+    url: "https://i.ibb.co/S7PprHnh/Whats-App-Image-2026-10-18-at-10-13-20-PM-3.jpg",
+    title: "فيست عمال ليموني مطبوع (الوجه الأمامي)",
+    badge: "طباعة الصدر والأمان",
+    category: "عمال",
   },
   {
-    url: "https://i.ibb.co/S7PprHnh/Whats-App-Image-2026-10-18-at-10-13-20-PM-3.jpg",
-    title: "فيست ليموني عمال معتمد بالموقع",
-    badge: "عواكس فسفورية واضحة",
+    url: "https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg",
+    title: "فيست عمال ليموني مطبوع (الظهر)",
+    badge: "طباعة الظهر عريضة",
+    category: "عمال",
   },
   {
     url: "https://i.ibb.co/nqVj983V/Whats-App-Image-2026-10-18-at-10-13-18-PM-3.jpg",
-    title: "أطقم توريدات مشروعات هندسية",
-    badge: "طباعة مقاومة للغسيل",
+    title: "فيستات مطبوعة وجاهزة للتسليم الميداني",
+    badge: "إنتاج فعلي مباشر",
+    category: "تسليمات",
   },
   {
     url: "https://i.ibb.co/3H5hPsv/Whats-App-Image-2026-10-18-at-10-13-42-PM-1.jpg",
-    title: "فيستات إشرافية متعددة الجيوب",
-    badge: "خامات عالية التحمل",
+    title: "موك آب فيست عمال احترافي",
+    badge: "تجسيد واقعي للشعار",
+    category: "موك آب",
+  },
+  {
+    url: "https://i.ibb.co/FkXwgTMy/Whats-App-Image-2026-10-18-at-10-13-15-PM.jpg",
+    title: "موك آب فيست مهندسين 4 عاكس (نموذج 1)",
+    badge: "4 خطوط فسفورية",
+    category: "مهندسين",
   },
   {
     url: "https://i.ibb.co/GfYhRpFf/Whats-App-Image-2026-10-18-at-10-13-18-PM.jpg",
-    title: "طباعة دقيقة للصدر والظهر",
-    badge: "ثبات كامل للألوان",
+    title: "موك آب فيست مهندسين 4 عاكس (نموذج 2)",
+    badge: "تصميم هندسي تنفيذي",
+    category: "مهندسين",
   },
   {
     url: "https://i.ibb.co/LDJ5Qv0d/Whats-App-Image-2026-10-18-at-10-13-17-PM-1.jpg",
-    title: "توريدات مصانع وشركات كبرى",
-    badge: "تسليم فوري للمواقع",
+    title: "موك آب فيست مهندسين 3M الأصلي",
+    badge: "أعلى توهج عاكس معتمد",
+    category: "3M بريميوم",
   },
 ];
 
@@ -148,10 +160,12 @@ const CATEGORIES: Category[] = [
         name: "عرض 50 فيست عمال ليموني بالطباعة",
         description: "باقة توفير كبرى تشمل 50 فيست عمال فسفوري عالي الجودة مع طباعة الشعار الخاص بشركتكم بسعر خاص جداً.",
         price: 3500,
-        image: "https://i.ibb.co/KpCCQXzR/Whats-App-Image-2026-10-17-at-4-56-45-AM.jpg",
+        image: "https://i.ibb.co/S7PprHnh/Whats-App-Image-2026-10-18-at-10-13-20-PM-3.jpg",
         gallery: [
-          "https://i.ibb.co/KpCCQXzR/Whats-App-Image-2026-10-17-at-4-56-45-AM.jpg",
+          "https://i.ibb.co/S7PprHnh/Whats-App-Image-2026-10-18-at-10-13-20-PM-3.jpg",
           "https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg",
+          "https://i.ibb.co/nqVj983V/Whats-App-Image-2026-10-18-at-10-13-18-PM-3.jpg",
+          "https://i.ibb.co/3H5hPsv/Whats-App-Image-2026-10-18-at-10-13-42-PM-1.jpg",
         ],
         sizes: ["مقاسات مشكلة (XL/2XL/3XL)", "XL", "2XL", "3XL"],
         features: [
@@ -175,7 +189,12 @@ const CATEGORIES: Category[] = [
         name: "فيست عمال ليموني (محلي)",
         description: "فيست أمان عمال لون ليموني فسفوري عالي الوضوح، تصنيع محلي بجودة ممتازة وخامة متينة.",
         price: 80,
-        image: "https://i.ibb.co/hxhfZXz0/Whats-App-Image-2026-10-11-at-3-09-23-PM.jpg",
+        image: "https://i.ibb.co/S7PprHnh/Whats-App-Image-2026-10-18-at-10-13-20-PM-3.jpg",
+        gallery: [
+          "https://i.ibb.co/S7PprHnh/Whats-App-Image-2026-10-18-at-10-13-20-PM-3.jpg",
+          "https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg",
+          "https://i.ibb.co/3H5hPsv/Whats-App-Image-2026-10-18-at-10-13-42-PM-1.jpg",
+        ],
         sizes: ["XL", "2XL", "3XL"],
         features: ["لون ليموني عالي الوضوح", "خطوط عاكسة للضوء للأمان الليلي", "صناعة محلية عالية الجودة"],
         badge: "إنتاج محلي",
@@ -231,6 +250,10 @@ const CATEGORIES: Category[] = [
         description: "فيست أمان عمال لون ليموني فسفوري عالي الوضوح، خامات مستوردة ممتازة وتصميم مريح للعمل الشاق.",
         price: 90,
         image: "https://i.ibb.co/hxhfZXz0/Whats-App-Image-2026-10-11-at-3-09-23-PM.jpg",
+        gallery: [
+          "https://i.ibb.co/hxhfZXz0/Whats-App-Image-2026-10-11-at-3-09-23-PM.jpg",
+          "https://i.ibb.co/3H5hPsv/Whats-App-Image-2026-10-18-at-10-13-42-PM-1.jpg",
+        ],
         sizes: ["XL", "2XL", "3XL"],
         features: ["خامة مستوردة فائقة المتانة", "أشرطة فسفورية عاكسة متطورة", "سحاب أمامي عملي وقوي"],
         badge: "مستورد",
@@ -409,7 +432,11 @@ const CATEGORIES: Category[] = [
         name: "فيست مهندسين 4 عاكس ليموني × أسود (محلي)",
         description: "فيست مهندسين تنفيذي مزود بأربعة خطوط عاكسة متطورة، قماش فاخر وجيوب واسعة للرسومات والأدوات.",
         price: 170,
-        image: "https://i.ibb.co/ycqLFDJD/Whats-App-Image-2026-10-11-at-3-12-09-PM.jpg",
+        image: "https://i.ibb.co/FkXwgTMy/Whats-App-Image-2026-10-18-at-10-13-15-PM.jpg",
+        gallery: [
+          "https://i.ibb.co/FkXwgTMy/Whats-App-Image-2026-10-18-at-10-13-15-PM.jpg",
+          "https://i.ibb.co/GfYhRpFf/Whats-App-Image-2026-10-18-at-10-13-18-PM.jpg",
+        ],
         sizes: ["XL", "2XL", "3XL"],
         features: ["4 خطوط عاكسة متطورة", "مظهر هندسي تنفيذي فاخر", "جيوب مخصصة للمخططات والموبايل"],
         badge: "4 عاكس",
@@ -420,7 +447,7 @@ const CATEGORIES: Category[] = [
         name: "فيست مهندسين 4 عاكس ليموني × أزرق (محلي)",
         description: "فيست مهندسين 4 عاكس بتنسيق ألوان ليموني وأزرق داكن راقٍ، خامات متينة وجيوب متعددة محلي.",
         price: 170,
-        image: "https://i.ibb.co/84Gc7fMy/Whats-App-Image-2026-10-11-at-3-12-09-PM-1.jpg",
+        image: "https://i.ibb.co/GfYhRpFf/Whats-App-Image-2026-10-18-at-10-13-18-PM.jpg",
         sizes: ["XL", "2XL", "3XL"],
         features: ["4 خطوط عاكسة قوية", "قصة أنيقة ومريحة للمهندسين", "خامات متينة ومقاومة للحرارة"],
         badge: "4 عاكس",
@@ -442,7 +469,11 @@ const CATEGORIES: Category[] = [
         name: "فيست مهندسين ثري إم (3M) ليموني × أسود (محلي)",
         description: "فيست مهندسين فاخر مزود بأشرطة 3M العاكسة الأصلية لتوفير بريق عاكس قياسي عالمي محلي.",
         price: 200,
-        image: "https://i.ibb.co/HTJjPgsn/Whats-App-Image-2026-10-11-at-3-12-35-PM.jpg",
+        image: "https://i.ibb.co/LDJ5Qv0d/Whats-App-Image-2026-10-18-at-10-13-17-PM-1.jpg",
+        gallery: [
+          "https://i.ibb.co/LDJ5Qv0d/Whats-App-Image-2026-10-18-at-10-13-17-PM-1.jpg",
+          "https://i.ibb.co/HTJjPgsn/Whats-App-Image-2026-10-11-at-3-12-35-PM.jpg",
+        ],
         sizes: ["XL", "2XL", "3XL"],
         features: ["شريط عاكس أصلي 3M", "قماش عالي الكثافة والجودة", "جيوب تنظيمية احترافية"],
         badge: "عاكس 3M محلي",
@@ -473,7 +504,11 @@ const CATEGORIES: Category[] = [
         name: "فيست مهندسين ثري إم (3M) ليموني × أسود (مستورد)",
         description: "فيست مهندسين تنفيذي مستورد بأعلى معايير الجودة العالمية مع شرائط 3M العاكسة الأصلية.",
         price: 250,
-        image: "https://i.ibb.co/HTJjPgsn/Whats-App-Image-2026-10-11-at-3-12-35-PM.jpg",
+        image: "https://i.ibb.co/LDJ5Qv0d/Whats-App-Image-2026-10-18-at-10-13-17-PM-1.jpg",
+        gallery: [
+          "https://i.ibb.co/LDJ5Qv0d/Whats-App-Image-2026-10-18-at-10-13-17-PM-1.jpg",
+          "https://i.ibb.co/HTJjPgsn/Whats-App-Image-2026-10-11-at-3-12-35-PM.jpg",
+        ],
         sizes: ["XL", "2XL", "3XL"],
         features: ["شريط عاكس معتمد 3M", "خامات مستوردة بريميوم", "تفصيل ومظهر قيادي فاخر"],
         badge: "عاكس 3M مستورد",
@@ -1183,7 +1218,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
       {/* المحتوى الرئيسي */}
       {view === "store" ? (
         <>
-          {/* 2. Hero Section محدث بصور واقعية مطبوعة وسلايدر تفاعلي */}
+          {/* 2. Hero Section مع السلايدر التفاعلي لصور النماذج الحية والموك آب */}
           <section className="relative overflow-hidden bg-gradient-to-b from-blue-950/30 via-transparent to-transparent border-b border-slate-800/60 py-12 sm:py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="grid lg:grid-cols-12 gap-8 items-center">
@@ -1201,7 +1236,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                   </h1>
 
                   <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                    شاهد نماذج حية مطبوعة بالفعل لشركات كبرى؛ سترات أمان مهندسين وعمال معتمدة وخامات أصلية تدوم في بيئات العمل القاسية.
+                    شاهد نماذج حية وموك آب واقعي لفيستات العمال والمهندسين (4 عاكس و 3M) مع إمكانية طباعة الصدر والظهر بدقة وثبات تام.
                   </p>
 
                   <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
@@ -1251,16 +1286,19 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                       unoptimized
                     />
 
-                    <div className="absolute top-4 right-4 z-10">
+                    <div className="absolute top-4 right-4 z-10 flex gap-2">
                       <Badge className="bg-blue-600/90 text-white font-bold px-3 py-1 text-xs backdrop-blur-md border border-blue-400/40 shadow-lg">
                         {HERO_SHOWCASE_IMAGES[heroSlideIndex].badge}
+                      </Badge>
+                      <Badge className="bg-slate-900/80 text-amber-300 font-semibold px-2.5 py-1 text-xs backdrop-blur-md border border-slate-700">
+                        {HERO_SHOWCASE_IMAGES[heroSlideIndex].category}
                       </Badge>
                     </div>
 
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex items-end justify-between p-5">
                       <div className="text-white">
                         <span className="text-[11px] font-bold text-amber-400 tracking-wider block">
-                          تصوير حي من خط الإنتاج
+                          معاينة وتصوير حي
                         </span>
                         <p className="font-bold text-base sm:text-lg">
                           {HERO_SHOWCASE_IMAGES[heroSlideIndex].title}
@@ -1298,7 +1336,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                   </div>
 
                   {/* صور مصغرة للتنقل السريع داخل البانر */}
-                  <div className="grid grid-cols-6 gap-2 mt-3">
+                  <div className="grid grid-cols-7 gap-1.5 mt-3">
                     {HERO_SHOWCASE_IMAGES.map((img, idx) => (
                       <button
                         key={idx}
@@ -1309,6 +1347,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                             ? "border-blue-500 scale-105 shadow-md shadow-blue-900/50"
                             : "border-slate-800 opacity-60 hover:opacity-100"
                         }`}
+                        title={img.title}
                       >
                         <Image src={img.url} alt="Thumbnail" fill className="object-cover" unoptimized />
                       </button>
@@ -1325,13 +1364,13 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                 <div>
                   <Badge className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 text-xs mb-2">
-                    تنفيذ حقيقي من مصانعنا
+                    تنفيذ حقيقي وموك آب معتمد
                   </Badge>
                   <h3 className="text-xl sm:text-2xl font-black text-white">
-                    معرض نماذج الطباعة الفعلية لعملائنا
+                    معرض نماذج الفيستات والطباعة الفعلية
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-400 mt-1">
-                    شاهد ألوان الأحبار الحقيقية ومواضع طباعة الشعار على الصدر والظهر قبل تقديم طلبك
+                    استعرض أشكال الفيستات من الأمام والظهر مع نماذج 4 عاكس و 3M قبل إتمام طلبك
                   </p>
                 </div>
                 <a
@@ -1345,11 +1384,12 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                 </a>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
                 {HERO_SHOWCASE_IMAGES.map((item, index) => (
                   <div
                     key={index}
-                    className="group relative aspect-square rounded-2xl overflow-hidden border border-slate-800 bg-slate-900 hover:border-blue-500/60 transition-all duration-300"
+                    onClick={() => setHeroSlideIndex(index)}
+                    className="group relative aspect-square rounded-2xl overflow-hidden border border-slate-800 bg-slate-900 hover:border-blue-500/60 transition-all duration-300 cursor-pointer"
                   >
                     <Image
                       src={item.url}
@@ -1358,8 +1398,9 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                       unoptimized
                     />
-                    <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2.5">
-                      <p className="text-[11px] font-bold text-white leading-tight">{item.title}</p>
+                    <div className="absolute inset-0 bg-slate-950/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2.5">
+                      <span className="text-[9px] font-bold text-amber-400">{item.badge}</span>
+                      <p className="text-[10px] font-bold text-white leading-tight">{item.title}</p>
                     </div>
                   </div>
                 ))}
@@ -1849,7 +1890,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                     />
                   </div>
 
-                  {/* رفع ملف اللوجو للطباعة */}
+                  {/* رفع ملف اللوجو للطباعة مع الموك آب المحدث */}
                   <div className="md:col-span-2 space-y-3">
                     <label className="block text-xs font-semibold text-slate-300">
                       لوجو الطباعة على الفيست (اختياري - يمكنك إرفاقه هنا أو إرساله واتساب)
@@ -1865,13 +1906,13 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                       <div className="p-4 rounded-xl bg-slate-950 border border-blue-900/60 flex flex-col sm:flex-row items-center gap-4">
                         <div className="relative w-28 h-28 rounded-lg overflow-hidden border border-slate-700 bg-slate-900 shrink-0">
                           <Image
-                            src="https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg"
+                            src="https://i.ibb.co/3H5hPsv/Whats-App-Image-2026-10-18-at-10-13-42-PM-1.jpg"
                             alt="Vest Mockup"
                             fill
-                            className="object-cover opacity-80"
+                            className="object-cover opacity-85"
                             unoptimized
                           />
-                          <div className="absolute top-7 right-4 w-9 h-9 bg-white/90 p-0.5 rounded shadow-md flex items-center justify-center">
+                          <div className="absolute top-7 right-4 w-9 h-9 bg-white/95 p-0.5 rounded shadow-md flex items-center justify-center">
                             <img
                               src={logoPreviewUrl}
                               alt="Uploaded Logo Preview"
