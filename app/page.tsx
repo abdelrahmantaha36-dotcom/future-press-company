@@ -35,6 +35,7 @@ interface Product {
   features: string[];
   badge?: string;
   isOffer?: boolean;
+  origin?: "local" | "imported";
 }
 
 interface CartItem {
@@ -101,7 +102,7 @@ const CATEGORIES: Category[] = [
           "50 فيست عمال فسفوري عالي الوضوح",
           "شامل طباعة الشعار بدقة عالية",
           "أشرطة عاكسة للضوء للأمان الليلي",
-          "سعر حصري وموفر جداً للمصانع والشركات"
+          "سعر حصري وموفر جداً للمصانع والشركات",
         ],
         badge: "عرض خاص لفترة محدودة",
         isOffer: true,
@@ -122,16 +123,7 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["لون ليموني عالي الوضوح", "خطوط عاكسة للضوء للأمان الليلي", "صناعة محلية عالية الجودة"],
         badge: "إنتاج محلي",
-      },
-      {
-        id: "worker-vest-lemon-imported",
-        name: "فيست عمال ليموني (مستورد)",
-        description: "فيست أمان عمال لون ليموني فسفوري عالي الوضوح، خامات مستوردة ممتازة وتصميم مريح للعمل الشاق.",
-        price: 90,
-        image: "https://i.ibb.co/hxhfZXz0/Whats-App-Image-2026-10-11-at-3-09-23-PM.jpg",
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["خامة مستوردة فائقة المتانة", "أشرطة فسفورية عاكسة متطورة", "سحاب أمامي عملي وقوي"],
-        badge: "مستورد",
+        origin: "local",
       },
       {
         id: "worker-vest-orange-local",
@@ -142,16 +134,7 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["لون برتقالي فاقع عالي الرؤية", "خطوط عاكسة مزدوجة", "تصنيع محلي متين"],
         badge: "إنتاج محلي",
-      },
-      {
-        id: "worker-vest-orange-imported",
-        name: "فيست عمال برتقالي (مستورد)",
-        description: "فيست أمان عمال برتقالي مستورد عالي الكفاءة، مقاوم للظروف القاسية مع أشرطة عاكسة ممتازة.",
-        price: 90,
-        image: "https://i.ibb.co/cXKFMsb7/Whats-App-Image-2026-10-11-at-3-09-24-PM.jpg",
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["خامة مستوردة ممتازة", "عاكس ضوء فائق القوة", "مريح وسهل الارتداء"],
-        badge: "مستورد",
+        origin: "local",
       },
       {
         id: "worker-vest-black-local",
@@ -162,16 +145,7 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["لون أسود مميز وعملي", "أشرطة فسفورية عاكسة للأمان", "قماش متين عالي التحمل"],
         badge: "إنتاج محلي",
-      },
-      {
-        id: "worker-vest-black-imported",
-        name: "فيست عمال أسود (مستورد)",
-        description: "فيست عمال أسود مستورد عالي الجودة، يجمع بين المظهر المهني والأمان التام داخل الموقع.",
-        price: 120,
-        image: "https://i.ibb.co/FLvDPndN/Whats-App-Image-2026-10-11-at-3-09-59-PM-2.jpg",
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["خامة مستوردة فاخرة", "أشرطة عاكسة متينة", "سحاب قوي وخياطة معززة"],
-        badge: "مستورد",
+        origin: "local",
       },
       {
         id: "worker-vest-blue-local",
@@ -182,16 +156,7 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["لون أزرق عملي وجذاب", "عاكس إضاءة عريض", "خامة محلية عالية الجودة"],
         badge: "إنتاج محلي",
-      },
-      {
-        id: "worker-vest-blue-imported",
-        name: "فيست عمال أزرق (مستورد)",
-        description: "فيست أمان عمال أزرق مستورد بخامات ممتازة وتصميم احترافي يوفر الراحة الكاملة أثناء العمل.",
-        price: 120,
-        image: "https://i.ibb.co/ccQ8PXjb/Whats-App-Image-2026-10-11-at-3-09-59-PM-1.jpg",
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["خامات مستوردة فائقة الجودة", "عواكس متطورة للرؤية الليلية", "تهوية وراحة أثناء الحركة"],
-        badge: "مستورد",
+        origin: "local",
       },
       {
         id: "worker-vest-red-local",
@@ -202,6 +167,51 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["لون أحمر فاقع لسهولة التمييز", "خطوط فسفورية لامعة", "خياطة متينة ومقاومة"],
         badge: "إنتاج محلي",
+        origin: "local",
+      },
+      {
+        id: "worker-vest-lemon-imported",
+        name: "فيست عمال ليموني (مستورد)",
+        description: "فيست أمان عمال لون ليموني فسفوري عالي الوضوح، خامات مستوردة ممتازة وتصميم مريح للعمل الشاق.",
+        price: 90,
+        image: "https://i.ibb.co/hxhfZXz0/Whats-App-Image-2026-10-11-at-3-09-23-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامة مستوردة فائقة المتانة", "أشرطة فسفورية عاكسة متطورة", "سحاب أمامي عملي وقوي"],
+        badge: "مستورد",
+        origin: "imported",
+      },
+      {
+        id: "worker-vest-orange-imported",
+        name: "فيست عمال برتقالي (مستورد)",
+        description: "فيست أمان عمال برتقالي مستورد عالي الكفاءة، مقاوم للظروف القاسية مع أشرطة عاكسة ممتازة.",
+        price: 90,
+        image: "https://i.ibb.co/cXKFMsb7/Whats-App-Image-2026-10-11-at-3-09-24-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامة مستوردة ممتازة", "عاكس ضوء فائق القوة", "مريح وسهل الارتداء"],
+        badge: "مستورد",
+        origin: "imported",
+      },
+      {
+        id: "worker-vest-black-imported",
+        name: "فيست عمال أسود (مستورد)",
+        description: "فيست عمال أسود مستورد عالي الجودة، يجمع بين المظهر المهني والأمان التام داخل الموقع.",
+        price: 120,
+        image: "https://i.ibb.co/FLvDPndN/Whats-App-Image-2026-10-11-at-3-09-59-PM-2.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامة مستوردة فاخرة", "أشرطة عاكسة متينة", "سحاب قوي وخياطة معززة"],
+        badge: "مستورد",
+        origin: "imported",
+      },
+      {
+        id: "worker-vest-blue-imported",
+        name: "فيست عمال أزرق (مستورد)",
+        description: "فيست أمان عمال أزرق مستورد بخامات ممتازة وتصميم احترافي يوفر الراحة الكاملة أثناء العمل.",
+        price: 120,
+        image: "https://i.ibb.co/ccQ8PXjb/Whats-App-Image-2026-10-11-at-3-09-59-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامات مستوردة فائقة الجودة", "عواكس متطورة للرؤية الليلية", "تهوية وراحة أثناء الحركة"],
+        badge: "مستورد",
+        origin: "imported",
       },
       {
         id: "worker-vest-red-imported",
@@ -212,6 +222,7 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["خامات مستوردة عالية التحمل", "أشرطة عاكسة متطورة", "سحاب مريح وعملي"],
         badge: "مستورد",
+        origin: "imported",
       },
     ],
   },
@@ -229,16 +240,7 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["جيوب أمامية متعددة وعميقة", "حامل بطاقة تعريفية", "قماش متين ولون عالي الوضوح"],
         badge: "إنتاج محلي",
-      },
-      {
-        id: "sup-vest-lemon-imported",
-        name: "فيست مشرفين ليموني (مستورد)",
-        description: "فيست مشرفين ليموني مستورد فاخر، جيوب متعددة وسحابات قوية مع عواكس ضوء ممتازة.",
-        price: 160,
-        image: "https://i.ibb.co/ZpmnCmJq/Whats-App-Image-2026-10-11-at-3-10-27-PM.jpg",
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["خامة مستوردة فاخرة", "جيوب مخصصة للراديو والأدوات", "أشرطة عاكسة عالية الجودة"],
-        badge: "مستورد",
+        origin: "local",
       },
       {
         id: "sup-vest-orange-local",
@@ -249,16 +251,7 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["جيوب عملية ومريحة", "لون برتقالي فاقع واضح", "أشرطة عاكسة متينة"],
         badge: "إنتاج محلي",
-      },
-      {
-        id: "sup-vest-orange-imported",
-        name: "فيست مشرفين برتقالي (مستورد)",
-        description: "فيست إشراف برتقالي مستورد عالي الكفاءة، تصميم مريح وخامات فائقة التحمل بجيوب كاملة.",
-        price: 160,
-        image: "https://i.ibb.co/CszMnVCj/Whats-App-Image-2026-10-11-at-3-10-27-PM-1.jpg",
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["خامة مستوردة عالية الجودة", "تقسيمات جيوب ذكية وعملية", "خطوط عاكسة متطورة"],
-        badge: "مستورد",
+        origin: "local",
       },
       {
         id: "sup-vest-lemon-black-local",
@@ -269,16 +262,7 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["مزيج ليموني وأسود أنيق", "جيوب مخصصة للأجهزة والأقلام", "صناعة محلية متينة"],
         badge: "إنتاج محلي",
-      },
-      {
-        id: "sup-vest-lemon-black-imported",
-        name: "فيست مشرفين ليموني × أسود (مستورد)",
-        description: "فيست إشراف ليموني × أسود مستورد بجودة عالية، مظهر مميز يبرز طاقم الإشراف بالموقع.",
-        price: 150,
-        image: "https://i.ibb.co/Jjqq2XML/Whats-App-Image-2026-10-14-at-1-55-06-PM.jpg",
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["خامات مستوردة ممتازة", "أشرطة فسفورية متطورة", "سحابات متينة وعملية"],
-        badge: "مستورد",
+        origin: "local",
       },
       {
         id: "sup-vest-lemon-blue-local",
@@ -289,16 +273,7 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["ألوان متباينة عالية الوضوح", "جيوب إشراف متعددة", "خياطة محلية معززة"],
         badge: "إنتاج محلي",
-      },
-      {
-        id: "sup-vest-lemon-blue-imported",
-        name: "فيست مشرفين ليموني × أزرق (مستورد)",
-        description: "فيست مشرفين ليموني × أزرق مستورد فاخر، مناسب للمتابعة الميدانية والمهام الإشرافية الدقيقة.",
-        price: 150,
-        image: "https://i.ibb.co/qL0cZFMW/Whats-App-Image-2026-10-14-at-1-55-06-PM-1.jpg",
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["خامة مستوردة راقية", "جيوب كروت وأجهزة لاسلكية", "عواكس ليلية ممتازة"],
-        badge: "مستورد",
+        origin: "local",
       },
       {
         id: "sup-vest-lemon-orange-local",
@@ -309,6 +284,51 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["وضوح مضاعف بلونين فسفوريين", "جيوب متعددة الوظائف", "خامة محلية قوية"],
         badge: "إنتاج محلي",
+        origin: "local",
+      },
+      {
+        id: "sup-vest-lemon-imported",
+        name: "فيست مشرفين ليموني (مستورد)",
+        description: "فيست مشرفين ليموني مستورد فاخر، جيوب متعددة وسحابات قوية مع عواكس ضوء ممتازة.",
+        price: 160,
+        image: "https://i.ibb.co/ZpmnCmJq/Whats-App-Image-2026-10-11-at-3-10-27-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامة مستوردة فاخرة", "جيوب مخصصة للراديو والأدوات", "أشرطة عاكسة عالية الجودة"],
+        badge: "مستورد",
+        origin: "imported",
+      },
+      {
+        id: "sup-vest-orange-imported",
+        name: "فيست مشرفين برتقالي (مستورد)",
+        description: "فيست إشراف برتقالي مستورد عالي الكفاءة، تصميم مريح وخامات فائقة التحمل بجيوب كاملة.",
+        price: 160,
+        image: "https://i.ibb.co/CszMnVCj/Whats-App-Image-2026-10-11-at-3-10-27-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامة مستوردة عالية الجودة", "تقسيمات جيوب ذكية وعملية", "خطوط عاكسة متطورة"],
+        badge: "مستورد",
+        origin: "imported",
+      },
+      {
+        id: "sup-vest-lemon-black-imported",
+        name: "فيست مشرفين ليموني × أسود (مستورد)",
+        description: "فيست إشراف ليموني × أسود مستورد بجودة عالية، مظهر مميز يبرز طاقم الإشراف بالموقع.",
+        price: 150,
+        image: "https://i.ibb.co/Jjqq2XML/Whats-App-Image-2026-10-14-at-1-55-06-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامات مستوردة ممتازة", "أشرطة فسفورية متطورة", "سحابات متينة وعملية"],
+        badge: "مستورد",
+        origin: "imported",
+      },
+      {
+        id: "sup-vest-lemon-blue-imported",
+        name: "فيست مشرفين ليموني × أزرق (مستورد)",
+        description: "فيست مشرفين ليموني × أزرق مستورد فاخر، مناسب للمتابعة الميدانية والمهام الإشرافية الدقيقة.",
+        price: 150,
+        image: "https://i.ibb.co/qL0cZFMW/Whats-App-Image-2026-10-14-at-1-55-06-PM-1.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["خامة مستوردة راقية", "جيوب كروت وأجهزة لاسلكية", "عواكس ليلية ممتازة"],
+        badge: "مستورد",
+        origin: "imported",
       },
       {
         id: "sup-vest-lemon-orange-imported",
@@ -319,6 +339,7 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["خامات مستوردة متطورة", "رؤية فائقة بالنهار والليل", "سحاب قوي وخياطة متينة"],
         badge: "مستورد",
+        origin: "imported",
       },
     ],
   },
@@ -336,6 +357,7 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["4 خطوط عاكسة متطورة", "مظهر هندسي تنفيذي فاخر", "جيوب مخصصة للمخططات والموبايل"],
         badge: "4 عاكس",
+        origin: "local",
       },
       {
         id: "eng-vest-4ref-lemon-blue-local",
@@ -346,6 +368,7 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["4 خطوط عاكسة قوية", "قصة أنيقة ومريحة للمهندسين", "خامات متينة ومقاومة للحرارة"],
         badge: "4 عاكس",
+        origin: "local",
       },
       {
         id: "eng-vest-4ref-lemon-orange-local",
@@ -356,6 +379,7 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["4 أشرطة عاكسة للضوء", "مزيج فسفوري فائق الوضوح", "خياطة مزدوجة معززة"],
         badge: "4 عاكس",
+        origin: "local",
       },
       {
         id: "eng-vest-3m-lemon-black-local",
@@ -366,16 +390,7 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["شريط عاكس أصلي 3M", "قماش عالي الكثافة والجودة", "جيوب تنظيمية احترافية"],
         badge: "عاكس 3M محلي",
-      },
-      {
-        id: "eng-vest-3m-lemon-black-imported",
-        name: "فيست مهندسين ثري إم (3M) ليموني × أسود (مستورد)",
-        description: "فيست مهندسين تنفيذي مستورد بأعلى معايير الجودة العالمية مع شرائط 3M العاكسة الأصلية.",
-        price: 250,
-        image: "https://i.ibb.co/HTJjPgsn/Whats-App-Image-2026-10-11-at-3-12-35-PM.jpg",
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["شريط عاكس معتمد 3M", "خامات مستوردة بريميوم", "تفصيل ومظهر قيادي فاخر"],
-        badge: "عاكس 3M مستورد",
+        origin: "local",
       },
       {
         id: "eng-vest-3m-lemon-blue-local",
@@ -386,16 +401,7 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["عواكس 3M فائقة التوهج", "قماش جبردين عالي التحمل", "حلقات لتعليق اللاسلكي والمفاتيح"],
         badge: "عاكس 3M محلي",
-      },
-      {
-        id: "eng-vest-3m-lemon-blue-imported",
-        name: "فيست مهندسين ثري إم (3M) ليموني × أزرق (مستورد)",
-        description: "فيست مهندسين مستورد بريميوم بشرائط 3M ليموني × أزرق لضمان أعلى مستويات الأمان والأناقة.",
-        price: 250,
-        image: "https://i.ibb.co/zkxZxDq/Whats-App-Image-2026-10-11-at-3-12-36-PM.jpg",
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["تقنية عاكس 3M المتطورة", "خامة مستوردة مقاومة للتآكل", "راحة تامة في التحرك والمطابقة"],
-        badge: "عاكس 3M مستورد",
+        origin: "local",
       },
       {
         id: "eng-vest-3m-lemon-orange-local",
@@ -406,6 +412,29 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["أشرطة عاكسة أصلية 3M", "مزيج لوني عالي الوضوح", "خياطة متينة وجيوب شاملة"],
         badge: "عاكس 3M محلي",
+        origin: "local",
+      },
+      {
+        id: "eng-vest-3m-lemon-black-imported",
+        name: "فيست مهندسين ثري إم (3M) ليموني × أسود (مستورد)",
+        description: "فيست مهندسين تنفيذي مستورد بأعلى معايير الجودة العالمية مع شرائط 3M العاكسة الأصلية.",
+        price: 250,
+        image: "https://i.ibb.co/HTJjPgsn/Whats-App-Image-2026-10-11-at-3-12-35-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["شريط عاكس معتمد 3M", "خامات مستوردة بريميوم", "تفصيل ومظهر قيادي فاخر"],
+        badge: "عاكس 3M مستورد",
+        origin: "imported",
+      },
+      {
+        id: "eng-vest-3m-lemon-blue-imported",
+        name: "فيست مهندسين ثري إم (3M) ليموني × أزرق (مستورد)",
+        description: "فيست مهندسين مستورد بريميوم بشرائط 3M ليموني × أزرق لضمان أعلى مستويات الأمان والأناقة.",
+        price: 250,
+        image: "https://i.ibb.co/zkxZxDq/Whats-App-Image-2026-10-11-at-3-12-36-PM.jpg",
+        sizes: ["XL", "2XL", "3XL"],
+        features: ["تقنية عاكس 3M المتطورة", "خامة مستوردة مقاومة للتآكل", "راحة تامة في التحرك والمطابقة"],
+        badge: "عاكس 3M مستورد",
+        origin: "imported",
       },
       {
         id: "eng-vest-3m-lemon-orange-imported",
@@ -416,6 +445,7 @@ const CATEGORIES: Category[] = [
         sizes: ["XL", "2XL", "3XL"],
         features: ["شريط عاكس 3M مستورد", "أعلى معايير الجودة التنفيذية", "متانة قصوى في البيئات القاسية"],
         badge: "عاكس 3M مستورد",
+        origin: "imported",
       },
     ],
   },
@@ -460,6 +490,12 @@ const CATEGORIES: Category[] = [
 
 export default function HomePage() {
   const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [subCategoryFilter, setSubCategoryFilter] = useState<{ [catId: string]: "all" | "local" | "imported" }>({
+    workers: "all",
+    supervisors: "all",
+    engineers: "all",
+  });
+
   const [selectedSizes, setSelectedSizes] = useState<{ [productId: string]: string }>({});
   const [quantities, setQuantities] = useState<{ [productId: string]: number }>({});
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -592,10 +628,10 @@ export default function HomePage() {
 📅 التاريخ: ${orderDate}
 
 👤 بيانات العميل:
-• الاسم: ${formData.fullName}
-• المحافظة: ${formData.governorate}
-• الهاتف: ${formData.phone1} ${formData.phone2 ? `\n• هاتف إضافي: ${formData.phone2}` : ""}
-• العنوان: ${formData.address}
+- الاسم: ${formData.fullName}
+- المحافظة: ${formData.governorate}
+- الهاتف: ${formData.phone1} ${formData.phone2 ? `\n• هاتف إضافي: ${formData.phone2}` : ""}
+- العنوان: ${formData.address}
 ${logoFile ? `• لوجو الطباعة: تم إرفاقه (${logoFile.name})` : "• لوجو الطباعة: لم يتم إرفاقه"}
 ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile.name})` : "• إيصال التحويل: لم يتم إرفاقه"}
 
@@ -636,6 +672,126 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
     activeCategory === "all"
       ? CATEGORIES
       : CATEGORIES.filter((category) => category.id === activeCategory);
+
+  const renderProductCard = (product: Product, isHelmet: boolean) => {
+    const currentSelectedSize = selectedSizes[product.id] || product.sizes[0] || "مقاس موحد";
+    const currentQty = quantities[product.id] || 1;
+
+    return (
+      <div
+        key={product.id}
+        className={`border rounded-2xl overflow-hidden bg-[#0c1830] text-slate-100 flex flex-col sm:flex-row hover:border-blue-500/50 transition-all duration-300 shadow-lg ${
+          product.isOffer ? "border-amber-500/50 bg-[#0e1c38]" : "border-blue-900/60"
+        }`}
+      >
+        <div className="relative sm:w-1/2 aspect-square bg-[#081020]">
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            className="object-cover"
+            unoptimized
+          />
+          {product.badge && (
+            <div className="absolute top-3 right-3">
+              <Badge
+                className={
+                  product.isOffer
+                    ? "bg-amber-600 text-white font-bold"
+                    : "bg-blue-600 text-white font-semibold"
+                }
+              >
+                {product.badge}
+              </Badge>
+            </div>
+          )}
+        </div>
+
+        <div className="p-6 sm:w-1/2 flex flex-col justify-between space-y-4">
+          <div>
+            <h4 className="text-xl font-bold mb-2 text-white">{product.name}</h4>
+            <p className="text-sm text-slate-300 mb-4">{product.description}</p>
+
+            {/* اختيار المقاس */}
+            {product.sizes && product.sizes.length > 0 && (
+              <div className="mb-4">
+                <span className="text-xs font-semibold text-slate-400 block mb-2">
+                  المقاس:
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {product.sizes.map((size) => (
+                    <button
+                      key={size}
+                      type="button"
+                      onClick={() => handleSelectSize(product.id, size)}
+                      className={`px-3 py-1.5 rounded-lg border text-sm font-semibold cursor-pointer ${
+                        currentSelectedSize === size
+                          ? "bg-blue-600 text-white border-blue-500 shadow-md"
+                          : "bg-[#091428] text-slate-300 border-blue-900 hover:bg-blue-950"
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* خانة كتابة العدد */}
+            <div className="mb-4">
+              <label className="text-xs font-semibold text-slate-400 block mb-2">
+                اكتب العدد المطلوب:
+              </label>
+              <input
+                type="number"
+                min="1"
+                value={currentQty}
+                onChange={(e) => handleQuantityChange(product.id, e.target.value)}
+                className="w-full bg-[#081020] border border-blue-900 rounded-lg px-3 py-2 text-white font-bold text-center focus:border-blue-500 focus:outline-none"
+              />
+            </div>
+
+            {/* المميزات */}
+            <ul className="text-xs space-y-1 text-slate-300">
+              {product.features.map((feature, idx) => (
+                <li key={idx} className="flex items-center gap-2">
+                  <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="pt-4 border-t border-blue-900/50 space-y-3">
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-slate-400">
+                  {product.isOffer ? "سعر العرض الإجمالي:" : "سعر القطعة:"}
+                </span>
+                <span className="text-2xl font-black text-blue-400">
+                  {product.price} ج.م
+                </span>
+              </div>
+              {!isHelmet && (
+                <p className="text-xs text-emerald-400 font-bold text-left mt-1 flex items-center justify-end gap-1">
+                  <Check className="w-3.5 h-3.5" />
+                  السعر شامل الطباعة
+                </p>
+              )}
+            </div>
+
+            <Button
+              onClick={() => addToCart(product)}
+              className="w-full cursor-pointer bg-blue-600 hover:bg-blue-500 text-white font-bold py-5"
+            >
+              <ShoppingCart className="w-4 h-4 ml-2" />
+              أضف ({currentQty}) إلى السلة
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-[#070d19] text-slate-100" dir="rtl">
@@ -698,7 +854,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
             </div>
           </section>
 
-          {/* قائمة اختيار الأقسام */}
+          {/* قائمة اختيار الأقسام الرئيسية */}
           <section className="container mx-auto px-4 pt-8">
             <div className="bg-[#0a1428]/80 border border-blue-900/50 rounded-2xl p-4 sm:p-6 shadow-xl">
               <div className="flex items-center gap-2 mb-4 text-blue-400 font-bold text-lg">
@@ -741,152 +897,130 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
           {/* عرض الأقسام والمنتجات */}
           <main className="py-10">
             <div className="container mx-auto px-4 space-y-16">
-              {displayedCategories.map((category) => (
-                <section
-                  key={category.id}
-                  id={category.id}
-                  className={`bg-[#0a1428]/60 border rounded-3xl p-6 sm:p-10 shadow-2xl ${
-                    category.id === "offers" ? "border-amber-500/60 shadow-amber-950/20" : "border-blue-900/40"
-                  }`}
-                >
-                  <div className="border-b border-blue-900/50 pb-6 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                      <h3 className="text-3xl sm:text-4xl font-black text-white tracking-wide flex items-center gap-2">
-                        {category.id === "offers" && <Flame className="w-8 h-8 text-amber-400" />}
-                        {category.title}
-                      </h3>
-                      <p className="text-slate-400 text-base mt-2">{category.description}</p>
-                    </div>
-                    <span className="text-sm font-semibold bg-blue-950 px-4 py-2 rounded-full border border-blue-800 text-blue-300 w-fit">
-                      {category.products.length} {category.products.length === 1 ? "منتج متاح" : "منتجات متاحة"}
-                    </span>
-                  </div>
+              {displayedCategories.map((category) => {
+                const isHelmet = category.id === "helmets";
+                const isVestCategory = ["workers", "supervisors", "engineers"].includes(category.id);
+                const currentFilter = subCategoryFilter[category.id] || "all";
 
-                  {category.products.length > 0 ? (
-                    <div className="grid md:grid-cols-2 gap-8">
-                      {category.products.map((product) => {
-                        const currentSelectedSize = selectedSizes[product.id] || product.sizes[0] || "مقاس موحد";
-                        const currentQty = quantities[product.id] || 1;
-                        const isHelmet = category.id === "helmets";
+                const localProducts = category.products.filter((p) => p.origin === "local");
+                const importedProducts = category.products.filter((p) => p.origin === "imported");
 
-                        return (
-                          <div
-                            key={product.id}
-                            className={`border rounded-2xl overflow-hidden bg-[#0c1830] text-slate-100 flex flex-col sm:flex-row hover:border-blue-500/50 transition-all duration-300 shadow-lg ${
-                              product.isOffer ? "border-amber-500/50 bg-[#0e1c38]" : "border-blue-900/60"
+                return (
+                  <section
+                    key={category.id}
+                    id={category.id}
+                    className={`bg-[#0a1428]/60 border rounded-3xl p-6 sm:p-10 shadow-2xl ${
+                      category.id === "offers"
+                        ? "border-amber-500/60 shadow-amber-950/20"
+                        : "border-blue-900/40"
+                    }`}
+                  >
+                    <div className="border-b border-blue-900/50 pb-6 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div>
+                        <h3 className="text-3xl sm:text-4xl font-black text-white tracking-wide flex items-center gap-2">
+                          {category.id === "offers" && <Flame className="w-8 h-8 text-amber-400" />}
+                          {category.title}
+                        </h3>
+                        <p className="text-slate-400 text-base mt-2">{category.description}</p>
+                      </div>
+
+                      {/* أزرار التبديل الداخلي (محلي / مستورد) لأقسام الفيستات */}
+                      {isVestCategory ? (
+                        <div className="flex items-center gap-2 bg-[#081020] p-1.5 rounded-xl border border-blue-900/80">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setSubCategoryFilter((prev) => ({ ...prev, [category.id]: "all" }))
+                            }
+                            className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                              currentFilter === "all"
+                                ? "bg-blue-600 text-white shadow"
+                                : "text-slate-400 hover:text-white"
                             }`}
                           >
-                            <div className="relative sm:w-1/2 aspect-square bg-[#081020]">
-                              <Image
-                                src={product.image}
-                                alt={product.name}
-                                fill
-                                className="object-cover"
-                                unoptimized
-                              />
-                              {product.badge && (
-                                <div className="absolute top-3 right-3">
-                                  <Badge className={product.isOffer ? "bg-amber-600 text-white font-bold" : "bg-blue-600 text-white font-semibold"}>
-                                    {product.badge}
-                                  </Badge>
-                                </div>
-                              )}
+                            الكل ({category.products.length})
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setSubCategoryFilter((prev) => ({ ...prev, [category.id]: "local" }))
+                            }
+                            className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                              currentFilter === "local"
+                                ? "bg-emerald-600 text-white shadow"
+                                : "text-slate-400 hover:text-white"
+                            }`}
+                          >
+                            محلي ({localProducts.length})
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setSubCategoryFilter((prev) => ({ ...prev, [category.id]: "imported" }))
+                            }
+                            className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                              currentFilter === "imported"
+                                ? "bg-cyan-600 text-white shadow"
+                                : "text-slate-400 hover:text-white"
+                            }`}
+                          >
+                            مستورد ({importedProducts.length})
+                          </button>
+                        </div>
+                      ) : (
+                        <span className="text-sm font-semibold bg-blue-950 px-4 py-2 rounded-full border border-blue-800 text-blue-300 w-fit">
+                          {category.products.length}{" "}
+                          {category.products.length === 1 ? "منتج متاح" : "منتجات متاحة"}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* عرض المنتجات إذا لم يكن فيست (العروض أو الخوذات) */}
+                    {!isVestCategory && (
+                      <div className="grid md:grid-cols-2 gap-8">
+                        {category.products.map((product) => renderProductCard(product, isHelmet))}
+                      </div>
+                    )}
+
+                    {/* عرض منتجات الفيستات مقسمة داخلياً إلى محلي ومستورد */}
+                    {isVestCategory && (
+                      <div className="space-y-12">
+                        {/* قسم تصنيع محلي */}
+                        {(currentFilter === "all" || currentFilter === "local") && localProducts.length > 0 && (
+                          <div className="space-y-4">
+                            <div className="flex items-center gap-3">
+                              <span className="h-4 w-1.5 bg-emerald-500 rounded-full"></span>
+                              <h4 className="text-xl sm:text-2xl font-bold text-emerald-400">
+                                قسم تصنيع محلي
+                              </h4>
+                              <span className="text-xs text-slate-400">({localProducts.length} منتجات)</span>
                             </div>
-
-                            <div className="p-6 sm:w-1/2 flex flex-col justify-between space-y-4">
-                              <div>
-                                <h4 className="text-xl font-bold mb-2 text-white">{product.name}</h4>
-                                <p className="text-sm text-slate-300 mb-4">{product.description}</p>
-
-                                {/* اختيار المقاس */}
-                                {product.sizes && product.sizes.length > 0 && (
-                                  <div className="mb-4">
-                                    <span className="text-xs font-semibold text-slate-400 block mb-2">
-                                      المقاس:
-                                    </span>
-                                    <div className="flex flex-wrap gap-2">
-                                      {product.sizes.map((size) => (
-                                        <button
-                                          key={size}
-                                          type="button"
-                                          onClick={() => handleSelectSize(product.id, size)}
-                                          className={`px-3 py-1.5 rounded-lg border text-sm font-semibold cursor-pointer ${
-                                            currentSelectedSize === size
-                                              ? "bg-blue-600 text-white border-blue-500 shadow-md"
-                                              : "bg-[#091428] text-slate-300 border-blue-900 hover:bg-blue-950"
-                                          }`}
-                                        >
-                                          {size}
-                                        </button>
-                                      ))}
-                                    </div>
-                                  </div>
-                                )}
-
-                                {/* خانة كتابة العدد */}
-                                <div className="mb-4">
-                                  <label className="text-xs font-semibold text-slate-400 block mb-2">
-                                    اكتب العدد المطلوب:
-                                  </label>
-                                  <input
-                                    type="number"
-                                    min="1"
-                                    value={currentQty}
-                                    onChange={(e) => handleQuantityChange(product.id, e.target.value)}
-                                    className="w-full bg-[#081020] border border-blue-900 rounded-lg px-3 py-2 text-white font-bold text-center focus:border-blue-500 focus:outline-none"
-                                  />
-                                </div>
-
-                                {/* المميزات */}
-                                <ul className="text-xs space-y-1 text-slate-300">
-                                  {product.features.map((feature, idx) => (
-                                    <li key={idx} className="flex items-center gap-2">
-                                      <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                                      <span>{feature}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-
-                              <div className="pt-4 border-t border-blue-900/50 space-y-3">
-                                <div>
-                                  <div className="flex items-center justify-between">
-                                    <span className="text-xs text-slate-400">
-                                      {product.isOffer ? "سعر العرض الإجمالي:" : "سعر القطعة:"}
-                                    </span>
-                                    <span className="text-2xl font-black text-blue-400">
-                                      {product.price} ج.م
-                                    </span>
-                                  </div>
-                                  {/* كتابة السعر شامل الطباعة لجميع الفيستات والعروض */}
-                                  {!isHelmet && (
-                                    <p className="text-xs text-emerald-400 font-bold text-left mt-1 flex items-center justify-end gap-1">
-                                      <Check className="w-3.5 h-3.5" />
-                                      السعر شامل الطباعة
-                                    </p>
-                                  )}
-                                </div>
-
-                                <Button
-                                  onClick={() => addToCart(product)}
-                                  className="w-full cursor-pointer bg-blue-600 hover:bg-blue-500 text-white font-bold py-5"
-                                >
-                                  <ShoppingCart className="w-4 h-4 ml-2" />
-                                  أضف ({currentQty}) إلى السلة
-                                </Button>
-                              </div>
+                            <div className="grid md:grid-cols-2 gap-8">
+                              {localProducts.map((product) => renderProductCard(product, false))}
                             </div>
                           </div>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <div className="py-12 text-center border border-dashed border-blue-900/70 rounded-2xl bg-[#081020]/50 text-slate-400">
-                      قريباً - سيتم توفير منتجات هذا القسم فور توفرها
-                    </div>
-                  )}
-                </section>
-              ))}
+                        )}
+
+                        {/* قسم مستورد */}
+                        {(currentFilter === "all" || currentFilter === "imported") && importedProducts.length > 0 && (
+                          <div className="space-y-4">
+                            <div className="flex items-center gap-3">
+                              <span className="h-4 w-1.5 bg-cyan-500 rounded-full"></span>
+                              <h4 className="text-xl sm:text-2xl font-bold text-cyan-400">
+                                قسم مستورد
+                              </h4>
+                              <span className="text-xs text-slate-400">({importedProducts.length} منتجات)</span>
+                            </div>
+                            <div className="grid md:grid-cols-2 gap-8">
+                              {importedProducts.map((product) => renderProductCard(product, false))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </section>
+                );
+              })}
             </div>
           </main>
         </>
@@ -924,7 +1058,8 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                         <div>
                           <p className="font-bold text-white">{item.name}</p>
                           <p className="text-slate-400 text-xs">
-                            المقاس: <span className="text-blue-300 font-semibold">{item.size}</span> | الكمية: <span className="text-blue-300 font-semibold">{item.quantity}</span>
+                            المقاس: <span className="text-blue-300 font-semibold">{item.size}</span> | الكمية:{" "}
+                            <span className="text-blue-300 font-semibold">{item.quantity}</span>
                           </p>
                         </div>
                         <div className="text-left font-bold text-blue-400">
@@ -944,7 +1079,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                 )}
               </div>
 
-              {/* بيانات العميل والشحن بالتسلسل المرتب */}
+              {/* بيانات العميل والشحن */}
               <div className="bg-[#0a1428] border border-blue-900/50 rounded-2xl p-6 shadow-xl space-y-4">
                 <h2 className="text-2xl font-bold text-white mb-2">بيانات العميل والشحن</h2>
                 <div className="grid md:grid-cols-2 gap-4">
@@ -963,7 +1098,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                     />
                   </div>
 
-                  {/* 2. رقم التليفون بجانب الاسم */}
+                  {/* 2. رقم التليفون */}
                   <div>
                     <label className="block text-sm font-semibold mb-2 text-slate-300">
                       رقم التليفون *
@@ -1037,7 +1172,9 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                       className="w-full bg-[#081020] border border-blue-900 rounded-lg p-2.5 text-xs text-slate-400 file:ml-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-blue-600 file:text-white"
                     />
                     {logoFile && (
-                      <p className="text-xs text-emerald-400 mt-1">تم اختيار ملف الشعار: {logoFile.name}</p>
+                      <p className="text-xs text-emerald-400 mt-1">
+                        تم اختيار ملف الشعار: {logoFile.name}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -1149,7 +1286,9 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                     className="w-full bg-[#081020] border border-blue-900 rounded-lg p-2.5 text-xs text-slate-400 file:ml-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-blue-600 file:text-white"
                   />
                   {receiptFile && (
-                    <p className="text-xs text-emerald-400 mt-2">تم إرفاق إيصال التحويل: {receiptFile.name}</p>
+                    <p className="text-xs text-emerald-400 mt-2">
+                      تم إرفاق إيصال التحويل: {receiptFile.name}
+                    </p>
                   )}
                 </div>
               </div>
@@ -1168,7 +1307,9 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-[#0a1428] p-4 rounded-xl border border-blue-900 gap-4">
                 <div>
                   <h2 className="text-xl font-bold text-white">تم استلام طلبك بنجاح!</h2>
-                  <p className="text-xs text-slate-400">تم تسجيل طلبك بنجاح، يمكنك الآن حفظ الفاتورة أو طباعتها</p>
+                  <p className="text-xs text-slate-400">
+                    تم تسجيل طلبك بنجاح، يمكنك الآن حفظ الفاتورة أو طباعتها
+                  </p>
                 </div>
                 <div className="flex flex-wrap gap-2 w-full sm:w-auto">
                   <Button
@@ -1200,13 +1341,19 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                       <h1 className="text-2xl font-black tracking-tight text-slate-900">
                         Future Press Company
                       </h1>
-                      <p className="text-xs text-slate-500">للطباعة وتوريدات الأمان الصناعي والمهني</p>
+                      <p className="text-xs text-slate-500">
+                        للطباعة وتوريدات الأمان الصناعي والمهني
+                      </p>
                     </div>
                   </div>
 
                   <div className="text-left font-sans">
-                    <span className="text-3xl font-black text-slate-900 tracking-wider">INVOICE</span>
-                    <p className="text-xs font-bold text-slate-600 mt-1">رقم الفاتورة: {invoiceNumber}</p>
+                    <span className="text-3xl font-black text-slate-900 tracking-wider">
+                      INVOICE
+                    </span>
+                    <p className="text-xs font-bold text-slate-600 mt-1">
+                      رقم الفاتورة: {invoiceNumber}
+                    </p>
                   </div>
                 </div>
 
@@ -1290,7 +1437,10 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                   <p className="font-semibold text-slate-700">
                     شكراً لتعاملكم مع Future Press Company
                   </p>
-                  <p>سيقوم فريق العمل بالتواصل معكم هاتفياً لتأكيد الشحن والتوصيل ومراجعة تصميم الشعار.</p>
+                  <p>
+                    سيقوم فريق العمل بالتواصل معكم هاتفياً لتأكيد الشحن والتوصيل ومراجعة تصميم
+                    الشعار.
+                  </p>
                 </div>
               </div>
             </div>
@@ -1371,7 +1521,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
         </div>
       )}
 
-      {/* زر سلة المشتريات العائم - أسفل اليمين */}
+      {/* زر سلة المشتريات العائم */}
       <div className="fixed bottom-6 right-6 z-40">
         <button
           type="button"
@@ -1388,7 +1538,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
         </button>
       </div>
 
-      {/* أزرار التواصل العائمة (واتساب، فيسبوك، إنستجرام) - أسفل اليسار */}
+      {/* أزرار التواصل العائمة */}
       <div className="fixed bottom-6 left-6 z-40 flex flex-col gap-3">
         <a
           href="https://wa.me/201010625349"
