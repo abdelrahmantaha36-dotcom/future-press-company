@@ -37,6 +37,7 @@ import {
   ChevronDown,
   Award,
   FileSpreadsheet,
+  ChevronRight,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -71,6 +72,40 @@ interface Category {
   description: string;
   products: Product[];
 }
+
+// صور التسليمات الحية والطباعة الفعلية على الفيستات
+const HERO_SHOWCASE_IMAGES = [
+  {
+    url: "https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg",
+    title: "فيست مهندسين 3M مع طباعة الشعار",
+    badge: "طباعة فائقة الدقة",
+  },
+  {
+    url: "https://i.ibb.co/S7PprHnh/Whats-App-Image-2026-10-18-at-10-13-20-PM-3.jpg",
+    title: "فيست ليموني عمال معتمد بالموقع",
+    badge: "عواكس فسفورية واضحة",
+  },
+  {
+    url: "https://i.ibb.co/nqVj983V/Whats-App-Image-2026-10-18-at-10-13-18-PM-3.jpg",
+    title: "أطقم توريدات مشروعات هندسية",
+    badge: "طباعة مقاومة للغسيل",
+  },
+  {
+    url: "https://i.ibb.co/3H5hPsv/Whats-App-Image-2026-10-18-at-10-13-42-PM-1.jpg",
+    title: "فيستات إشرافية متعددة الجيوب",
+    badge: "خامات عالية التحمل",
+  },
+  {
+    url: "https://i.ibb.co/GfYhRpFf/Whats-App-Image-2026-10-18-at-10-13-18-PM.jpg",
+    title: "طباعة دقيقة للصدر والظهر",
+    badge: "ثبات كامل للألوان",
+  },
+  {
+    url: "https://i.ibb.co/LDJ5Qv0d/Whats-App-Image-2026-10-18-at-10-13-17-PM-1.jpg",
+    title: "توريدات مصانع وشركات كبرى",
+    badge: "تسليم فوري للمواقع",
+  },
+];
 
 const GOVERNORATES = [
   { name: "القاهرة", fee: 100 },
@@ -116,7 +151,7 @@ const CATEGORIES: Category[] = [
         image: "https://i.ibb.co/KpCCQXzR/Whats-App-Image-2026-10-17-at-4-56-45-AM.jpg",
         gallery: [
           "https://i.ibb.co/KpCCQXzR/Whats-App-Image-2026-10-17-at-4-56-45-AM.jpg",
-          "https://i.ibb.co/hxhfZXz0/Whats-App-Image-2026-10-11-at-3-09-23-PM.jpg",
+          "https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg",
         ],
         sizes: ["مقاسات مشكلة (XL/2XL/3XL)", "XL", "2XL", "3XL"],
         features: [
@@ -536,6 +571,9 @@ export default function HomePage() {
   const [sortBy, setSortBy] = useState<"default" | "price-asc" | "price-desc">("default");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  // السلايدر التفاعلي لصور البانر الرئيسي
+  const [heroSlideIndex, setHeroSlideIndex] = useState(0);
+
   // نوافذ منبثقة تفاعلية
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
@@ -595,6 +633,14 @@ export default function HomePage() {
       })
     );
     setInvoiceNumber(`FP-${Math.floor(100000 + Math.random() * 900000)}`);
+  }, []);
+
+  // التبديل التلقائي لصور البانر كل 5 ثوانٍ
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setHeroSlideIndex((prev) => (prev + 1) % HERO_SHOWCASE_IMAGES.length);
+    }, 5000);
+    return () => clearInterval(timer);
   }, []);
 
   const showToast = (msg: string) => {
@@ -742,7 +788,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
       const url = `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${encodeURIComponent(msg)}&apikey=${apiKey}`;
       await fetch(url, { mode: "no-cors" });
     } catch {
-      // تجاهل أخطاء الشبكة لضمان استمرار واجهة المستخدم
+      // تجاهل أخطاء الشبكة
     }
   };
 
@@ -824,7 +870,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
             </div>
           )}
 
-          {/* زر المعاينة السريعة */}
           <button
             type="button"
             onClick={() => setQuickViewProduct(product)}
@@ -854,7 +899,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
             </div>
             <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">{product.description}</p>
 
-            {/* اختيار المقاس */}
             {product.sizes && product.sizes.length > 0 && (
               <div className="mt-4">
                 <span className="text-xs font-semibold text-slate-300 block mb-2">المقاس المطلوب:</span>
@@ -877,7 +921,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
               </div>
             )}
 
-            {/* تخصيص موضع الطباعة للفيستات */}
             {!isHelmet && (
               <div className="mt-4">
                 <span className="text-xs font-semibold text-slate-300 block mb-1.5">موضع طباعة الشعار:</span>
@@ -909,7 +952,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
               </div>
             )}
 
-            {/* خانة كتابة العدد + تنبيه خصم الكمية */}
             <div className="mt-4">
               <div className="flex items-center justify-between mb-1.5">
                 <label className="text-xs font-semibold text-slate-300">الكمية:</label>
@@ -957,7 +999,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
               </div>
             </div>
 
-            {/* جدول أسعار الكميات المصغر */}
             {!product.isOffer && (
               <div className="mt-3 py-1.5 px-2.5 rounded-lg bg-slate-950/70 border border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
                 <span>1-9 قطع: <strong className="text-slate-200">{product.price} ج.م</strong></span>
@@ -966,7 +1007,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
               </div>
             )}
 
-            {/* المميزات */}
             <ul className="mt-4 space-y-1.5">
               {product.features.map((feature, idx) => (
                 <li key={idx} className="flex items-center gap-2 text-xs text-slate-300">
@@ -1027,7 +1067,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
         </div>
       </div>
 
-      {/* Toast Notification العائم */}
       {toastMessage && (
         <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-blue-600 text-white px-5 py-2.5 rounded-full shadow-2xl flex items-center gap-2 text-xs sm:text-sm font-bold animate-in fade-in slide-in-from-top-4 duration-300">
           <Check className="w-4 h-4 text-emerald-300" />
@@ -1035,10 +1074,9 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
         </div>
       )}
 
-      {/* 1. Header محسّن وعصري */}
+      {/* الهيدر العلوي */}
       <header className="sticky top-0 z-40 bg-[#090d16]/90 backdrop-blur-md border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
-          {/* الشعار والاسم */}
           <div
             className="flex items-center gap-3 cursor-pointer group"
             onClick={() => {
@@ -1065,7 +1103,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
             </div>
           </div>
 
-          {/* التنقل الداخلي */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
             <button
               onClick={() => {
@@ -1104,6 +1141,9 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
             >
               مهندسين
             </button>
+            <a href="#showcase" className="hover:text-blue-400 transition-colors">
+              نماذج الطباعة
+            </a>
             <a href="#reviews" className="hover:text-blue-400 transition-colors">
               آراء العملاء
             </a>
@@ -1112,7 +1152,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
             </a>
           </nav>
 
-          {/* أزرار الإجراءات السريعة (طلب مقايسة + السلة) */}
           <div className="flex items-center gap-2 sm:gap-3">
             <button
               type="button"
@@ -1144,12 +1183,12 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
       {/* المحتوى الرئيسي */}
       {view === "store" ? (
         <>
-          {/* 2. Hero Section */}
-          <section className="relative overflow-hidden bg-gradient-to-b from-blue-950/20 via-transparent to-transparent border-b border-slate-800/60 py-12 sm:py-16">
+          {/* 2. Hero Section محدث بصور واقعية مطبوعة وسلايدر تفاعلي */}
+          <section className="relative overflow-hidden bg-gradient-to-b from-blue-950/30 via-transparent to-transparent border-b border-slate-800/60 py-12 sm:py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="grid lg:grid-cols-12 gap-8 items-center">
                 <div className="lg:col-span-7 space-y-6 text-center lg:text-right">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-950/80 border border-blue-800/50 text-blue-300 text-xs font-semibold">
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-950/80 border border-blue-800/60 text-blue-300 text-xs font-semibold">
                     <Flame className="w-4 h-4 text-amber-400" />
                     خصومات توريد فورية تصل إلى 15% للكميات والمصانع
                   </div>
@@ -1162,7 +1201,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                   </h1>
 
                   <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                    نوفر لشركتكم سترات أمان مهندسين وعمال وخوذات معتمدة بمواصفات قياسية، وخامات محلية ومستوردة تدوم في أصعب ظروف العمل.
+                    شاهد نماذج حية مطبوعة بالفعل لشركات كبرى؛ سترات أمان مهندسين وعمال معتمدة وخامات أصلية تدوم في بيئات العمل القاسية.
                   </p>
 
                   <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
@@ -1200,26 +1239,130 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                   </div>
                 </div>
 
+                {/* معرض صور البانر المطبوعة مع أزرار تنقل */}
                 <div className="lg:col-span-5">
-                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-slate-700/80 shadow-2xl bg-slate-900 group">
+                  <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-slate-700/80 shadow-2xl bg-slate-900 group">
                     <Image
-                      src="https://i.ibb.co/xK3CccpF/Whats-App-Image-2026-10-14-at-1-29-11-PM.jpg"
-                      alt="عرض باقة الـ 50 فيست ليموني عمال"
+                      src={HERO_SHOWCASE_IMAGES[heroSlideIndex].url}
+                      alt={HERO_SHOWCASE_IMAGES[heroSlideIndex].title}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      className="object-cover transition-all duration-700 group-hover:scale-105"
                       priority
                       unoptimized
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-5">
+
+                    <div className="absolute top-4 right-4 z-10">
+                      <Badge className="bg-blue-600/90 text-white font-bold px-3 py-1 text-xs backdrop-blur-md border border-blue-400/40 shadow-lg">
+                        {HERO_SHOWCASE_IMAGES[heroSlideIndex].badge}
+                      </Badge>
+                    </div>
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex items-end justify-between p-5">
                       <div className="text-white">
-                        <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block">
-                          العرض الأكثر طلباً للمصانع
+                        <span className="text-[11px] font-bold text-amber-400 tracking-wider block">
+                          تصوير حي من خط الإنتاج
                         </span>
-                        <p className="font-bold text-base sm:text-lg">عرض 50 فيست عمال + طباعة الشعار</p>
+                        <p className="font-bold text-base sm:text-lg">
+                          {HERO_SHOWCASE_IMAGES[heroSlideIndex].title}
+                        </p>
+                      </div>
+
+                      {/* أزرار السلايدر */}
+                      <div className="flex items-center gap-1.5 z-10">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setHeroSlideIndex((prev) =>
+                              prev === 0 ? HERO_SHOWCASE_IMAGES.length - 1 : prev - 1
+                            )
+                          }
+                          className="w-8 h-8 rounded-full bg-slate-900/80 hover:bg-blue-600 text-white border border-slate-700 flex items-center justify-center cursor-pointer transition-colors"
+                          aria-label="الصورة السابقة"
+                        >
+                          <ChevronRight className="w-4 h-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setHeroSlideIndex((prev) =>
+                              (prev + 1) % HERO_SHOWCASE_IMAGES.length
+                            )
+                          }
+                          className="w-8 h-8 rounded-full bg-slate-900/80 hover:bg-blue-600 text-white border border-slate-700 flex items-center justify-center cursor-pointer transition-colors"
+                          aria-label="الصورة التالية"
+                        >
+                          <ArrowLeft className="w-4 h-4" />
+                        </button>
                       </div>
                     </div>
                   </div>
+
+                  {/* صور مصغرة للتنقل السريع داخل البانر */}
+                  <div className="grid grid-cols-6 gap-2 mt-3">
+                    {HERO_SHOWCASE_IMAGES.map((img, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => setHeroSlideIndex(idx)}
+                        className={`relative aspect-square rounded-xl overflow-hidden border transition-all cursor-pointer ${
+                          heroSlideIndex === idx
+                            ? "border-blue-500 scale-105 shadow-md shadow-blue-900/50"
+                            : "border-slate-800 opacity-60 hover:opacity-100"
+                        }`}
+                      >
+                        <Image src={img.url} alt="Thumbnail" fill className="object-cover" unoptimized />
+                      </button>
+                    ))}
+                  </div>
                 </div>
+              </div>
+            </div>
+          </section>
+
+          {/* معرض نماذج الطباعة والتنفيذ الحي (Real Production Showcase) */}
+          <section id="showcase" className="py-12 bg-slate-950/60 border-b border-slate-800/80">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                <div>
+                  <Badge className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 text-xs mb-2">
+                    تنفيذ حقيقي من مصانعنا
+                  </Badge>
+                  <h3 className="text-xl sm:text-2xl font-black text-white">
+                    معرض نماذج الطباعة الفعلية لعملائنا
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-400 mt-1">
+                    شاهد ألوان الأحبار الحقيقية ومواضع طباعة الشعار على الصدر والظهر قبل تقديم طلبك
+                  </p>
+                </div>
+                <a
+                  href="https://wa.me/201010625349?text=أود الاستفسار عن تفاصيل طباعة كميات فيستات للشركات"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-xs font-bold text-blue-400 hover:text-blue-300"
+                >
+                  <span>اطلب بروفة رقمية لشعارك الآن</span>
+                  <ArrowLeft className="w-4 h-4" />
+                </a>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                {HERO_SHOWCASE_IMAGES.map((item, index) => (
+                  <div
+                    key={index}
+                    className="group relative aspect-square rounded-2xl overflow-hidden border border-slate-800 bg-slate-900 hover:border-blue-500/60 transition-all duration-300"
+                  >
+                    <Image
+                      src={item.url}
+                      alt={item.title}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      unoptimized
+                    />
+                    <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2.5">
+                      <p className="text-[11px] font-bold text-white leading-tight">{item.title}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </section>
@@ -1722,7 +1865,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                       <div className="p-4 rounded-xl bg-slate-950 border border-blue-900/60 flex flex-col sm:flex-row items-center gap-4">
                         <div className="relative w-28 h-28 rounded-lg overflow-hidden border border-slate-700 bg-slate-900 shrink-0">
                           <Image
-                            src="https://i.ibb.co/hxhfZXz0/Whats-App-Image-2026-10-11-at-3-09-23-PM.jpg"
+                            src="https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg"
                             alt="Vest Mockup"
                             fill
                             className="object-cover opacity-80"
