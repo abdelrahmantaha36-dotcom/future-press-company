@@ -69,13 +69,13 @@ interface Category {
   products: Product[];
 }
 
-const LEMON_WORKER_LOCAL_IMG = "https://i.ibb.co/8gKN8hzP/file-0000000094448210a19f4e941d1adf40.png";
+const LEMON_WORKER_PRINTED_IMG = "https://i.ibb.co/nNY1nWT7/file-00000000f2e471f4a5f7a7a4235b1fca.png";
 
 const HERO_SHOWCASE_IMAGES = [
   {
-    url: LEMON_WORKER_LOCAL_IMG,
-    title: "فيست عمال ليموني محلي معتمد",
-    badge: "إنتاج محلي عالي الجودة",
+    url: LEMON_WORKER_PRINTED_IMG,
+    title: "فيست عمال ليموني مطبوع",
+    badge: "طباعة حية معتمدة",
     category: "عمال",
   },
   {
@@ -157,9 +157,9 @@ const CATEGORIES: Category[] = [
         name: "عرض 50 فيست عمال ليموني بالطباعة",
         description: "باقة توفير كبرى تشمل 50 فيست عمال فسفوري عالي الجودة مع طباعة الشعار الخاص بشركتكم بدقة متناهية.",
         price: 3500,
-        image: LEMON_WORKER_LOCAL_IMG,
+        image: LEMON_WORKER_PRINTED_IMG,
         gallery: [
-          LEMON_WORKER_LOCAL_IMG,
+          LEMON_WORKER_PRINTED_IMG,
           "https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg",
           "https://i.ibb.co/nqVj983V/Whats-App-Image-2026-10-18-at-10-13-18-PM-3.jpg",
           "https://i.ibb.co/3H5hPsv/Whats-App-Image-2026-10-18-at-10-13-42-PM-1.jpg",
@@ -186,9 +186,9 @@ const CATEGORIES: Category[] = [
         name: "فيست عمال ليموني (محلي)",
         description: "فيست أمان عمال لون ليموني فسفوري عالي الوضوح، تصنيع محلي بجودة ممتازة وخامة متينة.",
         price: 80,
-        image: LEMON_WORKER_LOCAL_IMG,
+        image: LEMON_WORKER_PRINTED_IMG,
         gallery: [
-          LEMON_WORKER_LOCAL_IMG,
+          LEMON_WORKER_PRINTED_IMG,
           "https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg",
           "https://i.ibb.co/3H5hPsv/Whats-App-Image-2026-10-18-at-10-13-42-PM-1.jpg",
         ],
@@ -746,10 +746,10 @@ export default function HomePage() {
   const totalItemsCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const rawTotalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-  // تعديل نسبة الخصم: من أول 20 قطعة خصم 5%، ومن 50 قطعة فأكثر 15%
+  // تعديل نسبة الخصم: من أول 25 قطعة خصم 5%، ومن 50 قطعة فأكثر 15%
   const discountRate = useMemo(() => {
     if (totalItemsCount >= 50) return 0.15;
-    if (totalItemsCount >= 20) return 0.05;
+    if (totalItemsCount >= 25) return 0.05;
     return 0;
   }, [totalItemsCount]);
 
@@ -866,8 +866,8 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
     const currentQty = quantities[product.id] || 1;
     const currentPrintLocation = printLocations[product.id] || "both";
 
-    // الخصم يبدأ من 20 قطعة
-    const potentialDiscount = currentQty >= 50 ? 0.15 : currentQty >= 20 ? 0.05 : 0;
+    // الخصم يبدأ من 25 قطعة
+    const potentialDiscount = currentQty >= 50 ? 0.15 : currentQty >= 25 ? 0.05 : 0;
     const finalItemPrice = Math.round(product.price * (1 - potentialDiscount));
 
     return (
@@ -990,7 +990,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                     خصم {potentialDiscount * 100}% مطبق
                   </span>
                 ) : (
-                  <span className="text-[10px] text-slate-400">20+ قطعة لخصم 5%</span>
+                  <span className="text-[10px] text-slate-400">25+ قطعة لخصم 5%</span>
                 )}
               </div>
               <div className="flex items-center gap-2 max-w-[140px]">
@@ -1030,8 +1030,8 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
 
             {!product.isOffer && (
               <div className="mt-3 py-1.5 px-2.5 rounded-lg bg-slate-950/70 border border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
-                <span>1-19 قطعة: <strong className="text-slate-200">{product.price} ج.م</strong></span>
-                <span>20+: <strong className="text-emerald-400">{Math.round(product.price * 0.95)} ج.م</strong></span>
+                <span>1-24 قطعة: <strong className="text-slate-200">{product.price} ج.م</strong></span>
+                <span>25+: <strong className="text-emerald-400">{Math.round(product.price * 0.95)} ج.م</strong></span>
                 <span>50+: <strong className="text-emerald-400">{Math.round(product.price * 0.85)} ج.م</strong></span>
               </div>
             )}
@@ -1254,7 +1254,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                 <div className="lg:col-span-7 space-y-6 text-center lg:text-right">
                   <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-950/80 border border-blue-800/60 text-blue-300 text-xs font-semibold">
                     <Flame className="w-4 h-4 text-amber-400" />
-                    خصومات توريد فورية: 5% من أول 20 قطعة و 15% من أول 50 قطعة
+                    خصومات توريد فورية: 5% من أول 25 قطعة و 15% من أول 50 قطعة
                   </div>
 
                   <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight">
@@ -2178,8 +2178,8 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
 
               {totalItemsCount < 50 && (
                 <div className="mt-3 p-2.5 rounded-lg bg-blue-950/40 border border-blue-900/50 text-[11px] text-blue-300">
-                  {totalItemsCount < 20 ? (
-                    <p>أضف <strong>{20 - totalItemsCount}</strong> قطع إضافية لتحصل على خصم 5% توريدات!</p>
+                  {totalItemsCount < 25 ? (
+                    <p>أضف <strong>{25 - totalItemsCount}</strong> قطع إضافية لتحصل على خصم 5% توريدات!</p>
                   ) : (
                     <p>أضف <strong>{50 - totalItemsCount}</strong> قطعة إضافية لتحصل على خصم الجملة الأكبر 15%!</p>
                   )}
