@@ -22,6 +22,10 @@ import {
   Copy,
   CheckCheck,
   Flame,
+  ShieldCheck,
+  Truck,
+  Printer,
+  ChevronDown,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -89,20 +93,20 @@ const CATEGORIES: Category[] = [
   {
     id: "offers",
     title: "العروض الحصرية",
-    description: "أقوى العروض وباقات التوفير للشركات والمصانع بأفضل الأسعار وأعلى جودة طباعة وتطريز.",
+    description: "أقوى عروض وباقات التوفير للشركات والمقاولات بأفضل الأسعار وأعلى جودة طباعة وتطريز.",
     products: [
       {
         id: "offer-50-vests",
         name: "عرض 50 فيست عمال ليموني بالطباعة",
-        description: "باقة توفير كبرى تشمل 50 فيست عمال ليموني فسفوري عالي الجودة مع طباعة الشعار الخاص بشركتكم بسعر خاص جداً.",
+        description: "باقة توفير كبرى تشمل 50 فيست عمال فسفوري عالي الجودة مع طباعة الشعار الخاص بشركتكم بسعر خاص جداً.",
         price: 3500,
         image: "https://i.ibb.co/KpCCQXzR/Whats-App-Image-2026-10-17-at-4-56-45-AM.jpg",
         sizes: ["مقاسات مشكلة (XL/2XL/3XL)", "XL", "2XL", "3XL"],
         features: [
           "50 فيست عمال فسفوري عالي الوضوح",
-          "شامل طباعة الشعار بدقة عالية",
-          "أشرطة عاكسة للضوء للأمان الليلي",
-          "سعر حصري وموفر جداً للمصانع والشركات",
+          "شامل طباعة الشعار بدقة عالية مجاناً",
+          "أشرطة عاكسة متطورة للأمان الليلي",
+          "سعر حصري وموفر للمصانع والشركات",
         ],
         badge: "عرض خاص لفترة محدودة",
         isOffer: true,
@@ -438,8 +442,7 @@ const CATEGORIES: Category[] = [
       },
       {
         id: "eng-vest-3m-lemon-orange-imported",
-        name: "فيست مهندسين ثري إم (3M) ليموني × برتقالي (مستورد)",
-        description: "فيست مهندسين تنفيذي مستورد بشرائط 3M، تصميم متقن يوفر الحماية والمظهر المهني المتألق.",
+        name: "فيست مهندسين تنفيذي مستورد بشرائط 3M، تصميم متقن يوفر الحماية والمظهر المهني المتألق.",
         price: 250,
         image: "https://i.ibb.co/PvkGXDPV/Whats-App-Image-2026-10-11-at-3-12-36-PM-1.jpg",
         sizes: ["XL", "2XL", "3XL"],
@@ -522,7 +525,7 @@ export default function HomePage() {
   const shippingFee = selectedGov ? selectedGov.fee : 100;
 
   useEffect(() => {
-    document.title = "Future Press Company";
+    document.title = "Future Press | للطباعة وتوريدات الأمان الصناعي";
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("future_press_cart");
       if (saved) {
@@ -619,7 +622,9 @@ export default function HomePage() {
   const generateOrderMessage = () => {
     let itemsText = "";
     cart.forEach((item, index) => {
-      itemsText += `\n${index + 1}- ${item.name} | المقاس: ${item.size} | الكمية: ${item.quantity} | السعر: ${item.price * item.quantity} ج.م`;
+      itemsText += `\n${index + 1}- ${item.name} | المقاس: ${item.size} | الكمية: ${item.quantity} | السعر: ${
+        item.price * item.quantity
+      } ج.م`;
     });
 
     return `*طلب جديد من موقع Future Press Company* 🔔
@@ -680,25 +685,25 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
     return (
       <div
         key={product.id}
-        className={`border rounded-2xl overflow-hidden bg-[#0c1830] text-slate-100 flex flex-col sm:flex-row hover:border-blue-500/50 transition-all duration-300 shadow-lg ${
-          product.isOffer ? "border-amber-500/50 bg-[#0e1c38]" : "border-blue-900/60"
+        className={`group border rounded-2xl overflow-hidden bg-slate-900/60 backdrop-blur-sm text-slate-100 flex flex-col sm:flex-row hover:border-blue-500/60 transition-all duration-300 hover:shadow-xl hover:shadow-blue-950/40 ${
+          product.isOffer ? "border-amber-500/40 bg-gradient-to-br from-amber-950/20 via-slate-900/70 to-slate-900" : "border-slate-800"
         }`}
       >
-        <div className="relative sm:w-1/2 aspect-square bg-[#081020]">
+        <div className="relative sm:w-1/2 aspect-square bg-slate-950/60 overflow-hidden">
           <Image
             src={product.image}
             alt={product.name}
             fill
-            className="object-cover"
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
             unoptimized
           />
           {product.badge && (
-            <div className="absolute top-3 right-3">
+            <div className="absolute top-3 right-3 z-10">
               <Badge
                 className={
                   product.isOffer
-                    ? "bg-amber-600 text-white font-bold"
-                    : "bg-blue-600 text-white font-semibold"
+                    ? "bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-2.5 py-1 text-xs shadow-md"
+                    : "bg-blue-600 hover:bg-blue-500 text-white font-medium px-2.5 py-1 text-xs shadow-md"
                 }
               >
                 {product.badge}
@@ -707,27 +712,27 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
           )}
         </div>
 
-        <div className="p-6 sm:w-1/2 flex flex-col justify-between space-y-4">
+        <div className="p-5 sm:p-6 sm:w-1/2 flex flex-col justify-between space-y-4">
           <div>
-            <h4 className="text-xl font-bold mb-2 text-white">{product.name}</h4>
-            <p className="text-sm text-slate-300 mb-4">{product.description}</p>
+            <h4 className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">
+              {product.name}
+            </h4>
+            <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">{product.description}</p>
 
             {/* اختيار المقاس */}
             {product.sizes && product.sizes.length > 0 && (
-              <div className="mb-4">
-                <span className="text-xs font-semibold text-slate-400 block mb-2">
-                  المقاس:
-                </span>
-                <div className="flex flex-wrap gap-2">
+              <div className="mt-4">
+                <span className="text-xs font-semibold text-slate-300 block mb-2">المقاس المطلوب:</span>
+                <div className="flex flex-wrap gap-1.5">
                   {product.sizes.map((size) => (
                     <button
                       key={size}
                       type="button"
                       onClick={() => handleSelectSize(product.id, size)}
-                      className={`px-3 py-1.5 rounded-lg border text-sm font-semibold cursor-pointer ${
+                      className={`px-2.5 py-1 rounded-md border text-xs font-medium cursor-pointer transition-colors ${
                         currentSelectedSize === size
-                          ? "bg-blue-600 text-white border-blue-500 shadow-md"
-                          : "bg-[#091428] text-slate-300 border-blue-900 hover:bg-blue-950"
+                          ? "bg-blue-600 text-white border-blue-500 shadow-sm"
+                          : "bg-slate-800/80 text-slate-300 border-slate-700 hover:bg-slate-700"
                       }`}
                     >
                       {size}
@@ -738,23 +743,47 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
             )}
 
             {/* خانة كتابة العدد */}
-            <div className="mb-4">
-              <label className="text-xs font-semibold text-slate-400 block mb-2">
-                اكتب العدد المطلوب:
-              </label>
-              <input
-                type="number"
-                min="1"
-                value={currentQty}
-                onChange={(e) => handleQuantityChange(product.id, e.target.value)}
-                className="w-full bg-[#081020] border border-blue-900 rounded-lg px-3 py-2 text-white font-bold text-center focus:border-blue-500 focus:outline-none"
-              />
+            <div className="mt-4">
+              <label className="text-xs font-semibold text-slate-300 block mb-1.5">الكمية:</label>
+              <div className="flex items-center gap-2 max-w-[140px]">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setQuantities((prev) => ({
+                      ...prev,
+                      [product.id]: Math.max(1, (prev[product.id] || 1) - 1),
+                    }))
+                  }
+                  className="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 flex items-center justify-center text-white font-bold cursor-pointer"
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  min="1"
+                  value={currentQty}
+                  onChange={(e) => handleQuantityChange(product.id, e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-700 rounded-lg py-1 text-center font-bold text-sm text-white focus:outline-none focus:border-blue-500"
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setQuantities((prev) => ({
+                      ...prev,
+                      [product.id]: (prev[product.id] || 1) + 1,
+                    }))
+                  }
+                  className="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 flex items-center justify-center text-white font-bold cursor-pointer"
+                >
+                  +
+                </button>
+              </div>
             </div>
 
             {/* المميزات */}
-            <ul className="text-xs space-y-1 text-slate-300">
+            <ul className="mt-4 space-y-1.5">
               {product.features.map((feature, idx) => (
-                <li key={idx} className="flex items-center gap-2">
+                <li key={idx} className="flex items-center gap-2 text-xs text-slate-300">
                   <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                   <span>{feature}</span>
                 </li>
@@ -762,29 +791,29 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
             </ul>
           </div>
 
-          <div className="pt-4 border-t border-blue-900/50 space-y-3">
-            <div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">
-                  {product.isOffer ? "سعر العرض الإجمالي:" : "سعر القطعة:"}
-                </span>
-                <span className="text-2xl font-black text-blue-400">
-                  {product.price} ج.م
-                </span>
+          <div className="pt-4 border-t border-slate-800 space-y-3">
+            <div className="flex items-baseline justify-between">
+              <span className="text-xs text-slate-400">
+                {product.isOffer ? "إجمالي العرض:" : "السعر للقطعة:"}
+              </span>
+              <div className="text-left">
+                <span className="text-2xl font-black text-blue-400">{product.price}</span>
+                <span className="text-xs text-slate-400 mr-1">ج.م</span>
               </div>
-              {!isHelmet && (
-                <p className="text-xs text-emerald-400 font-bold text-left mt-1 flex items-center justify-end gap-1">
-                  <Check className="w-3.5 h-3.5" />
-                  السعر شامل الطباعة
-                </p>
-              )}
             </div>
+
+            {!isHelmet && (
+              <p className="text-xs text-emerald-400 font-medium flex items-center justify-end gap-1">
+                <Check className="w-3.5 h-3.5" />
+                شامل طباعة الشعار بدقة عالية
+              </p>
+            )}
 
             <Button
               onClick={() => addToCart(product)}
-              className="w-full cursor-pointer bg-blue-600 hover:bg-blue-500 text-white font-bold py-5"
+              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-xl cursor-pointer transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20"
             >
-              <ShoppingCart className="w-4 h-4 ml-2" />
+              <ShoppingCart className="w-4 h-4" />
               أضف ({currentQty}) إلى السلة
             </Button>
           </div>
@@ -794,45 +823,97 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
   };
 
   return (
-    <div className="min-h-screen bg-[#070d19] text-slate-100" dir="rtl">
-      {/* Header */}
-      <header className="border-b border-blue-900/40 sticky top-0 bg-[#0a1324]/90 backdrop-blur-md z-40">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <div
-              className="flex items-center gap-3 cursor-pointer"
+    <div className="min-h-screen bg-[#090d16] text-slate-100 antialiased selection:bg-blue-500 selection:text-white" dir="rtl">
+      {/* 1. Header محسّن وعصري */}
+      <header className="sticky top-0 z-40 bg-[#090d16]/90 backdrop-blur-md border-b border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+          {/* الجانب الأيمن: الشعار والاسم */}
+          <div
+            className="flex items-center gap-3 cursor-pointer group"
+            onClick={() => {
+              setView("store");
+              setIsInvoiceReady(false);
+            }}
+          >
+            <div className="relative w-11 h-11 rounded-full overflow-hidden border border-blue-500/40 shadow-sm shrink-0 group-hover:scale-105 transition-transform">
+              <Image
+                src="https://i.ibb.co/NdnYZ3Pp/Whats-App-Image-2026-10-14-at-5-53-58-AM.jpg"
+                alt="Future Press Company"
+                fill
+                className="object-cover"
+                unoptimized
+              />
+            </div>
+            <div>
+              <span className="text-base sm:text-lg font-black tracking-tight text-white block group-hover:text-blue-400 transition-colors">
+                Future Press
+              </span>
+              <span className="text-[10px] text-slate-400 font-medium hidden sm:block">
+                للطباعة ومهمات الأمان الصناعي
+              </span>
+            </div>
+          </div>
+
+          {/* المنتصف: روابط سريعة للتنقل الداخلي */}
+          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
+            <button
               onClick={() => {
                 setView("store");
-                setIsInvoiceReady(false);
+                setActiveCategory("all");
               }}
+              className="hover:text-blue-400 transition-colors cursor-pointer"
             >
-              <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-blue-500/40 shadow-md shrink-0">
-                <Image
-                  src="https://i.ibb.co/NdnYZ3Pp/Whats-App-Image-2026-10-14-at-5-53-58-AM.jpg"
-                  alt="Future Press Company Logo"
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
-              </div>
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
-                Future Press Company
-              </h1>
-            </div>
+              الرئيسية
+            </button>
+            <button
+              onClick={() => {
+                setView("store");
+                setActiveCategory("offers");
+              }}
+              className="hover:text-amber-400 transition-colors cursor-pointer flex items-center gap-1"
+            >
+              <Flame className="w-4 h-4 text-amber-500" />
+              العروض
+            </button>
+            <button
+              onClick={() => {
+                setView("store");
+                setActiveCategory("workers");
+              }}
+              className="hover:text-blue-400 transition-colors cursor-pointer"
+            >
+              فيستات عمال
+            </button>
+            <button
+              onClick={() => {
+                setView("store");
+                setActiveCategory("engineers");
+              }}
+              className="hover:text-blue-400 transition-colors cursor-pointer"
+            >
+              مهندسين
+            </button>
+            <a href="#footer" className="hover:text-blue-400 transition-colors">
+              تواصل معنا
+            </a>
+          </nav>
 
-            <Button
-              variant="outline"
-              className="relative cursor-pointer flex items-center gap-2 border-blue-500/40 bg-blue-950/40 text-blue-200 hover:bg-blue-900/60 hover:text-white"
+          {/* الجانب الأيسر: زر سلة المشتريات البسيط والأنيق */}
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
               onClick={() => setIsCartOpen(true)}
+              className="relative p-2.5 rounded-xl border border-slate-700/80 bg-slate-800/40 hover:bg-slate-800 hover:border-blue-500/50 text-slate-200 transition-colors cursor-pointer flex items-center gap-2.5"
+              aria-label="سلة المشتريات"
             >
               <ShoppingCart className="w-5 h-5 text-blue-400" />
-              <span className="hidden sm:inline font-semibold">سلة المشتريات</span>
+              <span className="text-xs font-semibold hidden sm:inline">السلة</span>
               {totalItemsCount > 0 && (
-                <span className="bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                <span className="bg-blue-600 text-white text-[11px] font-bold px-1.5 py-0.5 rounded-full min-w-5 h-5 flex items-center justify-center">
                   {totalItemsCount}
                 </span>
               )}
-            </Button>
+            </button>
           </div>
         </div>
       </header>
@@ -840,63 +921,132 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
       {/* المحتوى الرئيسي */}
       {view === "store" ? (
         <>
-          {/* صورة عروض اليوم */}
-          <section className="container mx-auto px-4 pt-6">
-            <div className="relative w-full h-48 sm:h-72 md:h-96 rounded-2xl overflow-hidden border border-blue-900/50 shadow-2xl bg-[#0a1428]">
-              <Image
-                src="https://i.ibb.co/xK3CccpF/Whats-App-Image-2026-10-14-at-1-29-11-PM.jpg"
-                alt="عروض اليوم - Future Press Company"
-                fill
-                className="object-cover"
-                priority
-                unoptimized
-              />
+          {/* 2. Hero Section احترافي مع CTA صريح ومساحات تنفس */}
+          <section className="relative overflow-hidden bg-gradient-to-b from-blue-950/20 via-transparent to-transparent border-b border-slate-800/60 py-12 sm:py-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid lg:grid-cols-12 gap-8 items-center">
+                <div className="lg:col-span-7 space-y-6 text-center lg:text-right">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-950/80 border border-blue-800/50 text-blue-300 text-xs font-semibold">
+                    <Flame className="w-4 h-4 text-amber-400" />
+                    أقوى عروض التوريدات لعام 2026 للشركات والمصانع
+                  </div>
+
+                  <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight">
+                    تجهيزات السلامة المهنية الميدانية <br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-amber-300">
+                      مع طباعة شعار شركتكم مجاناً
+                    </span>
+                  </h1>
+
+                  <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                    نوفر لشركتكم سترات أمان مهندسين وعمال وخوذات معتمدة بمواصفات عالية، وخامات محلية ومستوردة تدوم في أصعب ظروف العمل.
+                  </p>
+
+                  <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                    <Button
+                      onClick={() => setActiveCategory("offers")}
+                      className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-6 rounded-xl font-bold text-base cursor-pointer shadow-lg shadow-blue-600/30 transition-transform active:scale-95"
+                    >
+                      تسوق العروض الحصرية الآن
+                      <ArrowLeft className="w-5 h-5 mr-2" />
+                    </Button>
+                    <a
+                      href="https://wa.me/201010625349?text=مرحبا، أود الاستفسار عن عروض أسعار توريدات الأمان الصناعي"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-5 py-3 rounded-xl border border-slate-700 bg-slate-900/60 text-slate-200 hover:text-white hover:bg-slate-800 text-sm font-semibold transition-colors flex items-center gap-2"
+                    >
+                      <MessageCircle className="w-4 h-4 text-emerald-400" />
+                      طلب عرض سعر خاص
+                    </a>
+                  </div>
+
+                  {/* شريط المميزات السريع */}
+                  <div className="grid grid-cols-3 gap-4 pt-6 border-t border-slate-800/80 max-w-lg mx-auto lg:mx-0 text-right">
+                    <div className="flex items-center gap-2 text-xs text-slate-300 font-medium">
+                      <Truck className="w-4 h-4 text-blue-400 shrink-0" />
+                      <span>شحن لجميع المحافظات</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-slate-300 font-medium">
+                      <Printer className="w-4 h-4 text-blue-400 shrink-0" />
+                      <span>طباعة لوجو احترافية</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-slate-300 font-medium">
+                      <ShieldCheck className="w-4 h-4 text-blue-400 shrink-0" />
+                      <span>جودة خامات معتمدة</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-5">
+                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-slate-700/80 shadow-2xl bg-slate-900 group">
+                    <Image
+                      src="https://i.ibb.co/xK3CccpF/Whats-App-Image-2026-10-14-at-1-29-11-PM.jpg"
+                      alt="عرض باقة الـ 50 فيست ليموني عمال"
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      priority
+                      unoptimized
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-5">
+                      <div className="text-white">
+                        <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block">
+                          العرض الأكثر طلباً
+                        </span>
+                        <p className="font-bold text-base sm:text-lg">عرض 50 فيست عمال + طباعة الشعار</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 
-          {/* قائمة اختيار الأقسام الرئيسية */}
-          <section className="container mx-auto px-4 pt-8">
-            <div className="bg-[#0a1428]/80 border border-blue-900/50 rounded-2xl p-4 sm:p-6 shadow-xl">
-              <div className="flex items-center gap-2 mb-4 text-blue-400 font-bold text-lg">
-                <Layers className="w-5 h-5" />
-                <span>اختر القسم لعرض المنتجات:</span>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={() => setActiveCategory("all")}
-                  className={`px-5 py-2.5 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 cursor-pointer border ${
-                    activeCategory === "all"
-                      ? "bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-950"
-                      : "bg-[#081020] text-slate-300 border-blue-900 hover:bg-blue-950 hover:text-white"
-                  }`}
-                >
-                  كل الأقسام
-                </button>
-
-                {CATEGORIES.map((cat) => (
+          {/* 3. شريط التصنيفات بنمط منظم يبدأ من اليمين */}
+          <section className="sticky top-18 z-30 bg-[#090d16]/95 backdrop-blur-md border-b border-slate-800/80 py-4 shadow-sm">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center justify-between gap-4 overflow-x-auto pb-1 scrollbar-none">
+                <div className="flex items-center gap-2 shrink-0">
                   <button
-                    key={cat.id}
                     type="button"
-                    onClick={() => setActiveCategory(cat.id)}
-                    className={`px-5 py-2.5 rounded-xl font-bold text-sm sm:text-base transition-all duration-200 cursor-pointer border flex items-center gap-1.5 ${
-                      activeCategory === cat.id
-                        ? "bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-950"
-                        : "bg-[#081020] text-slate-300 border-blue-900 hover:bg-blue-950 hover:text-white"
+                    onClick={() => setActiveCategory("all")}
+                    className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer border ${
+                      activeCategory === "all"
+                        ? "bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-900/30"
+                        : "bg-slate-900/80 text-slate-300 border-slate-800 hover:border-slate-700 hover:text-white"
                     }`}
                   >
-                    {cat.id === "offers" && <Flame className="w-4 h-4 text-amber-400" />}
-                    {cat.title}
+                    كل الأقسام
                   </button>
-                ))}
+
+                  {CATEGORIES.map((cat) => (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => setActiveCategory(cat.id)}
+                      className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer border flex items-center gap-1.5 ${
+                        activeCategory === cat.id
+                          ? "bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-900/30"
+                          : "bg-slate-900/80 text-slate-300 border-slate-800 hover:border-slate-700 hover:text-white"
+                      }`}
+                    >
+                      {cat.id === "offers" && <Flame className="w-3.5 h-3.5 text-amber-400" />}
+                      {cat.title}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400 shrink-0">
+                  <Layers className="w-3.5 h-3.5" />
+                  <span>تصفح حسب الفئة</span>
+                </div>
               </div>
             </div>
           </section>
 
-          {/* عرض الأقسام والمنتجات */}
-          <main className="py-10">
-            <div className="container mx-auto px-4 space-y-16">
+          {/* قائمة المنتجات المعروضة */}
+          <main className="py-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
               {displayedCategories.map((category) => {
                 const isHelmet = category.id === "helmets";
                 const isVestCategory = ["workers", "supervisors", "engineers"].includes(category.id);
@@ -909,32 +1059,30 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                   <section
                     key={category.id}
                     id={category.id}
-                    className={`bg-[#0a1428]/60 border rounded-3xl p-6 sm:p-10 shadow-2xl ${
-                      category.id === "offers"
-                        ? "border-amber-500/60 shadow-amber-950/20"
-                        : "border-blue-900/40"
-                    }`}
+                    className="space-y-6"
                   >
-                    <div className="border-b border-blue-900/50 pb-6 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-slate-800">
                       <div>
-                        <h3 className="text-3xl sm:text-4xl font-black text-white tracking-wide flex items-center gap-2">
-                          {category.id === "offers" && <Flame className="w-8 h-8 text-amber-400" />}
-                          {category.title}
-                        </h3>
-                        <p className="text-slate-400 text-base mt-2">{category.description}</p>
+                        <div className="flex items-center gap-2">
+                          {category.id === "offers" && <Flame className="w-6 h-6 text-amber-400" />}
+                          <h2 className="text-2xl sm:text-3xl font-black text-white">
+                            {category.title}
+                          </h2>
+                        </div>
+                        <p className="text-slate-400 text-sm mt-1">{category.description}</p>
                       </div>
 
-                      {/* أزرار التبديل الداخلي (محلي / مستورد) لأقسام الفيستات */}
-                      {isVestCategory ? (
-                        <div className="flex items-center gap-2 bg-[#081020] p-1.5 rounded-xl border border-blue-900/80">
+                      {/* فلترة داخلي: محلي / مستورد */}
+                      {isVestCategory && (
+                        <div className="flex items-center bg-slate-900 p-1 rounded-xl border border-slate-800 w-fit">
                           <button
                             type="button"
                             onClick={() =>
                               setSubCategoryFilter((prev) => ({ ...prev, [category.id]: "all" }))
                             }
-                            className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                               currentFilter === "all"
-                                ? "bg-blue-600 text-white shadow"
+                                ? "bg-blue-600 text-white shadow-sm"
                                 : "text-slate-400 hover:text-white"
                             }`}
                           >
@@ -945,9 +1093,9 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                             onClick={() =>
                               setSubCategoryFilter((prev) => ({ ...prev, [category.id]: "local" }))
                             }
-                            className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                               currentFilter === "local"
-                                ? "bg-emerald-600 text-white shadow"
+                                ? "bg-emerald-600 text-white shadow-sm"
                                 : "text-slate-400 hover:text-white"
                             }`}
                           >
@@ -958,60 +1106,49 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                             onClick={() =>
                               setSubCategoryFilter((prev) => ({ ...prev, [category.id]: "imported" }))
                             }
-                            className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                               currentFilter === "imported"
-                                ? "bg-cyan-600 text-white shadow"
+                                ? "bg-cyan-600 text-white shadow-sm"
                                 : "text-slate-400 hover:text-white"
                             }`}
                           >
                             مستورد ({importedProducts.length})
                           </button>
                         </div>
-                      ) : (
-                        <span className="text-sm font-semibold bg-blue-950 px-4 py-2 rounded-full border border-blue-800 text-blue-300 w-fit">
-                          {category.products.length}{" "}
-                          {category.products.length === 1 ? "منتج متاح" : "منتجات متاحة"}
-                        </span>
                       )}
                     </div>
 
-                    {/* عرض المنتجات إذا لم يكن فيست (العروض أو الخوذات) */}
+                    {/* عرض الخوذات أو العروض */}
                     {!isVestCategory && (
-                      <div className="grid md:grid-cols-2 gap-8">
+                      <div className="grid md:grid-cols-2 gap-6">
                         {category.products.map((product) => renderProductCard(product, isHelmet))}
                       </div>
                     )}
 
-                    {/* عرض منتجات الفيستات مقسمة داخلياً إلى محلي ومستورد */}
+                    {/* عرض الفيستات بحسب التصنيف المحلي / المستورد */}
                     {isVestCategory && (
-                      <div className="space-y-12">
-                        {/* قسم تصنيع محلي */}
+                      <div className="space-y-10">
                         {(currentFilter === "all" || currentFilter === "local") && localProducts.length > 0 && (
                           <div className="space-y-4">
-                            <div className="flex items-center gap-3">
-                              <span className="h-4 w-1.5 bg-emerald-500 rounded-full"></span>
-                              <h4 className="text-xl sm:text-2xl font-bold text-emerald-400">
-                                قسم تصنيع محلي
-                              </h4>
-                              <span className="text-xs text-slate-400">({localProducts.length} منتجات)</span>
+                            <div className="flex items-center gap-2">
+                              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                              <h3 className="text-lg font-bold text-emerald-400">تصنيع محلي</h3>
+                              <span className="text-xs text-slate-500">({localProducts.length} نوع)</span>
                             </div>
-                            <div className="grid md:grid-cols-2 gap-8">
+                            <div className="grid md:grid-cols-2 gap-6">
                               {localProducts.map((product) => renderProductCard(product, false))}
                             </div>
                           </div>
                         )}
 
-                        {/* قسم مستورد */}
                         {(currentFilter === "all" || currentFilter === "imported") && importedProducts.length > 0 && (
                           <div className="space-y-4">
-                            <div className="flex items-center gap-3">
-                              <span className="h-4 w-1.5 bg-cyan-500 rounded-full"></span>
-                              <h4 className="text-xl sm:text-2xl font-bold text-cyan-400">
-                                قسم مستورد
-                              </h4>
-                              <span className="text-xs text-slate-400">({importedProducts.length} منتجات)</span>
+                            <div className="flex items-center gap-2">
+                              <span className="w-2 h-2 rounded-full bg-cyan-500"></span>
+                              <h3 className="text-lg font-bold text-cyan-400">خامات مستوردة</h3>
+                              <span className="text-xs text-slate-500">({importedProducts.length} نوع)</span>
                             </div>
-                            <div className="grid md:grid-cols-2 gap-8">
+                            <div className="grid md:grid-cols-2 gap-6">
                               {importedProducts.map((product) => renderProductCard(product, false))}
                             </div>
                           </div>
@@ -1025,129 +1162,120 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
           </main>
         </>
       ) : (
-        /* شاشة إتمام الطلب والفاتورة المدمجة */
-        <div className="max-w-4xl mx-auto py-10 px-4 space-y-8">
+        /* شاشة الفاتورة وإتمام الطلب */
+        <div className="max-w-4xl mx-auto py-10 px-4 sm:px-6 space-y-8">
           <button
             type="button"
             onClick={() => {
               setView("store");
               setIsInvoiceReady(false);
             }}
-            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-semibold cursor-pointer"
+            className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-semibold text-sm cursor-pointer"
           >
-            <ArrowRight className="w-5 h-5" />
-            العودة للمتجر والمنتجات
+            <ArrowRight className="w-4 h-4" />
+            الرجوع للتسوق وإضافة منتجات أخرى
           </button>
 
           {!isInvoiceReady ? (
-            <form onSubmit={handleCheckoutSubmit} className="space-y-8">
-              {/* استعراض منتجات السلة */}
-              <div className="bg-[#0a1428] border border-blue-900/50 rounded-2xl p-6 shadow-xl">
-                <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-                  <FileText className="w-6 h-6 text-blue-400" />
-                  المنتجات في سلة المشتريات
+            <form onSubmit={handleCheckoutSubmit} className="space-y-6">
+              {/* ملخص السلة */}
+              <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-blue-400" />
+                  مراجعة المنتجات المختارة
                 </h2>
                 {cart.length === 0 ? (
-                  <div className="text-center py-6 text-slate-400">
-                    <p>لا توجد منتجات بالسلة حالياً.</p>
-                  </div>
+                  <p className="text-center py-6 text-slate-400 text-sm">سلتك فارغة حالياً</p>
                 ) : (
-                  <div className="divide-y divide-blue-900/40">
+                  <div className="divide-y divide-slate-800 text-sm">
                     {cart.map((item) => (
-                      <div key={item.id} className="py-3 flex justify-between items-center text-sm">
+                      <div key={item.id} className="py-3 flex justify-between items-center">
                         <div>
                           <p className="font-bold text-white">{item.name}</p>
-                          <p className="text-slate-400 text-xs">
-                            المقاس: <span className="text-blue-300 font-semibold">{item.size}</span> | الكمية:{" "}
-                            <span className="text-blue-300 font-semibold">{item.quantity}</span>
+                          <p className="text-slate-400 text-xs mt-0.5">
+                            المقاس: <span className="text-slate-200">{item.size}</span> | الكمية:{" "}
+                            <span className="text-slate-200">{item.quantity}</span>
                           </p>
                         </div>
-                        <div className="text-left font-bold text-blue-400">
-                          {item.price * item.quantity} ج.م
-                        </div>
+                        <div className="font-bold text-blue-400">{item.price * item.quantity} ج.م</div>
                       </div>
                     ))}
-                    <div className="pt-3 flex justify-between font-bold text-slate-300 text-sm">
-                      <span>رسوم الشحن والتوصيل ({formData.governorate}):</span>
-                      <span>{shippingFee} ج.م</span>
+                    <div className="pt-3 flex justify-between text-slate-300 text-sm">
+                      <span>تكلفة الشحن لـ ({formData.governorate}):</span>
+                      <span className="font-semibold">{shippingFee} ج.م</span>
                     </div>
                     <div className="pt-3 flex justify-between font-black text-lg text-white">
-                      <span>الإجمالي الكلي:</span>
+                      <span>الإجمالي المطلوب:</span>
                       <span className="text-blue-400">{grandTotal} ج.م</span>
                     </div>
                   </div>
                 )}
               </div>
 
-              {/* بيانات العميل والشحن */}
-              <div className="bg-[#0a1428] border border-blue-900/50 rounded-2xl p-6 shadow-xl space-y-4">
-                <h2 className="text-2xl font-bold text-white mb-2">بيانات العميل والشحن</h2>
+              {/* بيانات العميل */}
+              <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+                <h2 className="text-xl font-bold text-white mb-2">بيانات الشحن والتوصيل</h2>
                 <div className="grid md:grid-cols-2 gap-4">
-                  {/* 1. الاسم بالكامل */}
                   <div>
-                    <label className="block text-sm font-semibold mb-2 text-slate-300">
-                      الاسم بالكامل *
+                    <label className="block text-xs font-semibold mb-1.5 text-slate-300">
+                      الاسم بالكامل أو اسم الشركة *
                     </label>
                     <input
                       type="text"
                       required
                       value={formData.fullName}
                       onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                      className="w-full bg-[#081020] border border-blue-900 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500"
-                      placeholder="اكتب اسمك ثلاثي أو رباعي"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
+                      placeholder="اسم المستلم ثلاثي"
                     />
                   </div>
 
-                  {/* 2. رقم التليفون */}
                   <div>
-                    <label className="block text-sm font-semibold mb-2 text-slate-300">
-                      رقم التليفون *
+                    <label className="block text-xs font-semibold mb-1.5 text-slate-300">
+                      رقم الهاتف للتواصل *
                     </label>
                     <input
                       type="tel"
                       required
                       value={formData.phone1}
                       onChange={(e) => setFormData({ ...formData, phone1: e.target.value })}
-                      className="w-full bg-[#081020] border border-blue-900 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500"
-                      placeholder="رقم الهاتف الأساسي"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
+                      placeholder="01xxxxxxxxx"
                     />
                   </div>
 
-                  {/* 3. رقم تليفون ثاني اختياري */}
                   <div>
-                    <label className="block text-sm font-semibold mb-2 text-slate-300">
-                      رقم تليفون ثاني (اختياري)
+                    <label className="block text-xs font-semibold mb-1.5 text-slate-300">
+                      رقم هاتف إضافي (اختياري)
                     </label>
                     <input
                       type="tel"
                       value={formData.phone2}
                       onChange={(e) => setFormData({ ...formData, phone2: e.target.value })}
-                      className="w-full bg-[#081020] border border-blue-900 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500"
-                      placeholder="رقم هاتف إضافي للطوارئ"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
+                      placeholder="رقم آخر للطوارئ"
                     />
                   </div>
 
-                  {/* 4. المحافظة */}
                   <div>
-                    <label className="block text-sm font-semibold mb-2 text-slate-300">
+                    <label className="block text-xs font-semibold mb-1.5 text-slate-300">
                       المحافظة *
                     </label>
                     <select
                       value={formData.governorate}
                       onChange={(e) => setFormData({ ...formData, governorate: e.target.value })}
-                      className="w-full bg-[#081020] border border-blue-900 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500 font-semibold"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-medium"
                     >
                       {GOVERNORATES.map((gov) => (
-                        <option key={gov.name} value={gov.name} className="bg-[#0a1428] text-white">
-                          {gov.name}
+                        <option key={gov.name} value={gov.name} className="bg-slate-900 text-white">
+                          {gov.name} (الشحن {gov.fee} ج.م)
                         </option>
                       ))}
                     </select>
                   </div>
 
-                  {/* 5. العنوان بالتفصيل */}
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-semibold mb-2 text-slate-300">
+                    <label className="block text-xs font-semibold mb-1.5 text-slate-300">
                       العنوان بالتفصيل *
                     </label>
                     <textarea
@@ -1155,140 +1283,90 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                       rows={2}
                       value={formData.address}
                       onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                      className="w-full bg-[#081020] border border-blue-900 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500"
-                      placeholder="المدينة / المركز، اسم المنطقة، اسم الشارع، رقم العمارة والدور"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
+                      placeholder="المنطقة، الشارع، رقم العمارة أو الموقع الهندسي"
                     />
                   </div>
 
-                  {/* 6. لوجو الطباعة على الفيست */}
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-semibold mb-2 text-slate-300">
-                      لوجو الطباعة على الفيست
+                    <label className="block text-xs font-semibold mb-1.5 text-slate-300">
+                      إرفاق لوجو الطباعة (اختياري - يمكنك إرساله أيضاً عبر الواتساب)
                     </label>
                     <input
                       type="file"
                       accept="image/*"
                       onChange={(e) => setLogoFile(e.target.files?.[0] || null)}
-                      className="w-full bg-[#081020] border border-blue-900 rounded-lg p-2.5 text-xs text-slate-400 file:ml-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-blue-600 file:text-white"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs text-slate-400 file:ml-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-blue-600 file:text-white"
                     />
                     {logoFile && (
-                      <p className="text-xs text-emerald-400 mt-1">
-                        تم اختيار ملف الشعار: {logoFile.name}
-                      </p>
+                      <p className="text-xs text-emerald-400 mt-1">الملف المحدد: {logoFile.name}</p>
                     )}
                   </div>
                 </div>
               </div>
 
-              {/* سداد الديبوزت مع أزرار النسخ */}
-              <div className="bg-[#0a1428] border border-blue-900/50 rounded-2xl p-6 shadow-xl space-y-4">
-                <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
-                  <CreditCard className="w-6 h-6 text-blue-400" />
-                  سداد ديبوزت (عربون تأكيد الطلب)
+              {/* سداد العربون */}
+              <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+                <h2 className="text-xl font-bold text-white mb-1 flex items-center gap-2">
+                  <CreditCard className="w-5 h-5 text-blue-400" />
+                  سداد عربون تأكيد أمر الشغل
                 </h2>
-                <p className="text-sm text-slate-300">
-                  يرجى تحويل مبلغ العربون لتأكيد أمر التوريد والبدء في التجهيز:
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  لتجهيز وطباعة الشعار، يرجى تحويل مبلغ جدية التعاقد (العربون) عبر فودافون كاش أو إنستاباي:
                 </p>
-                <div className="grid md:grid-cols-2 gap-4">
-                  {/* كارت فودافون كاش */}
-                  <div className="relative overflow-hidden rounded-2xl border-2 border-red-600/50 min-h-[160px] p-5 flex flex-col justify-between shadow-xl group">
-                    <Image
-                      src="https://i.ibb.co/GQkKT0n4/da825f86efb52423c2785be6a2dd9124.jpg"
-                      alt="Vodafone Cash Background"
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      unoptimized
-                    />
-                    <div className="absolute inset-0 bg-black/65 backdrop-blur-[1px]" />
-                    <div className="relative z-10 flex justify-between items-center">
-                      <Badge className="bg-red-600 hover:bg-red-700 text-white font-bold px-3 py-1 text-xs shadow-md">
-                        Vodafone Cash
-                      </Badge>
+
+                <div className="grid md:grid-cols-2 gap-4 pt-1">
+                  {/* فودافون كاش */}
+                  <div className="rounded-xl border border-red-500/30 bg-gradient-to-br from-red-950/30 to-slate-950 p-4 flex flex-col justify-between">
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="text-xs font-bold text-red-400">Vodafone Cash</span>
                       <button
                         type="button"
                         onClick={() => handleCopy("01010625349", "vodafone")}
-                        className="bg-black/60 hover:bg-red-700/80 text-white border border-red-500/40 px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow"
+                        className="px-2 py-1 rounded bg-red-600/20 hover:bg-red-600 text-red-200 hover:text-white text-xs font-bold transition-colors cursor-pointer flex items-center gap-1"
                       >
-                        {copiedVodafone ? (
-                          <>
-                            <CheckCheck className="w-3.5 h-3.5 text-emerald-400" />
-                            <span>تم النسخ!</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-3.5 h-3.5" />
-                            <span>نسخ الرقم</span>
-                          </>
-                        )}
+                        {copiedVodafone ? <CheckCheck className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                        <span>{copiedVodafone ? "تم النسخ" : "نسخ"}</span>
                       </button>
                     </div>
-                    <div className="relative z-10 mt-3">
-                      <p className="text-2xl sm:text-3xl font-black text-white tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                        01010625349
-                      </p>
-                      <p className="text-xs text-slate-200 mt-1 font-medium drop-shadow-sm">
-                        تحويل كاش إلى هذا الرقم
-                      </p>
+                    <div>
+                      <p className="text-xl font-black text-white tracking-wider">01010625349</p>
+                      <p className="text-[11px] text-slate-400 mt-1">تحويل كاش إلى هذا الرقم</p>
                     </div>
                   </div>
 
-                  {/* كارت إنستاباي */}
-                  <div className="relative overflow-hidden rounded-2xl border-2 border-purple-600/50 min-h-[160px] p-5 flex flex-col justify-between shadow-xl group">
-                    <Image
-                      src="https://i.ibb.co/rKx9kD0r/images.jpg"
-                      alt="InstaPay Background"
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      unoptimized
-                    />
-                    <div className="absolute inset-0 bg-black/65 backdrop-blur-[1px]" />
-                    <div className="relative z-10 flex justify-between items-center">
-                      <Badge className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-3 py-1 text-xs shadow-md">
-                        InstaPay
-                      </Badge>
+                  {/* إنستاباي */}
+                  <div className="rounded-xl border border-purple-500/30 bg-gradient-to-br from-purple-950/30 to-slate-950 p-4 flex flex-col justify-between">
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="text-xs font-bold text-purple-400">InstaPay</span>
                       <button
                         type="button"
                         onClick={() => handleCopy("01144248804", "instapay")}
-                        className="bg-black/60 hover:bg-purple-700/80 text-white border border-purple-500/40 px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow"
+                        className="px-2 py-1 rounded bg-purple-600/20 hover:bg-purple-600 text-purple-200 hover:text-white text-xs font-bold transition-colors cursor-pointer flex items-center gap-1"
                       >
-                        {copiedInstapay ? (
-                          <>
-                            <CheckCheck className="w-3.5 h-3.5 text-emerald-400" />
-                            <span>تم النسخ!</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-3.5 h-3.5" />
-                            <span>نسخ الرقم</span>
-                          </>
-                        )}
+                        {copiedInstapay ? <CheckCheck className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                        <span>{copiedInstapay ? "تم النسخ" : "نسخ"}</span>
                       </button>
                     </div>
-                    <div className="relative z-10 mt-3">
-                      <p className="text-2xl sm:text-3xl font-black text-white tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                        01144248804
-                      </p>
-                      <p className="text-xs text-slate-200 mt-1 font-medium drop-shadow-sm">
-                        تحويل فوري عبر تطبيق إنستاباي
-                      </p>
+                    <div>
+                      <p className="text-xl font-black text-white tracking-wider">01144248804</p>
+                      <p className="text-[11px] text-slate-400 mt-1">تحويل لحظي عبر InstaPay</p>
                     </div>
                   </div>
                 </div>
 
                 <div className="pt-2">
-                  <label className="block text-sm font-semibold mb-2 text-slate-300">
-                    إرفاق اسكرين من التحويل
+                  <label className="block text-xs font-semibold mb-1.5 text-slate-300">
+                    إرفاق إيصال التحويل (اسكرين شوت)
                   </label>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={(e) => setReceiptFile(e.target.files?.[0] || null)}
-                    className="w-full bg-[#081020] border border-blue-900 rounded-lg p-2.5 text-xs text-slate-400 file:ml-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-blue-600 file:text-white"
+                    className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs text-slate-400 file:ml-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-blue-600 file:text-white"
                   />
                   {receiptFile && (
-                    <p className="text-xs text-emerald-400 mt-2">
-                      تم إرفاق إيصال التحويل: {receiptFile.name}
-                    </p>
+                    <p className="text-xs text-emerald-400 mt-1">تم إرفاق الإيصال: {receiptFile.name}</p>
                   )}
                 </div>
               </div>
@@ -1296,7 +1374,7 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
               <Button
                 type="submit"
                 disabled={cart.length === 0}
-                className="w-full py-6 text-lg font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-xl cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-6 text-base font-bold bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-lg shadow-blue-600/20 cursor-pointer"
               >
                 تأكيد الطلب وعرض الفاتورة
               </Button>
@@ -1304,31 +1382,29 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
           ) : (
             /* الفاتورة */
             <div className="space-y-6">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-[#0a1428] p-4 rounded-xl border border-blue-900 gap-4">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-900 p-4 rounded-xl border border-slate-800 gap-4">
                 <div>
-                  <h2 className="text-xl font-bold text-white">تم استلام طلبك بنجاح!</h2>
+                  <h3 className="text-lg font-bold text-white">تم استلام طلبك بنجاح!</h3>
                   <p className="text-xs text-slate-400">
-                    تم تسجيل طلبك بنجاح، يمكنك الآن حفظ الفاتورة أو طباعتها
+                    تم توثيق الطلب وإرسال إشعار التجهيز لفريق المبيعات.
                   </p>
                 </div>
-                <div className="flex flex-wrap gap-2 w-full sm:w-auto">
-                  <Button
-                    onClick={() => window.print()}
-                    className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center gap-2 font-bold cursor-pointer"
-                  >
-                    <Download className="w-4 h-4" />
-                    تحميل / طباعة الفاتورة
-                  </Button>
-                </div>
+                <Button
+                  onClick={() => window.print()}
+                  className="bg-blue-600 hover:bg-blue-500 text-white flex items-center gap-2 font-bold cursor-pointer"
+                >
+                  <Download className="w-4 h-4" />
+                  طباعة أو حفظ الفاتورة PDF
+                </Button>
               </div>
 
               <div
                 id="invoice-print-area"
-                className="bg-white text-slate-900 p-8 sm:p-12 rounded-2xl shadow-2xl border border-slate-200"
+                className="bg-white text-slate-900 p-8 sm:p-12 rounded-2xl shadow-xl border border-slate-200"
               >
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-8 border-b-2 border-slate-900 gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="relative w-16 h-16 rounded-full overflow-hidden border border-slate-300 shadow-sm shrink-0">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 border-b-2 border-slate-900 gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="relative w-14 h-14 rounded-full overflow-hidden border border-slate-300 shrink-0">
                       <Image
                         src="https://i.ibb.co/NdnYZ3Pp/Whats-App-Image-2026-10-14-at-5-53-58-AM.jpg"
                         alt="Logo"
@@ -1338,76 +1414,55 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                       />
                     </div>
                     <div>
-                      <h1 className="text-2xl font-black tracking-tight text-slate-900">
-                        Future Press Company
-                      </h1>
-                      <p className="text-xs text-slate-500">
-                        للطباعة وتوريدات الأمان الصناعي والمهني
-                      </p>
+                      <h2 className="text-xl font-black text-slate-900">Future Press Company</h2>
+                      <p className="text-xs text-slate-500">للطباعة ومهمات السلامة المهنية</p>
                     </div>
                   </div>
 
                   <div className="text-left font-sans">
-                    <span className="text-3xl font-black text-slate-900 tracking-wider">
-                      INVOICE
-                    </span>
-                    <p className="text-xs font-bold text-slate-600 mt-1">
-                      رقم الفاتورة: {invoiceNumber}
-                    </p>
+                    <span className="text-2xl font-black text-slate-900 tracking-wider">فاتورة مبيعات</span>
+                    <p className="text-xs font-bold text-slate-600 mt-1">كود الطلب: {invoiceNumber}</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6 py-6 border-b border-slate-200 text-sm">
+                <div className="grid grid-cols-2 gap-6 py-6 border-b border-slate-200 text-xs">
                   <div>
-                    <h4 className="font-bold text-slate-900 mb-2">بيانات الشركة:</h4>
-                    <p className="text-slate-800 font-semibold">Future Press Company</p>
-                    <p className="text-slate-600 flex items-center gap-1 mt-1">
-                      <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                      القاهرة - حلوان
-                    </p>
-                    <p className="text-slate-600 flex items-center gap-1 mt-1">
-                      <Phone className="w-3.5 h-3.5 text-slate-400" />
-                      01010625349
-                    </p>
+                    <h4 className="font-bold text-slate-900 mb-1">الجهة الموردة:</h4>
+                    <p className="text-slate-700 font-semibold">Future Press Company</p>
+                    <p className="text-slate-500 mt-0.5">القاهرة - حلوان</p>
+                    <p className="text-slate-500">هاتف: 01010625349</p>
                   </div>
 
                   <div>
-                    <h4 className="font-bold text-slate-900 mb-2">فاتورة إلى (بيانات العميل):</h4>
-                    <p className="text-slate-800 font-semibold">{formData.fullName}</p>
-                    <p className="text-slate-600 flex items-center gap-1 mt-1 font-medium text-xs">
-                      <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                      المحافظة: {formData.governorate} | {formData.address}
+                    <h4 className="font-bold text-slate-900 mb-1">بيانات العميل:</h4>
+                    <p className="text-slate-700 font-semibold">{formData.fullName}</p>
+                    <p className="text-slate-500 mt-0.5">
+                      {formData.governorate} - {formData.address}
                     </p>
-                    <p className="text-slate-600 flex items-center gap-1 mt-1">
-                      <Phone className="w-3.5 h-3.5 text-slate-400" />
-                      {formData.phone1} {formData.phone2 ? ` - ${formData.phone2}` : ""}
-                    </p>
-                    <p className="text-slate-600 flex items-center gap-1 mt-1 text-xs">
-                      <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                      التاريخ: {orderDate}
-                    </p>
+                    <p className="text-slate-500">هاتف: {formData.phone1}</p>
+                    <p className="text-slate-500">التاريخ: {orderDate}</p>
                   </div>
                 </div>
 
                 <div className="py-6">
-                  <table className="w-full text-right border-collapse">
+                  <table className="w-full text-right border-collapse text-xs">
                     <thead>
-                      <tr className="border-b-2 border-slate-900 text-xs uppercase font-bold text-slate-700">
-                        <th className="py-3">المنتج / البيان</th>
-                        <th className="py-3 text-center">المقاس</th>
-                        <th className="py-3 text-center">الكمية</th>
-                        <th className="py-3 text-center">سعر الوحدة</th>
-                        <th className="py-3 text-left">الإجمالي</th>
+                      <tr className="border-b-2 border-slate-900 font-bold text-slate-700">
+                        <th className="py-2.5">المنتج</th>
+                        <th className="py-2.5 text-center">المقاس</th>
+                        <th className="py-2.5 text-center">الكمية</th>
+                        <th className="py-2.5 text-center">السعر</th>
+                        <th className="py-2.5 text-left">الإجمالي</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-200 text-sm">
+                    <tbody className="divide-y divide-slate-200">
                       {cart.map((item, idx) => (
                         <tr key={idx}>
-                          <td className="py-3 font-medium text-slate-900">{item.name}</td>
-                          <td className="py-3 text-center text-slate-600">{item.size}</td>
-                          <td className="py-3 text-center text-slate-600">{item.quantity}</td>
-                          <td className="py-3 text-center text-slate-600">{item.price} ج.م</td>
-                          <td className="py-3 text-left font-bold text-slate-900">
+                          <td className="py-2.5 font-medium text-slate-800">{item.name}</td>
+                          <td className="py-2.5 text-center text-slate-600">{item.size}</td>
+                          <td className="py-2.5 text-center text-slate-600">{item.quantity}</td>
+                          <td className="py-2.5 text-center text-slate-600">{item.price} ج.م</td>
+                          <td className="py-2.5 text-left font-bold text-slate-900">
                             {item.price * item.quantity} ج.م
                           </td>
                         </tr>
@@ -1417,30 +1472,24 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                 </div>
 
                 <div className="border-t-2 border-slate-900 pt-4 flex justify-end">
-                  <div className="w-72 space-y-2 text-sm">
+                  <div className="w-64 space-y-1.5 text-xs">
                     <div className="flex justify-between text-slate-600">
-                      <span>مجموع المنتجات:</span>
+                      <span>إجمالي المنتجات:</span>
                       <span>{totalPrice} ج.م</span>
                     </div>
                     <div className="flex justify-between text-slate-600">
-                      <span>رسوم الشحن والتوصيل ({formData.governorate}):</span>
+                      <span>الشحن والتوصيل ({formData.governorate}):</span>
                       <span>{shippingFee} ج.م</span>
                     </div>
-                    <div className="flex justify-between text-base font-black border-t-2 border-slate-900 pt-2 text-slate-900">
-                      <span>الإجمالي النهائي المطلوب:</span>
+                    <div className="flex justify-between text-sm font-black border-t border-slate-900 pt-2 text-slate-900">
+                      <span>الإجمالي النهائي:</span>
                       <span>{grandTotal} ج.م</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-12 pt-6 border-t border-slate-200 text-center text-xs text-slate-500 space-y-1">
-                  <p className="font-semibold text-slate-700">
-                    شكراً لتعاملكم مع Future Press Company
-                  </p>
-                  <p>
-                    سيقوم فريق العمل بالتواصل معكم هاتفياً لتأكيد الشحن والتوصيل ومراجعة تصميم
-                    الشعار.
-                  </p>
+                <div className="mt-8 pt-4 border-t border-slate-200 text-center text-[11px] text-slate-500">
+                  <p>شكراً لتعاملكم مع Future Press Company. سيتم التواصل معكم فوراً للمطابقة والتسليم.</p>
                 </div>
               </div>
             </div>
@@ -1448,47 +1497,49 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
         </div>
       )}
 
-      {/* سلة المشتريات الجانبية السريعة */}
+      {/* سلة المشتريات الجانبية Drawer */}
       {isCartOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-black/70 backdrop-blur-sm">
-          <div className="w-full max-w-md bg-[#0a1428] text-slate-100 border-l border-blue-900/70 h-full p-6 flex flex-col justify-between">
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm">
+          <div className="w-full max-w-md bg-slate-900 text-slate-100 border-l border-slate-800 h-full p-6 flex flex-col justify-between shadow-2xl">
             <div>
-              <div className="flex items-center justify-between pb-4 border-b border-blue-900/50">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-800">
                 <div className="flex items-center gap-2">
                   <ShoppingCart className="w-5 h-5 text-blue-400" />
-                  <h3 className="text-lg font-bold text-white">سلة المشتريات</h3>
-                  <Badge className="bg-blue-600 text-white">{totalItemsCount}</Badge>
+                  <h3 className="font-bold text-base text-white">سلة المشتريات</h3>
+                  <Badge className="bg-blue-600 text-white text-xs">{totalItemsCount}</Badge>
                 </div>
                 <button
                   type="button"
                   onClick={() => setIsCartOpen(false)}
-                  className="p-1 rounded-md text-slate-400 hover:text-white cursor-pointer"
+                  className="p-1 rounded-lg text-slate-400 hover:text-white cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="overflow-y-auto max-h-[60vh] py-4 space-y-4">
+              <div className="overflow-y-auto max-h-[65vh] py-4 space-y-3">
                 {cart.length === 0 ? (
-                  <p className="text-center text-slate-500 py-10">سلة المشتريات فارغة</p>
+                  <p className="text-center text-slate-500 py-12 text-sm">السلة فارغة حالياً</p>
                 ) : (
                   cart.map((item) => (
                     <div
                       key={item.id}
-                      className="flex items-center justify-between gap-4 p-3 bg-[#0d1a35] border border-blue-900/60 rounded-xl"
+                      className="flex items-center justify-between gap-3 p-3 bg-slate-950/60 border border-slate-800/80 rounded-xl"
                     >
                       <div className="flex-1 min-w-0">
-                        <h5 className="font-semibold text-sm truncate text-white">{item.name}</h5>
-                        <p className="text-xs text-slate-400">المقاس: {item.size}</p>
-                        <p className="text-xs text-slate-400">العدد: {item.quantity}</p>
-                        <p className="text-sm font-bold text-blue-400 mt-1">
+                        <h5 className="font-bold text-xs truncate text-white">{item.name}</h5>
+                        <p className="text-[11px] text-slate-400 mt-0.5">
+                          المقاس: {item.size} | العدد: {item.quantity}
+                        </p>
+                        <p className="text-xs font-black text-blue-400 mt-1">
                           {item.price * item.quantity} ج.م
                         </p>
                       </div>
                       <button
                         type="button"
                         onClick={() => removeFromCart(item.id)}
-                        className="text-red-400 hover:bg-red-950/40 p-2 rounded cursor-pointer"
+                        className="text-slate-500 hover:text-red-400 p-1.5 rounded transition-colors cursor-pointer"
+                        title="حذف"
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -1499,10 +1550,10 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
             </div>
 
             {cart.length > 0 && (
-              <div className="border-t border-blue-900/50 pt-4 space-y-4">
-                <div className="flex justify-between items-center text-lg font-bold">
-                  <span className="text-slate-300">الإجمالي:</span>
-                  <span className="text-blue-400 text-2xl font-black">{totalPrice} ج.م</span>
+              <div className="border-t border-slate-800 pt-4 space-y-3">
+                <div className="flex justify-between items-center text-sm font-bold">
+                  <span className="text-slate-400">إجمالي السلة:</span>
+                  <span className="text-blue-400 text-xl font-black">{totalPrice} ج.م</span>
                 </div>
                 <Button
                   onClick={() => {
@@ -1510,10 +1561,10 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
                     setView("checkout");
                     setIsInvoiceReady(false);
                   }}
-                  className="w-full text-base py-6 cursor-pointer bg-blue-600 hover:bg-blue-500 text-white font-bold"
+                  className="w-full py-5 text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white rounded-xl cursor-pointer"
                 >
                   متابعة إتمام الطلب
-                  <ArrowLeft className="w-5 h-5 mr-2" />
+                  <ArrowLeft className="w-4 h-4 mr-2" />
                 </Button>
               </div>
             )}
@@ -1521,55 +1572,98 @@ ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile
         </div>
       )}
 
-      {/* زر سلة المشتريات العائم */}
-      <div className="fixed bottom-6 right-6 z-40">
-        <button
-          type="button"
-          onClick={() => setIsCartOpen(true)}
-          className="relative w-14 h-14 rounded-full bg-blue-600 text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform cursor-pointer border-2 border-blue-400/40"
-          title="سلة المشتريات"
-        >
-          <ShoppingCart className="w-6 h-6" />
-          {totalItemsCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-              {totalItemsCount}
-            </span>
-          )}
-        </button>
-      </div>
-
-      {/* أزرار التواصل العائمة */}
-      <div className="fixed bottom-6 left-6 z-40 flex flex-col gap-3">
+      {/* 4. زر واتساب عائم وحيد وواضح لتقليل التشتت البصري */}
+      <div className="fixed bottom-6 left-6 z-40">
         <a
-          href="https://wa.me/201010625349"
+          href="https://wa.me/201010625349?text=مرحبا، أود الاستفسار عن منتجات Future Press"
           target="_blank"
           rel="noopener noreferrer"
-          className="w-14 h-14 rounded-full bg-[#25D366] text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform cursor-pointer"
-          title="تواصل معنا عبر واتساب"
+          className="group flex items-center gap-2 bg-[#25D366] text-white p-3.5 rounded-full shadow-2xl hover:scale-105 transition-all cursor-pointer"
+          title="تواصل مباشرة عبر واتساب"
         >
-          <MessageCircle className="w-7 h-7" />
-        </a>
-
-        <a
-          href="https://www.facebook.com/profile.php?id=61565194104813"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-14 h-14 rounded-full bg-[#1877F2] text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform cursor-pointer"
-          title="صفحتنا على فيسبوك"
-        >
-          <Facebook className="w-7 h-7" />
-        </a>
-
-        <a
-          href="https://instagram.com/future.press1?stkn=MTI1azk0dzZsMnp1dw%3D%3D"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white shadow-xl flex items-center justify-center hover:scale-110 transition-transform cursor-pointer"
-          title="تابعنا على إنستجرام"
-        >
-          <Instagram className="w-7 h-7" />
+          <MessageCircle className="w-6 h-6" />
+          <span className="text-xs font-bold max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-300">
+            تواصل معنا واتساب
+          </span>
         </a>
       </div>
+
+      {/* 5. تذييل الموقع (Footer) يضم منصات التواصل والمعلومات الرسمية */}
+      <footer id="footer" className="bg-slate-950 border-t border-slate-800/80 mt-20 pt-12 pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-slate-800/80 text-sm">
+            <div className="space-y-3 md:col-span-2">
+              <div className="flex items-center gap-3">
+                <div className="relative w-10 h-10 rounded-full overflow-hidden border border-blue-500/40">
+                  <Image
+                    src="https://i.ibb.co/NdnYZ3Pp/Whats-App-Image-2026-10-14-at-5-53-58-AM.jpg"
+                    alt="Future Press"
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
+                <h4 className="text-base font-black text-white">Future Press Company</h4>
+              </div>
+              <p className="text-slate-400 text-xs leading-relaxed max-w-sm">
+                المتخصصون في مستلزمات السلامة والصحة المهنية، سترات الأمان التنفيذية والميدانية، وأحدث حلول الطباعة واليونيفورم للشركات والمصانع في مصر.
+              </p>
+            </div>
+
+            <div>
+              <h5 className="font-bold text-white mb-3 text-xs tracking-wider uppercase">معلومات التواصل</h5>
+              <ul className="space-y-2 text-xs text-slate-400">
+                <li className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-blue-400 shrink-0" />
+                  <span>القاهرة - حلوان</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Phone className="w-4 h-4 text-blue-400 shrink-0" />
+                  <span>01010625349</span>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h5 className="font-bold text-white mb-3 text-xs tracking-wider uppercase">تابعنا على السوشيال ميديا</h5>
+              <div className="flex items-center gap-2.5">
+                <a
+                  href="https://www.facebook.com/profile.php?id=61565194104813"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 hover:border-blue-500 flex items-center justify-center text-slate-300 hover:text-blue-400 transition-colors"
+                  title="صفحتنا على فيسبوك"
+                >
+                  <Facebook className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://instagram.com/future.press1?stkn=MTI1azk0dzZsMnp1dw%3D%3D"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 hover:border-pink-500 flex items-center justify-center text-slate-300 hover:text-pink-400 transition-colors"
+                  title="إنستغرام"
+                >
+                  <Instagram className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://wa.me/201010625349"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-lg bg-slate-900 border border-slate-800 hover:border-emerald-500 flex items-center justify-center text-slate-300 hover:text-emerald-400 transition-colors"
+                  title="واتساب مباشر"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-3">
+            <p>© 2026 Future Press Company. جميع الحقوق محفوظة.</p>
+            <p>حلول التوريدات الميدانية والأمان الصناعي</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
