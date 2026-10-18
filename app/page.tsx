@@ -69,11 +69,11 @@ interface Category {
   products: Product[];
 }
 
-const LEMON_WORKER_PRINTED_IMG = "https://i.ibb.co/nNY1nWT7/file-00000000f2e471f4a5f7a7a4235b1fca.png";
+const LEMON_WORKER_LOCAL_IMG = "https://i.ibb.co/8gKN8hzP/file-0000000094448210a19f4e941d1adf40.png";
 
 const HERO_SHOWCASE_IMAGES = [
   {
-    url: LEMON_WORKER_PRINTED_IMG,
+    url: LEMON_WORKER_LOCAL_IMG,
     title: "فيست عمال ليموني مطبوع",
     badge: "طباعة حية معتمدة",
     category: "عمال",
@@ -157,9 +157,9 @@ const CATEGORIES: Category[] = [
         name: "عرض 50 فيست عمال ليموني بالطباعة",
         description: "باقة توفير كبرى تشمل 50 فيست عمال فسفوري عالي الجودة مع طباعة الشعار الخاص بشركتكم بدقة متناهية.",
         price: 3500,
-        image: LEMON_WORKER_PRINTED_IMG,
+        image: LEMON_WORKER_LOCAL_IMG,
         gallery: [
-          LEMON_WORKER_PRINTED_IMG,
+          LEMON_WORKER_LOCAL_IMG,
           "https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg",
           "https://i.ibb.co/nqVj983V/Whats-App-Image-2026-10-18-at-10-13-18-PM-3.jpg",
           "https://i.ibb.co/3H5hPsv/Whats-App-Image-2026-10-18-at-10-13-42-PM-1.jpg",
@@ -186,9 +186,9 @@ const CATEGORIES: Category[] = [
         name: "فيست عمال ليموني (محلي)",
         description: "فيست أمان عمال لون ليموني فسفوري عالي الوضوح، تصنيع محلي بجودة ممتازة وخامة متينة.",
         price: 80,
-        image: "https://i.ibb.co/8gKN8hzP/file-0000000094448210a19f4e941d1adf40.png",
+        image: LEMON_WORKER_LOCAL_IMG,
         gallery: [
-          "https://i.ibb.co/8gKN8hzP/file-0000000094448210a19f4e941d1adf40.png",
+          LEMON_WORKER_LOCAL_IMG,
           "https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg",
           "https://i.ibb.co/3H5hPsv/Whats-App-Image-2026-10-18-at-10-13-42-PM-1.jpg",
         ],
