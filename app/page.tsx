@@ -73,12 +73,6 @@ const LEMON_WORKER_LOCAL_IMG = "https://i.ibb.co/8gKN8hzP/file-0000000094448210a
 
 const HERO_SHOWCASE_IMAGES = [
   {
-    url: LEMON_WORKER_LOCAL_IMG,
-    title: "فيست عمال ليموني مطبوع",
-    badge: "طباعة حية معتمدة",
-    category: "عمال",
-  },
-  {
     url: "https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg",
     title: "فيست عمال ليموني مطبوع (الظهر)",
     badge: "طباعة الظهر عريضة",
@@ -1361,7 +1355,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-7 gap-1.5 mt-3">
+                  <div className="grid grid-cols-6 gap-1.5 mt-3">
                     {HERO_SHOWCASE_IMAGES.map((img, idx) => (
                       <button
                         key={idx}
@@ -1408,7 +1402,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                 </a>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                 {HERO_SHOWCASE_IMAGES.map((item, index) => (
                   <div
                     key={index}
