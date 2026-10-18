@@ -367,7 +367,7 @@ const CATEGORIES: Category[] = [
         name: "فيست مشرفين ليموني (مستورد)",
         description: "فيست مشرفين ليموني مستورد فاخر، جيوب متعددة وسحابات قوية مع عواكس ضوء ممتازة.",
         price: 160,
-        image: "https://i.ibb.co/ZpmnCmJq/Whats-App-Image-2026-10-11-at-3-10-27-PM.jpg",
+        image: "https://i.ibb.co/ZpmnCmJq/Whats-App-Image-2026-11-at-3-10-27-PM.jpg",
         sizes: ["XL", "2XL", "3XL"],
         features: ["خامة مستوردة فاخرة", "جيوب مخصصة للراديو والأدوات", "أشرطة عاكسة عالية الجودة"],
         badge: "مستورد",
@@ -746,10 +746,10 @@ export default function HomePage() {
   const totalItemsCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const rawTotalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-  // تعديل نسبة الخصم: من أول 25 قطعة خصم 5%، ومن 50 قطعة فأكثر 15%
+  // تحديث نسبة الخصم: أي 50 قطعة فأكثر 12.5%، وأكثر من 21 قطعة 5%
   const discountRate = useMemo(() => {
-    if (totalItemsCount >= 50) return 0.15;
-    if (totalItemsCount >= 25) return 0.05;
+    if (totalItemsCount >= 50) return 0.125;
+    if (totalItemsCount > 21) return 0.05;
     return 0;
   }, [totalItemsCount]);
 
@@ -866,8 +866,8 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
     const currentQty = quantities[product.id] || 1;
     const currentPrintLocation = printLocations[product.id] || "both";
 
-    // الخصم يبدأ من 25 قطعة
-    const potentialDiscount = currentQty >= 50 ? 0.15 : currentQty >= 25 ? 0.05 : 0;
+    // حساب الخصم التقديري الفردي: 12.5% من 50 فأكثر، و 5% لما فوق 21 قطعة
+    const potentialDiscount = currentQty >= 50 ? 0.125 : currentQty > 21 ? 0.05 : 0;
     const finalItemPrice = Math.round(product.price * (1 - potentialDiscount));
 
     return (
@@ -990,7 +990,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                     خصم {potentialDiscount * 100}% مطبق
                   </span>
                 ) : (
-                  <span className="text-[10px] text-slate-400">25+ قطعة لخصم 5%</span>
+                  <span className="text-[10px] text-slate-400">أكثر من 21 قطعة لخصم 5%</span>
                 )}
               </div>
               <div className="flex items-center gap-2 max-w-[140px]">
@@ -1030,9 +1030,9 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
 
             {!product.isOffer && (
               <div className="mt-3 py-1.5 px-2.5 rounded-lg bg-slate-950/70 border border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
-                <span>1-24 قطعة: <strong className="text-slate-200">{product.price} ج.م</strong></span>
-                <span>25+: <strong className="text-emerald-400">{Math.round(product.price * 0.95)} ج.م</strong></span>
-                <span>50+: <strong className="text-emerald-400">{Math.round(product.price * 0.85)} ج.م</strong></span>
+                <span>1-21 قطعة: <strong className="text-slate-200">{product.price} ج.م</strong></span>
+                <span>فوق 21: <strong className="text-emerald-400">{Math.round(product.price * 0.95)} ج.م</strong></span>
+                <span>50+: <strong className="text-emerald-400">{Math.round(product.price * (1 - 0.125))} ج.م</strong></span>
               </div>
             )}
 
@@ -1126,7 +1126,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
             عروض التوريد الكبرى لعام 2026
           </span>
           <span className="hidden sm:inline text-blue-200">|</span>
-          <span className="hidden sm:inline">🚚 شحن سريع لكافة مواقع المشروعات بجميع المحافظات</span>
+          <span className="hidden sm:inline">🚚 خصم 5% فوق 21 قطعة و 12.5% على 50 قطعة فأكثر لجميع الفيستات والخوذات</span>
           <span className="hidden md:inline text-blue-200">|</span>
           <span className="hidden md:inline text-emerald-300 font-bold">✨ أعلى دقة طباعة للشعار للشركات والمصانع</span>
         </div>
@@ -1254,7 +1254,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                 <div className="lg:col-span-7 space-y-6 text-center lg:text-right">
                   <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-950/80 border border-blue-800/60 text-blue-300 text-xs font-semibold">
                     <Flame className="w-4 h-4 text-amber-400" />
-                    خصومات توريد فورية: 5% من أول 25 قطعة و 15% من أول 50 قطعة
+                    خصومات توريد فورية: 5% فوق 21 قطعة و 12.5% على 50 قطعة فأكثر
                   </div>
 
                   <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight">
@@ -2178,10 +2178,10 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
 
               {totalItemsCount < 50 && (
                 <div className="mt-3 p-2.5 rounded-lg bg-blue-950/40 border border-blue-900/50 text-[11px] text-blue-300">
-                  {totalItemsCount < 25 ? (
-                    <p>أضف <strong>{25 - totalItemsCount}</strong> قطع إضافية لتحصل على خصم 5% توريدات!</p>
+                  {totalItemsCount <= 21 ? (
+                    <p>أضف <strong>{22 - totalItemsCount}</strong> قطع إضافية لتحصل على خصم 5% توريدات!</p>
                   ) : (
-                    <p>أضف <strong>{50 - totalItemsCount}</strong> قطعة إضافية لتحصل على خصم الجملة الأكبر 15%!</p>
+                    <p>أضف <strong>{50 - totalItemsCount}</strong> قطعة إضافية لتحصل على خصم الجملة الكبرى 12.5%!</p>
                   )}
                 </div>
               )}
