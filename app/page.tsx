@@ -702,7 +702,6 @@ export default function HomePage() {
           const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
           const data = imgData.data;
 
-          // عينة لون الزاوية العليا لتحديد ما إذا كانت الخلفية بيضاء أو فاتحة
           const cornerR = data[0];
           const cornerG = data[1];
           const cornerB = data[2];
@@ -713,12 +712,10 @@ export default function HomePage() {
             const g = data[i + 1];
             const b = data[i + 2];
 
-            // إزالة اللون الأبيض الفاتح أو درجات رمادية باهتة
             if (isCornerLight) {
               if (r > 215 && g > 215 && b > 215) {
-                data[i + 3] = 0; // جعل البكسل شفاف
+                data[i + 3] = 0;
               } else if (r > 195 && g > 195 && b > 195) {
-                // تدرج شفافية للحواف
                 const factor = (255 - Math.max(r, g, b)) / 60;
                 data[i + 3] = Math.min(255, Math.floor(data[i + 3] * factor));
               }
@@ -924,7 +921,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
     products: filterAndSortProducts(cat.products),
   })).filter((cat) => cat.products.length > 0 || !searchQuery);
 
-  // معرفة هل الطلب الحالي في السلة يتضمن طباعة صدر أو ظهر
   const primaryPrintLocation = useMemo(() => {
     if (cart.length === 0) return "both";
     return cart[0]?.printLocation || "both";
@@ -1150,7 +1146,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
 
   return (
     <div className="min-h-screen bg-[#090d16] text-slate-100 antialiased selection:bg-blue-500 selection:text-white pb-16 md:pb-0" dir="rtl">
-      {/* تضمين تنسيقات الطباعة لضمان طباعة صفحة واحدة فقط بدون عناصر الواجهة */}
       <style jsx global>{`
         @media print {
           body, html {
@@ -1994,83 +1989,96 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                       </div>
                     )}
 
-                    {processedLogoUrl && !isProcessingLogo && (
-                      <div className="p-4 sm:p-5 rounded-2xl bg-slate-950 border border-blue-900/60 space-y-3">
-                        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 border-b border-slate-800 pb-2">
-                          <span className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
-                            <Sparkles className="w-4 h-4 text-emerald-400" />
-                            معاينة حية للموك آب بعد إزالة خلفية الشعار (أمام وخلف)
-                          </span>
-                          <span className="text-[11px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
-                            موضع الطباعة المحدد: {primaryPrintLocation === "chest" ? "الصدر فقط" : primaryPrintLocation === "back" ? "الظهر فقط" : "الصدر والظهر"}
-                          </span>
-                        </div>
+                    {/* حاوية الموك آب التفاعلية الدقيقة */}
+                    <div className="p-4 sm:p-5 rounded-2xl bg-slate-950 border border-blue-900/60 space-y-3">
+                      <div className="flex flex-col sm:flex-row items-center justify-between gap-2 border-b border-slate-800 pb-2">
+                        <span className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+                          <Sparkles className="w-4 h-4 text-emerald-400" />
+                          {processedLogoUrl
+                            ? "معاينة حية للموك آب بعد ضبط الشعار المرفق (أمام وخلف)"
+                            : "الموك آب المعتمد ومواضع الطباعة المحددة"}
+                        </span>
+                        <span className="text-[11px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+                          موضع الطباعة المحدد: {primaryPrintLocation === "chest" ? "الصدر فقط" : primaryPrintLocation === "back" ? "الظهر فقط" : "الصدر والظهر"}
+                        </span>
+                      </div>
 
-                        {/* حاوية الموك آب التفاعلية الدقيقة */}
-                        <div className="relative w-full max-w-xl mx-auto aspect-[4/3] rounded-2xl overflow-hidden border border-slate-700 shadow-2xl bg-[#0b101b]">
-                          {/* صورة الموك آب الخلفية الأساسية (فيست أمامي وخلفي) */}
-                          <Image
-                            src={MOCKUP_TEMPLATE_IMG}
-                            alt="Mockup Template Front & Back"
-                            fill
-                            className="object-cover"
-                            unoptimized
-                          />
+                      <div className="relative w-full max-w-xl mx-auto aspect-[3/2] rounded-2xl overflow-hidden border border-slate-700 shadow-2xl bg-white">
+                        {/* صورة الموك آب الخلفية الأساسية (فيست أمامي على اليسار وخلفي على اليمين) */}
+                        <Image
+                          src={MOCKUP_TEMPLATE_IMG}
+                          alt="Mockup Template Front & Back"
+                          fill
+                          className="object-contain"
+                          unoptimized
+                        />
 
-                          {/* لوجو الصدر (على الفيست الأيمن - جهة الصدر) */}
-                          {(primaryPrintLocation === "chest" || primaryPrintLocation === "both") && (
-                            <div
-                              className="absolute z-20 flex items-center justify-center pointer-events-none"
-                              style={{
-                                top: "27%",
-                                right: "20.5%",
-                                width: "9%",
-                                height: "7.5%",
-                              }}
-                              title="طباعة لوجو الصدر"
-                            >
+                        {/* --- منطقة طباعة الصدر (على فيست الوجه الأمامي - يسار الصورة) --- */}
+                        {(primaryPrintLocation === "chest" || primaryPrintLocation === "both") && (
+                          <div
+                            className="absolute flex items-center justify-center pointer-events-none transition-all duration-300"
+                            style={{
+                              top: "38%",
+                              left: "30%",
+                              width: "12%",
+                              height: "14%",
+                            }}
+                          >
+                            {processedLogoUrl ? (
                               <img
                                 src={processedLogoUrl}
                                 alt="Printed Chest Logo"
                                 className="max-w-full max-h-full object-contain filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.45)] mix-blend-multiply opacity-95"
                               />
-                            </div>
-                          )}
+                            ) : (
+                              <div className="w-full h-full rounded-full border-2 border-dashed border-sky-400/90 bg-sky-400/15 flex flex-col items-center justify-center p-1 text-center animate-pulse">
+                                <span className="text-[9px] font-bold text-sky-600 leading-tight">شعار الصدر</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
 
-                          {/* لوجو الظهر (على الفيست الأيسر - جهة الظهر عريض بين الأشرطة العاكسة) */}
-                          {(primaryPrintLocation === "back" || primaryPrintLocation === "both") && (
-                            <div
-                              className="absolute z-20 flex items-center justify-center pointer-events-none"
-                              style={{
-                                top: "24%",
-                                left: "21%",
-                                width: "23%",
-                                height: "13%",
-                              }}
-                              title="طباعة لوجو الظهر"
-                            >
+                        {/* --- منطقة طباعة الظهر (على فيست الوجه الخلفي - يمين الصورة) --- */}
+                        {(primaryPrintLocation === "back" || primaryPrintLocation === "both") && (
+                          <div
+                            className="absolute flex items-center justify-center pointer-events-none transition-all duration-300"
+                            style={{
+                              top: "23%",
+                              left: "58%",
+                              width: "25%",
+                              height: "26%",
+                            }}
+                          >
+                            {processedLogoUrl ? (
                               <img
                                 src={processedLogoUrl}
                                 alt="Printed Back Logo"
                                 className="max-w-full max-h-full object-contain filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] mix-blend-multiply opacity-95"
                               />
-                            </div>
-                          )}
+                            ) : (
+                              <div className="w-full h-full rounded-2xl border-2 border-dashed border-sky-400/90 bg-sky-400/15 flex flex-col items-center justify-center p-2 text-center animate-pulse">
+                                <span className="text-[11px] font-bold text-sky-600 leading-tight">شعار الظهر عريض</span>
+                                <span className="text-[8px] text-sky-500 mt-0.5">بين الأكتاف والعاكس</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
 
-                          {/* وسوم توضيحية خفيفة على الموك آب */}
-                          <div className="absolute bottom-2.5 right-3 bg-black/60 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] text-slate-300 font-semibold border border-white/10">
-                            الوجه الأمامي (الصدر)
-                          </div>
-                          <div className="absolute bottom-2.5 left-3 bg-black/60 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] text-slate-300 font-semibold border border-white/10">
-                            الوجه الخلفي (الظهر)
-                          </div>
+                        {/* وسوم توضيحية خفيفة على أطراف الموك آب */}
+                        <div className="absolute bottom-2.5 left-4 bg-slate-900/80 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] text-slate-200 font-semibold border border-white/10">
+                          الصدر (الأمام)
                         </div>
-
-                        <p className="text-[11px] text-slate-400 text-center leading-relaxed">
-                          * هذا تمثيل بصري تقريبي. يقوم فريق التصميم الاحترافي لدينا بضبط درجة ميل ومقاس الأحبار بدقة السلك سكرين أو الفينيل الحراري المعتمد وإرسال بروفة رقمية نهائية (PDF) عبر واتساب قبل بدء خط الإنتاج.
-                        </p>
+                        <div className="absolute bottom-2.5 right-4 bg-slate-900/80 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] text-slate-200 font-semibold border border-white/10">
+                          الظهر (الخلف)
+                        </div>
                       </div>
-                    )}
+
+                      <p className="text-[11px] text-slate-400 text-center leading-relaxed">
+                        {processedLogoUrl
+                          ? "✓ تم إسقاط وضبط الشعار في الموضع المحدد تماماً. يقوم فريق التصميم الاحترافي بإرسال بروفة نهائية بأبعاد المليمتر عبر واتساب قبل بدء خط الإنتاج."
+                          : "قم باختيار ملف الشعار بالأعلى ليتم إزالة الخلفية تلقائياً وإسقاطه في الأماكن الموضحة وتجهيز الموك آب فوراً."}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
