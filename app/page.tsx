@@ -34,7 +34,6 @@ import {
   ChevronDown,
   FileSpreadsheet,
   ChevronRight,
-  Loader2,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -71,7 +70,6 @@ interface Category {
 }
 
 const LEMON_WORKER_LOCAL_IMG = "https://i.ibb.co/8gKN8hzP/file-0000000094448210a19f4e941d1adf40.png";
-const MOCKUP_TEMPLATE_IMG = "https://i.ibb.co/21PvGwdX/image.jpg";
 
 const HERO_SHOWCASE_IMAGES = [
   {
@@ -577,7 +575,7 @@ const FAQS = [
   },
   {
     q: "كيف أتأكد من ضبط وتناسق الشعار الخاص بشركتي قبل طباعة الكمية كاملة؟",
-    a: "بمجرد إرفاق الشعار أو إرساله لنا، يقوم فريق التصميم بإعداد بروفا رقمية (Digital Mockup) توضح أبعاد وموضع الشعار على الصدر والظهر وإرسالها لكم عبر واتساب لاعتمادها قبل بدء خط الإنتاج.",
+    a: "بمجرد إرفاق الشعار عبر الطلب أو إرساله لنا، يقوم فريق التصميم بإعداد بروفا رقمية توضح أبعاد وموضع الشعار على الصدر والظهر وإرسالها لكم عبر واتساب لاعتمادها قبل بدء خط الإنتاج.",
   },
   {
     q: "هل يمكن إصدار فواتير ضريبية وأوراق توريد رسمية للمؤسسات والشركات؟",
@@ -624,8 +622,6 @@ export default function HomePage() {
     companyName: "",
   });
   const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [processedLogoUrl, setProcessedLogoUrl] = useState<string | null>(null);
-  const [isProcessingLogo, setIsProcessingLogo] = useState(false);
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [isInvoiceReady, setIsInvoiceReady] = useState(false);
   const [orderDate, setOrderDate] = useState("");
@@ -676,77 +672,9 @@ export default function HomePage() {
     }, 3200);
   };
 
-  /**
-   * دالة إزالة الخلفية من اللوجو المرفق أوتوماتيكياً:
-   * تقوم بتحميل الصورة في Canvas وفحص لون الزاوية ثم تحويل أي بكسل قريب من الأبيض
-   * أو من لون الخلفية إلى شفاف (Alpha = 0)، مع تنعيم الحواف لتناسب الطباعة الميدانية.
-   */
-  const removeBackgroundFromImage = (file: File): Promise<string> => {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new window.Image();
-        img.crossOrigin = "anonymous";
-        img.onload = () => {
-          const canvas = document.createElement("canvas");
-          const ctx = canvas.getContext("2d");
-          if (!ctx) {
-            resolve(e.target?.result as string);
-            return;
-          }
-
-          canvas.width = img.width;
-          canvas.height = img.height;
-          ctx.drawImage(img, 0, 0);
-
-          const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          const data = imgData.data;
-
-          const cornerR = data[0];
-          const cornerG = data[1];
-          const cornerB = data[2];
-          const isCornerLight = (cornerR + cornerG + cornerB) / 3 > 220;
-
-          for (let i = 0; i < data.length; i += 4) {
-            const r = data[i];
-            const g = data[i + 1];
-            const b = data[i + 2];
-
-            if (isCornerLight) {
-              if (r > 215 && g > 215 && b > 215) {
-                data[i + 3] = 0;
-              } else if (r > 195 && g > 195 && b > 195) {
-                const factor = (255 - Math.max(r, g, b)) / 60;
-                data[i + 3] = Math.min(255, Math.floor(data[i + 3] * factor));
-              }
-            }
-          }
-
-          ctx.putImageData(imgData, 0, 0);
-          resolve(canvas.toDataURL("image/png"));
-        };
-        img.src = e.target?.result as string;
-      };
-      reader.readAsDataURL(file);
-    });
-  };
-
-  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setLogoFile(file);
-    if (file) {
-      setIsProcessingLogo(true);
-      try {
-        const transparentLogo = await removeBackgroundFromImage(file);
-        setProcessedLogoUrl(transparentLogo);
-      } catch {
-        setProcessedLogoUrl(URL.createObjectURL(file));
-      } finally {
-        setIsProcessingLogo(false);
-      }
-    } else {
-      setProcessedLogoUrl(null);
-    }
   };
 
   const saveCart = (items: CartItem[]) => {
@@ -855,7 +783,7 @@ export default function HomePage() {
 - المحافظة: ${formData.governorate}
 - الهاتف: ${formData.phone1} ${formData.phone2 ? `\n• هاتف إضافي: ${formData.phone2}` : ""}
 - العنوان: ${formData.address}
-${logoFile ? `• ملف الشعار للطباعة: تم إرفاقه ومعاينته (${logoFile.name})` : "• ملف الشعار: لم يتم إرفاقه"}
+${logoFile ? `• ملف الشعار للطباعة: تم إرفاقه (${logoFile.name})` : "• ملف الشعار: لم يتم إرفاقه"}
 ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile.name})` : "• إيصال التحويل: لم يتم إرفاقه"}
 
 📦 تفاصيل المنتجات والمطبوعات:${itemsText}
@@ -920,11 +848,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
     ...cat,
     products: filterAndSortProducts(cat.products),
   })).filter((cat) => cat.products.length > 0 || !searchQuery);
-
-  const primaryPrintLocation = useMemo(() => {
-    if (cart.length === 0) return "both";
-    return cart[0]?.printLocation || "both";
-  }, [cart]);
 
   const renderProductCard = (product: Product, isHelmet: boolean) => {
     const currentSelectedSize = selectedSizes[product.id] || product.sizes[0] || "مقاس موحد";
@@ -1971,105 +1894,27 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                     />
                   </div>
 
-                  <div className="md:col-span-2 space-y-3">
+                  {/* إرفاق الشعار بدون معاينة */}
+                  <div className="md:col-span-2 space-y-2">
                     <label className="block text-xs font-semibold text-slate-300">
-                      لوجو الطباعة على الفيست (اختياري - يتم إزالة الخلفية تلقائياً وعرض الموك آب فوراً)
+                      ملف الشعار للطباعة (اختياري)
                     </label>
                     <input
                       type="file"
-                      accept="image/*"
+                      accept="image/*,.pdf,.ai,.eps,.psd"
                       onChange={handleLogoUpload}
                       className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs text-slate-400 file:ml-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-blue-600 file:text-white cursor-pointer"
                     />
-
-                    {isProcessingLogo && (
-                      <div className="flex items-center gap-2 p-3 text-xs text-blue-400 bg-blue-950/40 rounded-xl border border-blue-800">
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>جارٍ إزالة خلفية الشعار وضبطه على خامة الفيست...</span>
-                      </div>
-                    )}
-
-                    {/* حاوية الموك آب التفاعلية الدقيقة */}
-                    <div className="p-4 sm:p-5 rounded-2xl bg-slate-950 border border-blue-900/60 space-y-3">
-                      <div className="flex flex-col sm:flex-row items-center justify-between gap-2 border-b border-slate-800 pb-2">
-                        <span className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
-                          <Sparkles className="w-4 h-4 text-emerald-400" />
-                          {processedLogoUrl
-                            ? "معاينة حية للموك آب بعد ضبط الشعار المرفق (أمام وخلف)"
-                            : "الموك آب المعتمد ومواضع الطباعة المحددة"}
-                        </span>
-                        <span className="text-[11px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
-                          موضع الطباعة المحدد: {primaryPrintLocation === "chest" ? "الصدر فقط" : primaryPrintLocation === "back" ? "الظهر فقط" : "الصدر والظهر"}
-                        </span>
-                      </div>
-
-                      <div className="relative w-full max-w-xl mx-auto aspect-[3/2] rounded-2xl overflow-hidden border border-slate-700 shadow-2xl bg-white">
-                        {/* صورة الموك آب الجديدة كخلفية */}
-                        <Image
-                          src={MOCKUP_TEMPLATE_IMG}
-                          alt="Mockup Template Front & Back"
-                          fill
-                          className="object-contain"
-                          unoptimized
-                        />
-
-                        {/* --- منطقة طباعة الصدر (موضع الدائرة بالوجه الأمامي - على اليسار) --- */}
-                        {(primaryPrintLocation === "chest" || primaryPrintLocation === "both") && (
-                          <div
-                            className="absolute flex items-center justify-center pointer-events-none transition-all duration-300"
-                            style={{
-                              top: "37%",
-                              left: "30.5%",
-                              width: "12%",
-                              height: "13%",
-                            }}
-                          >
-                            {processedLogoUrl ? (
-                              <img
-                                src={processedLogoUrl}
-                                alt="Printed Chest Logo"
-                                className="max-w-full max-h-full object-contain filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.45)] mix-blend-multiply opacity-95"
-                              />
-                            ) : null}
-                          </div>
-                        )}
-
-                        {/* --- منطقة طباعة الظهر (موضع الدائرة بالوجه الخلفي - على اليمين) --- */}
-                        {(primaryPrintLocation === "back" || primaryPrintLocation === "both") && (
-                          <div
-                            className="absolute flex items-center justify-center pointer-events-none transition-all duration-300"
-                            style={{
-                              top: "23.5%",
-                              left: "63.5%",
-                              width: "14%",
-                              height: "17%",
-                            }}
-                          >
-                            {processedLogoUrl ? (
-                              <img
-                                src={processedLogoUrl}
-                                alt="Printed Back Logo"
-                                className="max-w-full max-h-full object-contain filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] mix-blend-multiply opacity-95"
-                              />
-                            ) : null}
-                          </div>
-                        )}
-
-                        {/* وسوم توضيحية خفيفة على أطراف الموك آب */}
-                        <div className="absolute bottom-2.5 left-4 bg-slate-900/80 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] text-slate-200 font-semibold border border-white/10">
-                          الصدر (الأمام)
-                        </div>
-                        <div className="absolute bottom-2.5 right-4 bg-slate-900/80 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] text-slate-200 font-semibold border border-white/10">
-                          الظهر (الخلف)
-                        </div>
-                      </div>
-
-                      <p className="text-[11px] text-slate-400 text-center leading-relaxed">
-                        {processedLogoUrl
-                          ? "✓ تم ضبط الشعار بمواضع الطباعة بدقة. يقوم فريق التصميم الاحترافي بإرسال بروفة نهائية بأبعاد المليمتر عبر واتساب قبل بدء خط الإنتاج."
-                          : "قم برفع ملف الشعار بالأعلى ليتم تنقية الخلفية تلقائياً وإسقاطه بدقة على مواضع الطباعة المحددة."}
+                    {logoFile ? (
+                      <p className="text-xs text-emerald-400 font-medium flex items-center gap-1.5">
+                        <Check className="w-3.5 h-3.5" />
+                        تم إرفاق الشعار بنجاح: {logoFile.name} (سيقوم فريق التصميم بإرسال بروفة الشعار عبر واتساب لاعتمادها قبل بدء خط الإنتاج)
                       </p>
-                    </div>
+                    ) : (
+                      <p className="text-[11px] text-slate-400">
+                        يمكنك إرفاق الشعار هنا بأي صيغة (PNG, JPG, PDF, AI)، وسنقوم بالتواصل معك وإرسال بروفة الاعتماد عبر واتساب.
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
