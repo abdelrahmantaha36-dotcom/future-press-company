@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -71,7 +71,7 @@ interface Category {
 }
 
 const LEMON_WORKER_LOCAL_IMG = "https://i.ibb.co/8gKN8hzP/file-0000000094448210a19f4e941d1adf40.png";
-const MOCKUP_TEMPLATE_IMG = "https://i.ibb.co/600RZ3m2/IMG-20260630-WA0011-1.jpg";
+const MOCKUP_TEMPLATE_IMG = "https://i.ibb.co/21PvGwdX/image.jpg";
 
 const HERO_SHOWCASE_IMAGES = [
   {
@@ -2004,7 +2004,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                       </div>
 
                       <div className="relative w-full max-w-xl mx-auto aspect-[3/2] rounded-2xl overflow-hidden border border-slate-700 shadow-2xl bg-white">
-                        {/* صورة الموك آب الخلفية الأساسية (فيست أمامي على اليسار وخلفي على اليمين) */}
+                        {/* صورة الموك آب الجديدة كخلفية */}
                         <Image
                           src={MOCKUP_TEMPLATE_IMG}
                           alt="Mockup Template Front & Back"
@@ -2013,15 +2013,15 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                           unoptimized
                         />
 
-                        {/* --- منطقة طباعة الصدر (على فيست الوجه الأمامي - يسار الصورة) --- */}
+                        {/* --- منطقة طباعة الصدر (موضع الدائرة بالوجه الأمامي - على اليسار) --- */}
                         {(primaryPrintLocation === "chest" || primaryPrintLocation === "both") && (
                           <div
                             className="absolute flex items-center justify-center pointer-events-none transition-all duration-300"
                             style={{
-                              top: "38%",
-                              left: "30%",
+                              top: "37%",
+                              left: "30.5%",
                               width: "12%",
-                              height: "14%",
+                              height: "13%",
                             }}
                           >
                             {processedLogoUrl ? (
@@ -2030,23 +2030,19 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                                 alt="Printed Chest Logo"
                                 className="max-w-full max-h-full object-contain filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.45)] mix-blend-multiply opacity-95"
                               />
-                            ) : (
-                              <div className="w-full h-full rounded-full border-2 border-dashed border-sky-400/90 bg-sky-400/15 flex flex-col items-center justify-center p-1 text-center animate-pulse">
-                                <span className="text-[9px] font-bold text-sky-600 leading-tight">شعار الصدر</span>
-                              </div>
-                            )}
+                            ) : null}
                           </div>
                         )}
 
-                        {/* --- منطقة طباعة الظهر (على فيست الوجه الخلفي - يمين الصورة) --- */}
+                        {/* --- منطقة طباعة الظهر (موضع الدائرة بالوجه الخلفي - على اليمين) --- */}
                         {(primaryPrintLocation === "back" || primaryPrintLocation === "both") && (
                           <div
                             className="absolute flex items-center justify-center pointer-events-none transition-all duration-300"
                             style={{
-                              top: "23%",
-                              left: "58%",
-                              width: "25%",
-                              height: "26%",
+                              top: "23.5%",
+                              left: "63.5%",
+                              width: "14%",
+                              height: "17%",
                             }}
                           >
                             {processedLogoUrl ? (
@@ -2055,12 +2051,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                                 alt="Printed Back Logo"
                                 className="max-w-full max-h-full object-contain filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] mix-blend-multiply opacity-95"
                               />
-                            ) : (
-                              <div className="w-full h-full rounded-2xl border-2 border-dashed border-sky-400/90 bg-sky-400/15 flex flex-col items-center justify-center p-2 text-center animate-pulse">
-                                <span className="text-[11px] font-bold text-sky-600 leading-tight">شعار الظهر عريض</span>
-                                <span className="text-[8px] text-sky-500 mt-0.5">بين الأكتاف والعاكس</span>
-                              </div>
-                            )}
+                            ) : null}
                           </div>
                         )}
 
@@ -2075,8 +2066,8 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
 
                       <p className="text-[11px] text-slate-400 text-center leading-relaxed">
                         {processedLogoUrl
-                          ? "✓ تم إسقاط وضبط الشعار في الموضع المحدد تماماً. يقوم فريق التصميم الاحترافي بإرسال بروفة نهائية بأبعاد المليمتر عبر واتساب قبل بدء خط الإنتاج."
-                          : "قم باختيار ملف الشعار بالأعلى ليتم إزالة الخلفية تلقائياً وإسقاطه في الأماكن الموضحة وتجهيز الموك آب فوراً."}
+                          ? "✓ تم ضبط الشعار بمواضع الطباعة بدقة. يقوم فريق التصميم الاحترافي بإرسال بروفة نهائية بأبعاد المليمتر عبر واتساب قبل بدء خط الإنتاج."
+                          : "قم برفع ملف الشعار بالأعلى ليتم تنقية الخلفية تلقائياً وإسقاطه بدقة على مواضع الطباعة المحددة."}
                       </p>
                     </div>
                   </div>
