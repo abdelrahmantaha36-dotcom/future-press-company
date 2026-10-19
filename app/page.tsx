@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -34,6 +34,7 @@ import {
   ChevronDown,
   FileSpreadsheet,
   ChevronRight,
+  Loader2,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -70,6 +71,7 @@ interface Category {
 }
 
 const LEMON_WORKER_LOCAL_IMG = "https://i.ibb.co/8gKN8hzP/file-0000000094448210a19f4e941d1adf40.png";
+const MOCKUP_TEMPLATE_IMG = "https://i.ibb.co/600RZ3m2/IMG-20260630-WA0011-1.jpg";
 
 const HERO_SHOWCASE_IMAGES = [
   {
@@ -386,8 +388,7 @@ const CATEGORIES: Category[] = [
       },
       {
         id: "sup-vest-lemon-black-imported",
-        name: "فيست مشرفين ليموني × أسود (مستورد)",
-        description: "فيست إشراف ليموني × أسود مستورد بجودة عالية، مظهر مميز يبرز طاقم الإشراف بالموقع.",
+        name: "فيست إشراف ليموني × أسود مستورد بجودة عالية، مظهر مميز يبرز طاقم الإشراف بالموقع.",
         price: 150,
         image: "https://i.ibb.co/Jjqq2XML/Whats-App-Image-2026-10-14-at-1-55-06-PM.jpg",
         sizes: ["XL", "2XL", "3XL"],
@@ -397,8 +398,7 @@ const CATEGORIES: Category[] = [
       },
       {
         id: "sup-vest-lemon-blue-imported",
-        name: "فيست مشرفين ليموني × أزرق (مستورد)",
-        description: "فيست مشرفين ليموني × أزرق مستورد فاخر، مناسب للمتابعة الميدانية والمهام الإشرافية الدقيقة.",
+        name: "فيست مشرفين ليموني × أزرق مستورد فاخر، مناسب للمتابعة الميدانية والمهام الإشرافية الدقيقة.",
         price: 150,
         image: "https://i.ibb.co/qL0cZFMW/Whats-App-Image-2026-10-14-at-1-55-06-PM-1.jpg",
         sizes: ["XL", "2XL", "3XL"],
@@ -408,8 +408,7 @@ const CATEGORIES: Category[] = [
       },
       {
         id: "sup-vest-lemon-orange-imported",
-        name: "فيست مشرفين ليموني × برتقالي (مستورد)",
-        description: "فيست إشراف ليموني × برتقالي مستورد عالي الجودة، يضمن أقصى معايير السلامة المهنية للمشرفين.",
+        name: "فيست إشراف ليموني × برتقالي مستورد عالي الجودة، يضمن أقصى معايير السلامة المهنية للمشرفين.",
         price: 150,
         image: "https://i.ibb.co/p61yHtHW/Whats-App-Image-2026-10-14-at-1-55-06-PM-2.jpg",
         sizes: ["XL", "2XL", "3XL"],
@@ -452,8 +451,7 @@ const CATEGORIES: Category[] = [
       },
       {
         id: "eng-vest-4ref-lemon-orange-local",
-        name: "فيست مهندسين 4 عاكس ليموني × برتقالي (محلي)",
-        description: "فيست مهندسين 4 عاكس بلونين ناصعين لتوفير أعلى مستوى رؤية وأناقة في المواقع الكبرى.",
+        name: "فيست مهندسين 4 عاكس بلونين ناصعين لتوفير أعلى مستوى رؤية وأناقة في المواقع الكبرى.",
         price: 170,
         image: "https://i.ibb.co/C5KynwMt/Whats-App-Image-2026-10-11-at-3-12-09-PM-2.jpg",
         sizes: ["XL", "2XL", "3XL"],
@@ -626,7 +624,8 @@ export default function HomePage() {
     companyName: "",
   });
   const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(null);
+  const [processedLogoUrl, setProcessedLogoUrl] = useState<string | null>(null);
+  const [isProcessingLogo, setIsProcessingLogo] = useState(false);
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [isInvoiceReady, setIsInvoiceReady] = useState(false);
   const [orderDate, setOrderDate] = useState("");
@@ -677,14 +676,79 @@ export default function HomePage() {
     }, 3200);
   };
 
-  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  /**
+   * دالة إزالة الخلفية من اللوجو المرفق أوتوماتيكياً:
+   * تقوم بتحميل الصورة في Canvas وفحص لون الزاوية ثم تحويل أي بكسل قريب من الأبيض
+   * أو من لون الخلفية إلى شفاف (Alpha = 0)، مع تنعيم الحواف لتناسب الطباعة الميدانية.
+   */
+  const removeBackgroundFromImage = (file: File): Promise<string> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new window.Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          if (!ctx) {
+            resolve(e.target?.result as string);
+            return;
+          }
+
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+
+          const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const data = imgData.data;
+
+          // عينة لون الزاوية العليا لتحديد ما إذا كانت الخلفية بيضاء أو فاتحة
+          const cornerR = data[0];
+          const cornerG = data[1];
+          const cornerB = data[2];
+          const isCornerLight = (cornerR + cornerG + cornerB) / 3 > 220;
+
+          for (let i = 0; i < data.length; i += 4) {
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+
+            // إزالة اللون الأبيض الفاتح أو درجات رمادية باهتة
+            if (isCornerLight) {
+              if (r > 215 && g > 215 && b > 215) {
+                data[i + 3] = 0; // جعل البكسل شفاف
+              } else if (r > 195 && g > 195 && b > 195) {
+                // تدرج شفافية للحواف
+                const factor = (255 - Math.max(r, g, b)) / 60;
+                data[i + 3] = Math.min(255, Math.floor(data[i + 3] * factor));
+              }
+            }
+          }
+
+          ctx.putImageData(imgData, 0, 0);
+          resolve(canvas.toDataURL("image/png"));
+        };
+        img.src = e.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setLogoFile(file);
     if (file) {
-      const url = URL.createObjectURL(file);
-      setLogoPreviewUrl(url);
+      setIsProcessingLogo(true);
+      try {
+        const transparentLogo = await removeBackgroundFromImage(file);
+        setProcessedLogoUrl(transparentLogo);
+      } catch {
+        setProcessedLogoUrl(URL.createObjectURL(file));
+      } finally {
+        setIsProcessingLogo(false);
+      }
     } else {
-      setLogoPreviewUrl(null);
+      setProcessedLogoUrl(null);
     }
   };
 
@@ -746,7 +810,6 @@ export default function HomePage() {
   const totalItemsCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const rawTotalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-  // تحديث نسبة الخصم: أي 50 قطعة فأكثر 12.5%، وأكثر من 21 قطعة 5%
   const discountRate = useMemo(() => {
     if (totalItemsCount >= 50) return 0.125;
     if (totalItemsCount > 21) return 0.05;
@@ -795,7 +858,7 @@ export default function HomePage() {
 - المحافظة: ${formData.governorate}
 - الهاتف: ${formData.phone1} ${formData.phone2 ? `\n• هاتف إضافي: ${formData.phone2}` : ""}
 - العنوان: ${formData.address}
-${logoFile ? `• ملف الشعار للطباعة: تم إرفاقه (${logoFile.name})` : "• ملف الشعار: لم يتم إرفاقه"}
+${logoFile ? `• ملف الشعار للطباعة: تم إرفاقه ومعاينته (${logoFile.name})` : "• ملف الشعار: لم يتم إرفاقه"}
 ${receiptFile ? `• إيصال التحويل: تم إرفاقه (${receiptFile.name})` : "• إيصال التحويل: لم يتم إرفاقه"}
 
 📦 تفاصيل المنتجات والمطبوعات:${itemsText}
@@ -861,12 +924,17 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
     products: filterAndSortProducts(cat.products),
   })).filter((cat) => cat.products.length > 0 || !searchQuery);
 
+  // معرفة هل الطلب الحالي في السلة يتضمن طباعة صدر أو ظهر
+  const primaryPrintLocation = useMemo(() => {
+    if (cart.length === 0) return "both";
+    return cart[0]?.printLocation || "both";
+  }, [cart]);
+
   const renderProductCard = (product: Product, isHelmet: boolean) => {
     const currentSelectedSize = selectedSizes[product.id] || product.sizes[0] || "مقاس موحد";
     const currentQty = quantities[product.id] || 1;
     const currentPrintLocation = printLocations[product.id] || "both";
 
-    // حساب الخصم التقديري الفردي: 12.5% من 50 فأكثر، و 5% لما فوق 21 قطعة
     const potentialDiscount = currentQty >= 50 ? 0.125 : currentQty > 21 ? 0.05 : 0;
     const finalItemPrice = Math.round(product.price * (1 - potentialDiscount));
 
@@ -986,7 +1054,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                 <label className="text-xs font-semibold text-slate-300">الكمية:</label>
                 {potentialDiscount > 0 ? (
                   <span className="text-[11px] font-bold text-emerald-400 flex items-center gap-1">
-                    <Sparkles className="w-3 h-3" />
+                    <Sparkles className="w-3.5 h-3.5" />
                     خصم {potentialDiscount * 100}% مطبق
                   </span>
                 ) : (
@@ -1910,7 +1978,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
 
                   <div className="md:col-span-2 space-y-3">
                     <label className="block text-xs font-semibold text-slate-300">
-                      لوجو الطباعة على الفيست (اختياري - يمكنك إرفاقه هنا أو إرساله واتساب)
+                      لوجو الطباعة على الفيست (اختياري - يتم إزالة الخلفية تلقائياً وعرض الموك آب فوراً)
                     </label>
                     <input
                       type="file"
@@ -1919,33 +1987,88 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                       className="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs text-slate-400 file:ml-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-blue-600 file:text-white cursor-pointer"
                     />
 
-                    {logoPreviewUrl && (
-                      <div className="p-4 rounded-xl bg-slate-950 border border-blue-900/60 flex flex-col sm:flex-row items-center gap-4">
-                        <div className="relative w-28 h-28 rounded-lg overflow-hidden border border-slate-700 bg-slate-900 shrink-0">
+                    {isProcessingLogo && (
+                      <div className="flex items-center gap-2 p-3 text-xs text-blue-400 bg-blue-950/40 rounded-xl border border-blue-800">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>جارٍ إزالة خلفية الشعار وضبطه على خامة الفيست...</span>
+                      </div>
+                    )}
+
+                    {processedLogoUrl && !isProcessingLogo && (
+                      <div className="p-4 sm:p-5 rounded-2xl bg-slate-950 border border-blue-900/60 space-y-3">
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 border-b border-slate-800 pb-2">
+                          <span className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+                            <Sparkles className="w-4 h-4 text-emerald-400" />
+                            معاينة حية للموك آب بعد إزالة خلفية الشعار (أمام وخلف)
+                          </span>
+                          <span className="text-[11px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+                            موضع الطباعة المحدد: {primaryPrintLocation === "chest" ? "الصدر فقط" : primaryPrintLocation === "back" ? "الظهر فقط" : "الصدر والظهر"}
+                          </span>
+                        </div>
+
+                        {/* حاوية الموك آب التفاعلية الدقيقة */}
+                        <div className="relative w-full max-w-xl mx-auto aspect-[4/3] rounded-2xl overflow-hidden border border-slate-700 shadow-2xl bg-[#0b101b]">
+                          {/* صورة الموك آب الخلفية الأساسية (فيست أمامي وخلفي) */}
                           <Image
-                            src="https://i.ibb.co/3H5hPsv/Whats-App-Image-2026-10-18-at-10-13-42-PM-1.jpg"
-                            alt="Vest Mockup"
+                            src={MOCKUP_TEMPLATE_IMG}
+                            alt="Mockup Template Front & Back"
                             fill
-                            className="object-cover opacity-85"
+                            className="object-cover"
                             unoptimized
                           />
-                          <div className="absolute top-7 right-4 w-9 h-9 bg-white/95 p-0.5 rounded shadow-md flex items-center justify-center">
-                            <img
-                              src={logoPreviewUrl}
-                              alt="Uploaded Logo Preview"
-                              className="max-h-full max-w-full object-contain"
-                            />
+
+                          {/* لوجو الصدر (على الفيست الأيمن - جهة الصدر) */}
+                          {(primaryPrintLocation === "chest" || primaryPrintLocation === "both") && (
+                            <div
+                              className="absolute z-20 flex items-center justify-center pointer-events-none"
+                              style={{
+                                top: "27%",
+                                right: "20.5%",
+                                width: "9%",
+                                height: "7.5%",
+                              }}
+                              title="طباعة لوجو الصدر"
+                            >
+                              <img
+                                src={processedLogoUrl}
+                                alt="Printed Chest Logo"
+                                className="max-w-full max-h-full object-contain filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.45)] mix-blend-multiply opacity-95"
+                              />
+                            </div>
+                          )}
+
+                          {/* لوجو الظهر (على الفيست الأيسر - جهة الظهر عريض بين الأشرطة العاكسة) */}
+                          {(primaryPrintLocation === "back" || primaryPrintLocation === "both") && (
+                            <div
+                              className="absolute z-20 flex items-center justify-center pointer-events-none"
+                              style={{
+                                top: "24%",
+                                left: "21%",
+                                width: "23%",
+                                height: "13%",
+                              }}
+                              title="طباعة لوجو الظهر"
+                            >
+                              <img
+                                src={processedLogoUrl}
+                                alt="Printed Back Logo"
+                                className="max-w-full max-h-full object-contain filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] mix-blend-multiply opacity-95"
+                              />
+                            </div>
+                          )}
+
+                          {/* وسوم توضيحية خفيفة على الموك آب */}
+                          <div className="absolute bottom-2.5 right-3 bg-black/60 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] text-slate-300 font-semibold border border-white/10">
+                            الوجه الأمامي (الصدر)
+                          </div>
+                          <div className="absolute bottom-2.5 left-3 bg-black/60 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] text-slate-300 font-semibold border border-white/10">
+                            الوجه الخلفي (الظهر)
                           </div>
                         </div>
-                        <div className="space-y-1 text-center sm:text-right">
-                          <span className="text-xs font-bold text-emerald-400 flex items-center gap-1 justify-center sm:justify-start">
-                            <Eye className="w-3.5 h-3.5" />
-                            معاينة افتراضية لموضع طباعة الشعار
-                          </span>
-                          <p className="text-[11px] text-slate-400 leading-relaxed">
-                            سيقوم قسم الجرافيك بإعداد وتجهيز البروفة الرقمية الرسمية وإرسالها لكم للاعتماد عبر واتساب.
-                          </p>
-                        </div>
+
+                        <p className="text-[11px] text-slate-400 text-center leading-relaxed">
+                          * هذا تمثيل بصري تقريبي. يقوم فريق التصميم الاحترافي لدينا بضبط درجة ميل ومقاس الأحبار بدقة السلك سكرين أو الفينيل الحراري المعتمد وإرسال بروفة رقمية نهائية (PDF) عبر واتساب قبل بدء خط الإنتاج.
+                        </p>
                       </div>
                     )}
                   </div>
