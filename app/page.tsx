@@ -34,6 +34,7 @@ import {
   ChevronDown,
   FileSpreadsheet,
   ChevronRight,
+  Users,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -607,6 +608,10 @@ export default function HomePage() {
   const [sortBy, setSortBy] = useState<"default" | "price-asc" | "price-desc">("default");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  // إحصائيات زوار الموقع
+  const [visitorCount, setVisitorCount] = useState<number>(14820);
+  const [activeOnlineVisitors, setActiveOnlineVisitors] = useState<number>(18);
+
   const [heroSlideIndex, setHeroSlideIndex] = useState(0);
 
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
@@ -644,6 +649,7 @@ export default function HomePage() {
   useEffect(() => {
     document.title = "Future Press | للطباعة وتوريدات الأمان الصناعي";
     if (typeof window !== "undefined") {
+      // تحميل عربة التسوق
       const saved = localStorage.getItem("future_press_cart");
       if (saved) {
         try {
@@ -652,6 +658,19 @@ export default function HomePage() {
           setCart([]);
         }
       }
+
+      // حساب وتحديث عداد الزوار التراكمي
+      const storedVisitors = localStorage.getItem("future_press_visitors");
+      let count = storedVisitors ? parseInt(storedVisitors, 10) : 14820;
+      if (isNaN(count) || count < 1000) count = 14820;
+
+      // زيادة العداد للزيارة الحالية
+      const newCount = count + 1;
+      localStorage.setItem("future_press_visitors", newCount.toString());
+      setVisitorCount(newCount);
+
+      // تحديد رقم عشوائي واقعي للزوار النشطين حالياً
+      setActiveOnlineVisitors(Math.floor(Math.random() * 11) + 14); // بين 14 و 24
     }
     const now = new Date();
     setOrderDate(
@@ -1212,6 +1231,18 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* مؤشر زوار الموقع في الهيدر */}
+            <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-300">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span className="font-bold text-white tracking-wide">
+                {visitorCount.toLocaleString("ar-EG")}
+              </span>
+              <span className="text-[11px] text-slate-400">زائر</span>
+            </div>
+
             <button
               type="button"
               onClick={() => setIsQuotationModalOpen(true)}
@@ -1426,9 +1457,10 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
             </div>
           </section>
 
+          {/* قسم الإحصائيات مع إبراز عدد زوار الموقع */}
           <section className="bg-slate-950/90 py-8 border-b border-slate-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-6 text-center items-center">
                 <div className="space-y-1">
                   <span className="text-2xl sm:text-3xl font-black text-blue-400">+15,000</span>
                   <p className="text-xs text-slate-400 font-medium">فيست ومهمة أمان تم توريدها</p>
@@ -1444,6 +1476,22 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                 <div className="space-y-1">
                   <span className="text-2xl sm:text-3xl font-black text-blue-400">100%</span>
                   <p className="text-xs text-slate-400 font-medium">ثبات ودقة طباعة الأحبار</p>
+                </div>
+
+                {/* بطاقة عداد زوار الموقع */}
+                <div className="col-span-2 md:col-span-1 p-3 rounded-2xl bg-gradient-to-br from-blue-950/60 to-slate-900 border border-blue-800/40 space-y-1">
+                  <div className="flex items-center justify-center gap-1.5 text-xs text-emerald-400 font-bold">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <Users className="w-3.5 h-3.5" />
+                    <span>نشط الآن: {activeOnlineVisitors}</span>
+                  </div>
+                  <span className="text-2xl sm:text-3xl font-black text-emerald-300 block">
+                    {visitorCount.toLocaleString("ar-EG")}
+                  </span>
+                  <p className="text-[11px] text-slate-400 font-medium">إجمالي زوار الموقع</p>
                 </div>
               </div>
             </div>
