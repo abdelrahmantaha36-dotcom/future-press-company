@@ -35,6 +35,7 @@ import {
   FileSpreadsheet,
   ChevronRight,
   Users,
+  ShieldAlert,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -50,6 +51,7 @@ interface Product {
   badge?: string;
   isOffer?: boolean;
   origin?: "local" | "imported";
+  fallbackColor?: string;
 }
 
 interface CartItem {
@@ -70,6 +72,57 @@ interface Category {
   products: Product[];
 }
 
+// صور احتياطية آمنة ومباشرة ذات استقرار فائق
+const SAFE_FALLBACKS: Record<string, string> = {
+  lemon: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=600&q=80",
+  orange: "https://images.unsplash.com/photo-1618042164219-62c820f10723?auto=format&fit=crop&w=600&q=80",
+  black: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80",
+  blue: "https://images.unsplash.com/photo-1541888946425-d0fbb186c5f7?auto=format&fit=crop&w=600&q=80",
+  red: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80",
+  helmet_white: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80",
+  helmet_yellow: "https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=600&q=80",
+  default: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80",
+};
+
+// مكون صورة آمن يعالج مشاكل تعطل سيرفرات ImgBB
+function SafeImage({
+  src,
+  alt,
+  fill,
+  className,
+  fallbackType = "default",
+  priority = false,
+}: {
+  src: string;
+  alt: string;
+  fill?: boolean;
+  className?: string;
+  fallbackType?: string;
+  priority?: boolean;
+}) {
+  const [imgSrc, setImgSrc] = useState(src);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    setImgSrc(src);
+    setHasError(false);
+  }, [src]);
+
+  return (
+    <Image
+      src={hasError ? SAFE_FALLBACKS[fallbackType] || SAFE_FALLBACKS.default : imgSrc}
+      alt={alt}
+      fill={fill}
+      priority={priority}
+      className={className}
+      onError={() => {
+        setHasError(true);
+      }}
+      unoptimized
+    />
+  );
+}
+
 const LEMON_WORKER_LOCAL_IMG = "https://i.ibb.co/8gKN8hzP/file-0000000094448210a19f4e941d1adf40.png";
 
 const HERO_SHOWCASE_IMAGES = [
@@ -78,42 +131,49 @@ const HERO_SHOWCASE_IMAGES = [
     title: "فيست عمال ليموني مطبوع (الصدر)",
     badge: "طباعة حية معتمدة",
     category: "عمال",
+    fallback: "lemon",
   },
   {
     url: "https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg",
     title: "فيست عمال ليموني مطبوع (الظهر)",
     badge: "طباعة الظهر عريضة",
     category: "عمال",
+    fallback: "lemon",
   },
   {
     url: "https://i.ibb.co/nqVj983V/Whats-App-Image-2026-10-18-at-10-13-18-PM-3.jpg",
     title: "فيستات مطبوعة وجاهزة للتسليم الميداني",
     badge: "إنتاج فعلي مباشر",
     category: "تسليمات",
+    fallback: "orange",
   },
   {
     url: "https://i.ibb.co/3H5hPsv/Whats-App-Image-2026-10-18-at-10-13-42-PM-1.jpg",
     title: "موك آب فيست عمال احترافي",
     badge: "تجسيد واقعي للشعار",
     category: "موك آب",
+    fallback: "lemon",
   },
   {
     url: "https://i.ibb.co/FkXwgTMy/Whats-App-Image-2026-10-18-at-10-13-15-PM.jpg",
     title: "موك آب فيست مهندسين 4 عاكس (نموذج 1)",
     badge: "4 خطوط فسفورية",
     category: "مهندسين",
+    fallback: "black",
   },
   {
     url: "https://i.ibb.co/GfYhRpFf/Whats-App-Image-2026-10-18-at-10-13-18-PM.jpg",
     title: "موك آب فيست مهندسين 4 عاكس (نموذج 2)",
     badge: "تصميم هندسي تنفيذي",
     category: "مهندسين",
+    fallback: "blue",
   },
   {
     url: "https://i.ibb.co/LDJ5Qv0d/Whats-App-Image-2026-10-18-at-10-13-17-PM-1.jpg",
     title: "موك آب فيست مهندسين 3M الأصلي",
     badge: "أعلى توهج عاكس معتمد",
     category: "3M بريميوم",
+    fallback: "lemon",
   },
 ];
 
@@ -163,7 +223,6 @@ const CATEGORIES: Category[] = [
           LEMON_WORKER_LOCAL_IMG,
           "https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg",
           "https://i.ibb.co/nqVj983V/Whats-App-Image-2026-10-18-at-10-13-18-PM-3.jpg",
-          "https://i.ibb.co/3H5hPsv/Whats-App-Image-2026-10-18-at-10-13-42-PM-1.jpg",
         ],
         sizes: ["مقاسات مشكلة (XL/2XL/3XL)", "XL", "2XL", "3XL"],
         features: [
@@ -174,6 +233,7 @@ const CATEGORIES: Category[] = [
         ],
         badge: "عرض خاص لفترة محدودة",
         isOffer: true,
+        fallbackColor: "lemon",
       },
     ],
   },
@@ -188,15 +248,11 @@ const CATEGORIES: Category[] = [
         description: "فيست أمان عمال لون ليموني فسفوري عالي الوضوح، تصنيع محلي بجودة ممتازة وخامة متينة.",
         price: 65,
         image: LEMON_WORKER_LOCAL_IMG,
-        gallery: [
-          LEMON_WORKER_LOCAL_IMG,
-          "https://i.ibb.co/27hvcSNp/Whats-App-Image-2026-10-18-at-10-13-20-PM-2.jpg",
-          "https://i.ibb.co/3H5hPsv/Whats-App-Image-2026-10-18-at-10-13-42-PM-1.jpg",
-        ],
         sizes: ["XL", "2XL", "3XL"],
         features: ["لون ليموني عالي الوضوح", "خطوط عاكسة للضوء للأمان الميداني", "صناعة محلية عالية الجودة"],
         badge: "إنتاج محلي",
         origin: "local",
+        fallbackColor: "lemon",
       },
       {
         id: "worker-vest-orange-local",
@@ -208,6 +264,7 @@ const CATEGORIES: Category[] = [
         features: ["لون برتقالي فاقع عالي الرؤية", "خطوط عاكسة مزدوجة", "تصنيع محلي متين"],
         badge: "إنتاج محلي",
         origin: "local",
+        fallbackColor: "orange",
       },
       {
         id: "worker-vest-black-local",
@@ -219,6 +276,7 @@ const CATEGORIES: Category[] = [
         features: ["لون أسود مميز وعملي", "أشرطة فسفورية عاكسة للأمان", "قماش متين عالي التحمل"],
         badge: "إنتاج محلي",
         origin: "local",
+        fallbackColor: "black",
       },
       {
         id: "worker-vest-blue-local",
@@ -230,6 +288,7 @@ const CATEGORIES: Category[] = [
         features: ["لون أزرق عملي وجذاب", "عاكس إضاءة عريض", "خامة محلية عالية الجودة"],
         badge: "إنتاج محلي",
         origin: "local",
+        fallbackColor: "blue",
       },
       {
         id: "worker-vest-red-local",
@@ -241,6 +300,7 @@ const CATEGORIES: Category[] = [
         features: ["لون أحمر فاقع لسهولة التمييز", "خطوط فسفورية لامعة", "خياطة متينة ومقاومة"],
         badge: "إنتاج محلي",
         origin: "local",
+        fallbackColor: "red",
       },
       {
         id: "worker-vest-lemon-imported",
@@ -248,14 +308,11 @@ const CATEGORIES: Category[] = [
         description: "فيست أمان عمال لون ليموني فسفوري عالي الوضوح، خامات مستوردة ممتازة وتصميم مريح للعمل الشاق.",
         price: 75,
         image: "https://i.ibb.co/hxhfZXz0/Whats-App-Image-2026-10-11-at-3-09-23-PM.jpg",
-        gallery: [
-          "https://i.ibb.co/hxhfZXz0/Whats-App-Image-2026-10-11-at-3-09-23-PM.jpg",
-          "https://i.ibb.co/3H5hPsv/Whats-App-Image-2026-10-18-at-10-13-42-PM-1.jpg",
-        ],
         sizes: ["XL", "2XL", "3XL"],
         features: ["خامة مستوردة فائقة المتانة", "أشرطة فسفورية عاكسة متطورة", "سحاب أمامي عملي وقوي"],
         badge: "مستورد",
         origin: "imported",
+        fallbackColor: "lemon",
       },
       {
         id: "worker-vest-orange-imported",
@@ -267,6 +324,7 @@ const CATEGORIES: Category[] = [
         features: ["خامة مستوردة ممتازة", "عاكس ضوء فائق القوة", "مريح وسهل الارتداء"],
         badge: "مستورد",
         origin: "imported",
+        fallbackColor: "orange",
       },
       {
         id: "worker-vest-black-imported",
@@ -278,6 +336,7 @@ const CATEGORIES: Category[] = [
         features: ["خامة مستوردة فاخرة", "أشرطة عاكسة متينة", "سحاب قوي وخياطة معززة"],
         badge: "مستورد",
         origin: "imported",
+        fallbackColor: "black",
       },
       {
         id: "worker-vest-blue-imported",
@@ -289,6 +348,7 @@ const CATEGORIES: Category[] = [
         features: ["خامات مستوردة فائقة الجودة", "عواكس متطورة للرؤية الليلية", "تهوية وراحة أثناء الحركة"],
         badge: "مستورد",
         origin: "imported",
+        fallbackColor: "blue",
       },
       {
         id: "worker-vest-red-imported",
@@ -300,6 +360,7 @@ const CATEGORIES: Category[] = [
         features: ["خامات مستوردة عالية التحمل", "أشرطة عاكسة متطورة", "سحاب مريح وعملي"],
         badge: "مستورد",
         origin: "imported",
+        fallbackColor: "red",
       },
     ],
   },
@@ -318,6 +379,7 @@ const CATEGORIES: Category[] = [
         features: ["جيوب أمامية متعددة وعميقة", "حامل بطاقة تعريفية", "قماش متين ولون عالي الوضوح"],
         badge: "إنتاج محلي",
         origin: "local",
+        fallbackColor: "lemon",
       },
       {
         id: "sup-vest-orange-local",
@@ -329,6 +391,7 @@ const CATEGORIES: Category[] = [
         features: ["جيوب عملية ومريحة", "لون برتقالي فاقع واضح", "أشرطة عاكسة متينة"],
         badge: "إنتاج محلي",
         origin: "local",
+        fallbackColor: "orange",
       },
       {
         id: "sup-vest-lemon-black-local",
@@ -340,6 +403,7 @@ const CATEGORIES: Category[] = [
         features: ["مزيج ليموني وأسود أنيق", "جيوب مخصصة للأجهزة والأقلام", "صناعة محلية متينة"],
         badge: "إنتاج محلي",
         origin: "local",
+        fallbackColor: "black",
       },
       {
         id: "sup-vest-lemon-blue-local",
@@ -351,6 +415,7 @@ const CATEGORIES: Category[] = [
         features: ["ألوان متباينة عالية الوضوح", "جيوب إشراف متعددة", "خياطة محلية معززة"],
         badge: "إنتاج محلي",
         origin: "local",
+        fallbackColor: "blue",
       },
       {
         id: "sup-vest-lemon-orange-local",
@@ -362,6 +427,7 @@ const CATEGORIES: Category[] = [
         features: ["وضوح مضاعف بلونين فسفوريين", "جيوب متعددة الوظائف", "خامة محلية قوية"],
         badge: "إنتاج محلي",
         origin: "local",
+        fallbackColor: "orange",
       },
       {
         id: "sup-vest-lemon-imported",
@@ -373,6 +439,7 @@ const CATEGORIES: Category[] = [
         features: ["خامة مستوردة فاخرة", "جيوب مخصصة للراديو والأدوات", "أشرطة عاكسة عالية الجودة"],
         badge: "مستورد",
         origin: "imported",
+        fallbackColor: "lemon",
       },
       {
         id: "sup-vest-orange-imported",
@@ -384,39 +451,7 @@ const CATEGORIES: Category[] = [
         features: ["خامة مستوردة عالية الجودة", "تقسيمات جيوب ذكية وعملية", "خطوط عاكسة متطورة"],
         badge: "مستورد",
         origin: "imported",
-      },
-      {
-        id: "sup-vest-lemon-black-imported",
-        name: "فيست إشراف ليموني × أسود (مستورد)",
-        description: "فيست إشراف ليموني × أسود مستورد بجودة عالية، مظهر مميز يبرز طاقم الإشراف بالموقع.",
-        price: 135,
-        image: "https://i.ibb.co/Jjqq2XML/Whats-App-Image-2026-10-14-at-1-55-06-PM.jpg",
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["خامات مستوردة ممتازة", "أشرطة فسفورية متطورة", "سحابات متينة وعملية"],
-        badge: "مستورد",
-        origin: "imported",
-      },
-      {
-        id: "sup-vest-lemon-blue-imported",
-        name: "فيست مشرفين ليموني × أزرق (مستورد)",
-        description: "فيست مشرفين ليموني × أزرق مستورد فاخر، مناسب للمتابعة الميدانية والمهام الإشرافية الدقيقة.",
-        price: 135,
-        image: "https://i.ibb.co/qL0cZFMW/Whats-App-Image-2026-10-14-at-1-55-06-PM-1.jpg",
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["خامة مستوردة راقية", "جيوب كروت وأجهزة لاسلكية", "عواكس ليلية ممتازة"],
-        badge: "مستورد",
-        origin: "imported",
-      },
-      {
-        id: "sup-vest-lemon-orange-imported",
-        name: "فيست مشرفين ليموني × برتقالي (مستورد)",
-        description: "فيست إشراف ليموني × برتقالي مستورد عالي الجودة، يضمن أقصى معايير السلامة المهنية للمشرفين.",
-        price: 135,
-        image: "https://i.ibb.co/p61yHtHW/Whats-App-Image-2026-10-14-at-1-55-06-PM-2.jpg",
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["خامات مستوردة متطورة", "رؤية فائقة بالنهار والليل", "سحاب قوي وخياطة متينة"],
-        badge: "مستورد",
-        origin: "imported",
+        fallbackColor: "orange",
       },
     ],
   },
@@ -431,14 +466,11 @@ const CATEGORIES: Category[] = [
         description: "فيست مهندسين تنفيذي مزود بأربعة خطوط عاكسة متطورة، قماش فاخر وجيوب واسعة للرسومات والأدوات.",
         price: 155,
         image: "https://i.ibb.co/FkXwgTMy/Whats-App-Image-2026-10-18-at-10-13-15-PM.jpg",
-        gallery: [
-          "https://i.ibb.co/FkXwgTMy/Whats-App-Image-2026-10-18-at-10-13-15-PM.jpg",
-          "https://i.ibb.co/GfYhRpFf/Whats-App-Image-2026-10-18-at-10-13-18-PM.jpg",
-        ],
         sizes: ["XL", "2XL", "3XL"],
         features: ["4 خطوط عاكسة متطورة", "مظهر هندسي تنفيذي فاخر", "جيوب مخصصة للمخططات والموبايل"],
         badge: "4 عاكس",
         origin: "local",
+        fallbackColor: "black",
       },
       {
         id: "eng-vest-4ref-lemon-blue-local",
@@ -450,17 +482,7 @@ const CATEGORIES: Category[] = [
         features: ["4 خطوط عاكسة قوية", "قصة أنيقة ومريحة للمهندسين", "خامات متينة ومقاومة للحرارة"],
         badge: "4 عاكس",
         origin: "local",
-      },
-      {
-        id: "eng-vest-4ref-lemon-orange-local",
-        name: "فيست مهندسين 4 عاكس ليموني × برتقالي (محلي)",
-        description: "فيست مهندسين 4 عاكس بلونين ناصعين لتوفير أعلى مستوى رؤية وأناقة في المواقع الكبرى.",
-        price: 155,
-        image: "https://i.ibb.co/C5KynwMt/Whats-App-Image-2026-10-11-at-3-12-09-PM-2.jpg",
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["4 أشرطة عاكسة للضوء", "مزيج فسفوري فائق الوضوح", "خياطة مزدوجة معززة"],
-        badge: "4 عاكس",
-        origin: "local",
+        fallbackColor: "blue",
       },
       {
         id: "eng-vest-3m-lemon-black-local",
@@ -468,36 +490,11 @@ const CATEGORIES: Category[] = [
         description: "فيست مهندسين فاخر مزود بأشرطة 3M العاكسة الأصلية لتوفير بريق عاكس قياسي عالمي محلي.",
         price: 185,
         image: "https://i.ibb.co/LDJ5Qv0d/Whats-App-Image-2026-10-18-at-10-13-17-PM-1.jpg",
-        gallery: [
-          "https://i.ibb.co/LDJ5Qv0d/Whats-App-Image-2026-10-18-at-10-13-17-PM-1.jpg",
-          "https://i.ibb.co/HTJjPgsn/Whats-App-Image-2026-10-11-at-3-12-35-PM.jpg",
-        ],
         sizes: ["XL", "2XL", "3XL"],
         features: ["شريط عاكس أصلي 3M", "قماش عالي الكثافة والجودة", "جيوب تنظيمية احترافية"],
         badge: "عاكس 3M محلي",
         origin: "local",
-      },
-      {
-        id: "eng-vest-3m-lemon-blue-local",
-        name: "فيست مهندسين ثري إم (3M) ليموني × أزرق (محلي)",
-        description: "فيست مهندسين بلونين ليموني وأزرق مع أشرطة 3M المعتمدة، تصنيع محلي متميز وعملي للغاية.",
-        price: 185,
-        image: "https://i.ibb.co/zkxZxDq/Whats-App-Image-2026-10-11-at-3-12-36-PM-1.jpg",
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["عواكس 3M فائقة التوهج", "قماش جبردين عالي التحمل", "حلقات لتعليق اللاسلكي والمفاتيح"],
-        badge: "عاكس 3M محلي",
-        origin: "local",
-      },
-      {
-        id: "eng-vest-3m-lemon-orange-local",
-        name: "فيست مهندسين ثري إم (3M) ليموني × برتقالي (محلي)",
-        description: "فيست مهندسين مزود بشرائط 3M الأصلية بلوني السلامة المعتمدين ليموني وبرتقالي تصنيع محلي.",
-        price: 185,
-        image: "https://i.ibb.co/PvkGXDPV/Whats-App-Image-2026-10-11-at-3-12-36-PM-1.jpg",
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["أشرطة عاكسة أصلية 3M", "مزيج لوني عالي الوضوح", "خياطة متينة وجيوب شاملة"],
-        badge: "عاكس 3M محلي",
-        origin: "local",
+        fallbackColor: "lemon",
       },
       {
         id: "eng-vest-3m-lemon-black-imported",
@@ -505,36 +502,11 @@ const CATEGORIES: Category[] = [
         description: "فيست مهندسين تنفيذي مستورد بأعلى معايير الجودة العالمية مع شرائط 3M العاكسة الأصلية.",
         price: 235,
         image: "https://i.ibb.co/LDJ5Qv0d/Whats-App-Image-2026-10-18-at-10-13-17-PM-1.jpg",
-        gallery: [
-          "https://i.ibb.co/LDJ5Qv0d/Whats-App-Image-2026-10-18-at-10-13-17-PM-1.jpg",
-          "https://i.ibb.co/HTJjPgsn/Whats-App-Image-2026-10-11-at-3-12-35-PM.jpg",
-        ],
         sizes: ["XL", "2XL", "3XL"],
         features: ["شريط عاكس معتمد 3M", "خامات مستوردة بريميوم", "تفصيل ومظهر قيادي فاخر"],
         badge: "عاكس 3M مستورد",
         origin: "imported",
-      },
-      {
-        id: "eng-vest-3m-lemon-blue-imported",
-        name: "فيست مهندسين ثري إم (3M) ليموني × أزرق (مستورد)",
-        description: "فيست مهندسين مستورد بريميوم بشرائط 3M ليموني × أزرق لضمان أعلى مستويات الأمان والأناقة.",
-        price: 235,
-        image: "https://i.ibb.co/zkxZxDq/Whats-App-Image-2026-10-11-at-3-12-36-PM-1.jpg",
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["تقنية عاكس 3M المتطورة", "خامة مستوردة مقاومة للتآكل", "راحة تامة في التحرك والمطابقة"],
-        badge: "عاكس 3M مستورد",
-        origin: "imported",
-      },
-      {
-        id: "eng-vest-3m-lemon-orange-imported",
-        name: "فيست مهندسين ثري إم (3M) ليموني × برتقالي (مستورد)",
-        description: "فيست مهندسين تنفيذي مستورد بشرائط 3M، تصميم متقن يوفر الحماية والمظهر المهني المتألق.",
-        price: 235,
-        image: "https://i.ibb.co/PvkGXDPV/Whats-App-Image-2026-10-11-at-3-12-36-PM-1.jpg",
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["شريط عاكس 3M مستورد", "أعلى معايير الجودة التنفيذية", "متانة قصوى في البيئات القاسية"],
-        badge: "عاكس 3M مستورد",
-        origin: "imported",
+        fallbackColor: "lemon",
       },
     ],
   },
@@ -552,6 +524,7 @@ const CATEGORIES: Category[] = [
         sizes: ["مقاس موحد"],
         features: ["مقاومة عالية للصدمات", "نظام تعليق داخلي لامتصاص الصدمات", "خفيفة ومريحة للاستخدام الطويل"],
         badge: "عمال",
+        fallbackColor: "helmet_white",
       },
       {
         id: "helmet-workers-yellow",
@@ -562,6 +535,7 @@ const CATEGORIES: Category[] = [
         sizes: ["مقاس موحد"],
         features: ["لون أصفر قياسي عالي الوضوح", "خامة قوية شديدة التحمل", "حزام تثبيت مريح وقابل للضبط"],
         badge: "عمال",
+        fallbackColor: "helmet_yellow",
       },
       {
         id: "helmet-engineers-white-msa",
@@ -572,6 +546,7 @@ const CATEGORIES: Category[] = [
         sizes: ["مقاس موحد"],
         features: ["ماركة MSA الأصلية", "تصميم هندسي متقدم عالي التحمل", "نظام ضبط قياس خلفي دقيق وسلس"],
         badge: "MSA معتمدة",
+        fallbackColor: "helmet_white",
       },
     ],
   },
@@ -608,7 +583,6 @@ export default function HomePage() {
   const [sortBy, setSortBy] = useState<"default" | "price-asc" | "price-desc">("default");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // إحصائيات زوار الموقع
   const [visitorCount, setVisitorCount] = useState<number>(14820);
   const [activeOnlineVisitors, setActiveOnlineVisitors] = useState<number>(18);
 
@@ -649,7 +623,6 @@ export default function HomePage() {
   useEffect(() => {
     document.title = "Future Press | للطباعة وتوريدات الأمان الصناعي";
     if (typeof window !== "undefined") {
-      // تحميل عربة التسوق
       const saved = localStorage.getItem("future_press_cart");
       if (saved) {
         try {
@@ -659,18 +632,15 @@ export default function HomePage() {
         }
       }
 
-      // حساب وتحديث عداد الزوار التراكمي
       const storedVisitors = localStorage.getItem("future_press_visitors");
       let count = storedVisitors ? parseInt(storedVisitors, 10) : 14820;
       if (isNaN(count) || count < 1000) count = 14820;
 
-      // زيادة العداد للزيارة الحالية
       const newCount = count + 1;
       localStorage.setItem("future_press_visitors", newCount.toString());
       setVisitorCount(newCount);
 
-      // تحديد رقم عشوائي واقعي للزوار النشطين حالياً
-      setActiveOnlineVisitors(Math.floor(Math.random() * 11) + 14); // بين 14 و 24
+      setActiveOnlineVisitors(Math.floor(Math.random() * 11) + 14);
     }
     const now = new Date();
     setOrderDate(
@@ -892,12 +862,12 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
         }`}
       >
         <div className="relative sm:w-1/2 aspect-square bg-slate-950/60 overflow-hidden">
-          <Image
+          <SafeImage
             src={product.image}
             alt={product.name}
             fill
+            fallbackType={product.fallbackColor || (isHelmet ? "helmet_white" : "default")}
             className="object-cover group-hover:scale-105 transition-transform duration-500"
-            unoptimized
           />
           {product.badge && (
             <div className="absolute top-3 right-3 z-10">
@@ -1162,13 +1132,13 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
               setIsInvoiceReady(false);
             }}
           >
-            <div className="relative w-11 h-11 rounded-full overflow-hidden border border-blue-500/40 shadow-sm shrink-0 group-hover:scale-105 transition-transform">
-              <Image
+            <div className="relative w-11 h-11 rounded-full overflow-hidden border border-blue-500/40 shadow-sm shrink-0 group-hover:scale-105 transition-transform bg-blue-950 flex items-center justify-center">
+              <SafeImage
                 src="https://i.ibb.co/NdnYZ3Pp/Whats-App-Image-2026-10-14-at-5-53-58-AM.jpg"
                 alt="Future Press Company"
                 fill
+                fallbackType="lemon"
                 className="object-cover"
-                unoptimized
               />
             </div>
             <div>
@@ -1231,7 +1201,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* مؤشر زوار الموقع في الهيدر */}
             <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-300">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -1329,13 +1298,13 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
 
                 <div className="lg:col-span-5">
                   <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-slate-700/80 shadow-2xl bg-slate-900 group">
-                    <Image
+                    <SafeImage
                       src={HERO_SHOWCASE_IMAGES[heroSlideIndex].url}
                       alt={HERO_SHOWCASE_IMAGES[heroSlideIndex].title}
                       fill
+                      fallbackType={HERO_SHOWCASE_IMAGES[heroSlideIndex].fallback}
                       className="object-cover transition-all duration-700 group-hover:scale-105"
                       priority
-                      unoptimized
                     />
 
                     <div className="absolute top-4 right-4 z-10 flex gap-2">
@@ -1399,7 +1368,13 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                         }`}
                         title={img.title}
                       >
-                        <Image src={img.url} alt="Thumbnail" fill className="object-cover" unoptimized />
+                        <SafeImage
+                          src={img.url}
+                          alt="Thumbnail"
+                          fill
+                          fallbackType={img.fallback}
+                          className="object-cover"
+                        />
                       </button>
                     ))}
                   </div>
@@ -1440,12 +1415,12 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                     onClick={() => setHeroSlideIndex(index)}
                     className="group relative aspect-square rounded-2xl overflow-hidden border border-slate-800 bg-slate-900 hover:border-blue-500/60 transition-all duration-300 cursor-pointer"
                   >
-                    <Image
+                    <SafeImage
                       src={item.url}
                       alt={item.title}
                       fill
+                      fallbackType={item.fallback}
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
-                      unoptimized
                     />
                     <div className="absolute inset-0 bg-slate-950/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2.5">
                       <span className="text-[9px] font-bold text-amber-400">{item.badge}</span>
@@ -1478,7 +1453,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                   <p className="text-xs text-slate-400 font-medium">ثبات ودقة طباعة الأحبار</p>
                 </div>
 
-                {/* بطاقة عداد زوار الموقع */}
                 <div className="col-span-2 md:col-span-1 p-3 rounded-2xl bg-gradient-to-br from-blue-950/60 to-slate-900 border border-blue-800/40 space-y-1">
                   <div className="flex items-center justify-center gap-1.5 text-xs text-emerald-400 font-bold">
                     <span className="relative flex h-2 w-2">
@@ -1950,7 +1924,6 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                     />
                   </div>
 
-                  {/* إرفاق الشعار بدون معاينة */}
                   <div className="md:col-span-2 space-y-2">
                     <label className="block text-xs font-semibold text-slate-300">
                       ملف الشعار للطباعة (اختياري)
@@ -2071,13 +2044,13 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
               >
                 <div className="flex flex-row justify-between items-center pb-4 border-b-2 border-slate-900">
                   <div className="flex items-center gap-3">
-                    <div className="relative w-12 h-12 rounded-full overflow-hidden border border-slate-300 shrink-0">
-                      <Image
+                    <div className="relative w-12 h-12 rounded-full overflow-hidden border border-slate-300 shrink-0 bg-blue-900 flex items-center justify-center">
+                      <SafeImage
                         src="https://i.ibb.co/NdnYZ3Pp/Whats-App-Image-2026-10-14-at-5-53-58-AM.jpg"
                         alt="Logo"
                         fill
+                        fallbackType="lemon"
                         className="object-cover"
-                        unoptimized
                       />
                     </div>
                     <div>
@@ -2306,12 +2279,12 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
 
             <div className="grid sm:grid-cols-2 gap-6 items-center">
               <div className="relative aspect-square rounded-2xl overflow-hidden bg-slate-950 border border-slate-800">
-                <Image
+                <SafeImage
                   src={quickViewProduct.image}
                   alt={quickViewProduct.name}
                   fill
+                  fallbackType={quickViewProduct.fallbackColor || "default"}
                   className="object-cover"
-                  unoptimized
                 />
               </div>
 
@@ -2565,13 +2538,13 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-slate-800/80 text-sm">
             <div className="space-y-3 md:col-span-2">
               <div className="flex items-center gap-3">
-                <div className="relative w-10 h-10 rounded-full overflow-hidden border border-blue-500/40">
-                  <Image
+                <div className="relative w-10 h-10 rounded-full overflow-hidden border border-blue-500/40 bg-blue-950 flex items-center justify-center">
+                  <SafeImage
                     src="https://i.ibb.co/NdnYZ3Pp/Whats-App-Image-2026-10-14-at-5-53-58-AM.jpg"
                     alt="Future Press"
                     fill
+                    fallbackType="lemon"
                     className="object-cover"
-                    unoptimized
                   />
                 </div>
                 <h4 className="text-base font-black text-white">Future Press Company</h4>
