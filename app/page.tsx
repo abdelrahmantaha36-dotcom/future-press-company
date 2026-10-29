@@ -70,6 +70,9 @@ interface Category {
   products: Product[];
 }
 
+// رابط اللوجو الرسمي لـ Future Press
+const LOGO_URL = "https://iili.io/n8656e1.png";
+
 // مكون لوجو رسمي تفاعلي لـ Future Press
 function FuturePressLogo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   const dim = size === "lg" ? "w-12 h-12" : size === "md" ? "w-11 h-11" : "w-9 h-9";
@@ -77,9 +80,14 @@ function FuturePressLogo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
     <div
       className={`relative ${dim} rounded-full overflow-hidden bg-gradient-to-tr from-blue-700 via-indigo-600 to-amber-400 p-[2px] shadow-md flex items-center justify-center shrink-0`}
     >
-      <div className="w-full h-full bg-[#0b1120] rounded-full flex flex-col items-center justify-center text-center">
-        <span className="text-[10px] sm:text-xs font-black tracking-tighter text-amber-300 leading-none">FP</span>
-        <span className="text-[6px] sm:text-[7px] font-bold text-blue-300 uppercase tracking-widest leading-none mt-0.5">PRESS</span>
+      <div className="relative w-full h-full bg-[#0b1120] rounded-full overflow-hidden flex items-center justify-center">
+        <Image
+          src={LOGO_URL}
+          alt="Future Press Logo"
+          fill
+          className="object-cover"
+          unoptimized
+        />
       </div>
     </div>
   );
@@ -103,7 +111,7 @@ const VEST_IMAGES = {
   supLemonBlue: "https://iili.io/n84bL37.jpg",
   supLemonOrange: "https://iili.io/n84bi4S.jpg",
 
-  // 4. فيستات مهندسين 4 عاكس (محلي ومستورد)
+  // 4. فيستات مهندسين 4 عاكس (محلي)
   eng4RefLemonBlack: "https://iili.io/n84plOg.jpg",
   eng4RefLemonBlue: "https://iili.io/n84paJ1.jpg",
   eng4RefLemonOrange: "https://iili.io/n84p7UP.jpg",
@@ -113,10 +121,9 @@ const VEST_IMAGES = {
   eng3MLemonBlue: "https://iili.io/n869xMx.jpg",
   eng3MLemonOrange: "https://iili.io/n869CZb.jpg",
 
-  // الخوذات
-  helmetWhite: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=700&q=80",
-  helmetYellow: "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=700&q=80",
-  helmetMSA: "https://images.unsplash.com/photo-1508873696983-2df5293cb32b?auto=format&fit=crop&w=700&q=80",
+  // الخوذات المعتمدة (أصفر وأبيض)
+  helmetYellow: "https://iili.io/n86uQs4.jpg",
+  helmetWhite: "https://iili.io/n86uLXf.jpg",
 };
 
 const HERO_SHOWCASE_IMAGES = [
@@ -134,7 +141,7 @@ const HERO_SHOWCASE_IMAGES = [
   },
   {
     url: VEST_IMAGES.eng4RefLemonBlue,
-    title: "فيست مهندسين تنفيذي 4 عاكس ليموني × أزرق",
+    title: "فيست مهندسين تنفيذي 4 عاكس ليموني × أزرق (محلي)",
     badge: "4 خطوط عاكسة",
     category: "مهندسين",
   },
@@ -443,7 +450,7 @@ const CATEGORIES: Category[] = [
   {
     id: "engineers",
     title: "فيست مهندسين",
-    description: "سترات احترافية فاخرة بنظام 4 عاكس وأشرطة 3M العالمية لتوفير أقصى درجات الأناقة والأمان الميداني.",
+    description: "سترات احترافية فاخرة بنظام 4 عاكس محلي وأشرطة 3M العالمية لتوفير أقصى درجات الأناقة والأمان الميداني.",
     products: [
       {
         id: "eng-vest-4ref-lemon-black-local",
@@ -477,39 +484,6 @@ const CATEGORIES: Category[] = [
         features: ["4 خطوط عاكسة مزدوجة", "رؤية ليلية كاملة 360 درجة", "جيوب واسعة ومريحة"],
         badge: "4 عاكس محلي",
         origin: "local",
-      },
-      {
-        id: "eng-vest-4ref-lemon-black-imported",
-        name: "فيست مهندسين 4 عاكس ليموني × أسود (مستورد)",
-        description: "فيست مهندسين 4 عاكس مستورد فاخر، تقفيل عالمي وخامات ممتازة مقاومة للعوامل الجوية.",
-        price: 195,
-        image: VEST_IMAGES.eng4RefLemonBlack,
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["خامة مستوردة راقية", "4 خطوط عاكسة عالية الكثافة", "جيوب وسحابات هيدروليكية مريحة"],
-        badge: "4 عاكس مستورد",
-        origin: "imported",
-      },
-      {
-        id: "eng-vest-4ref-lemon-blue-imported",
-        name: "فيست مهندسين 4 عاكس ليموني × أزرق (مستورد)",
-        description: "فيست مهندسين 4 عاكس ليموني في أزرق مستورد بتفصيل قيادي وأشرطة عاكسة متطورة.",
-        price: 195,
-        image: VEST_IMAGES.eng4RefLemonBlue,
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["مظهر قيادي تنفيذي", "خامة مريحة وباردة صيفاً", "4 عواكس ضوء بريميوم"],
-        badge: "4 عاكس مستورد",
-        origin: "imported",
-      },
-      {
-        id: "eng-vest-4ref-lemon-orange-imported",
-        name: "فيست مهندسين 4 عاكس ليموني × برتقالي (مستورد)",
-        description: "فيست مهندسين 4 عاكس مستورد بلونين ليموني وبرتقالي، يوفر أقصى حماية وأعلى درجات الرؤية الهندسية.",
-        price: 195,
-        image: VEST_IMAGES.eng4RefLemonOrange,
-        sizes: ["XL", "2XL", "3XL"],
-        features: ["خامة مستوردة عالية التحمل", "عواكس ضوئية معتمدة دولياً", "جيوب مخصصة للراديو والأجهزة"],
-        badge: "4 عاكس مستورد",
-        origin: "imported",
       },
       {
         id: "eng-vest-3m-lemon-black-local",
@@ -582,18 +556,8 @@ const CATEGORIES: Category[] = [
   {
     id: "helmets",
     title: "خوذه",
-    description: "خوذات حماية للرأس مصممة لتحمل الصدمات وتوفير الحماية القصوى للأمان الميداني.",
+    description: "خوذات حماية للرأس مصممة لتحمل الصدمات وتوفير الحماية القصوى للأمان الميداني لكافة طواقم العمل.",
     products: [
-      {
-        id: "helmet-workers-white",
-        name: "خوذه عمال أبيض",
-        description: "خوذة أمان عمال لون أبيض، متينة ومقاومة للصدمات ومطابقة لمواصفات الأمان الميداني ومريحة للارتداء اليومي.",
-        price: 65,
-        image: VEST_IMAGES.helmetWhite,
-        sizes: ["مقاس موحد"],
-        features: ["مقاومة عالية للصدمات", "نظام تعليق داخلي لامتصاص الصدمات", "خفيفة ومريحة للاستخدام الطويل"],
-        badge: "عمال",
-      },
       {
         id: "helmet-workers-yellow",
         name: "خوذه عمال أصفر",
@@ -605,14 +569,34 @@ const CATEGORIES: Category[] = [
         badge: "عمال",
       },
       {
-        id: "helmet-engineers-white-msa",
-        name: "خوذه مهندسين أبيض MSA",
-        description: "خوذة أمان مهندسين أبيض ماركة MSA الأصلية، خامات فائقة الجودة توفر أقصى درجات الحماية والأناقة الهندسية.",
-        price: 205,
-        image: VEST_IMAGES.helmetMSA,
+        id: "helmet-workers-white",
+        name: "خوذه عمال أبيض",
+        description: "خوذة أمان عمال لون أبيض، متينة ومقاومة للصدمات ومطابقة لمواصفات الأمان الميداني ومريحة للارتداء اليومي.",
+        price: 65,
+        image: VEST_IMAGES.helmetWhite,
         sizes: ["مقاس موحد"],
-        features: ["ماركة MSA الأصلية", "تصميم هندسي متقدم عالي التحمل", "نظام ضبط قياس خلفي دقيق وسلس"],
-        badge: "MSA معتمدة",
+        features: ["مقاومة عالية للصدمات", "نظام تعليق داخلي لامتصاص الصدمات", "خفيفة ومريحة للاستخدام الطويل"],
+        badge: "عمال",
+      },
+      {
+        id: "helmet-engineers-yellow",
+        name: "خوذه مهندسين أصفر",
+        description: "خوذة أمان مهندسين لون أصفر فاقع بجودة عالية ونظام ضبط متطور ومريح لبيئة العمل الهندسية والإشرافية.",
+        price: 95,
+        image: VEST_IMAGES.helmetYellow,
+        sizes: ["مقاس موحد"],
+        features: ["خامة مقواة ضد الصدمات", "نظام تهوية وضبط قياس خلفي مريح", "تصميم هندسي خفيف وعملي"],
+        badge: "مهندسين",
+      },
+      {
+        id: "helmet-engineers-white-msa",
+        name: "خوذه مهندسين أبيض",
+        description: "خوذة أمان مهندسين أبيض فاخرة ومطابقة للمواصفات القياسية، خامات متطورة توفر أقصى درجات الحماية والأناقة الهندسية.",
+        price: 95,
+        image: VEST_IMAGES.helmetWhite,
+        sizes: ["مقاس موحد"],
+        features: ["تصميم هندسي متقدم عالي التحمل", "نظام ضبط قياس خلفي دقيق وسلس", "مقاومة فائقة للحرارة والصدمات"],
+        badge: "مهندسين",
       },
     ],
   },
@@ -1256,6 +1240,15 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
             >
               مهندسين
             </button>
+            <button
+              onClick={() => {
+                setView("store");
+                setActiveCategory("helmets");
+              }}
+              className="hover:text-blue-400 transition-colors cursor-pointer"
+            >
+              خوذات أمان
+            </button>
             <a href="#showcase" className="hover:text-blue-400 transition-colors">
               نماذج الطباعة
             </a>
@@ -1326,7 +1319,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                   </h1>
 
                   <p className="text-slate-300 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                    شاهد نماذج حية وموك آب واقعي لفيستات العمال والمشرفين والمهندسين (لون واحد، 2 لون، 4 عاكس، و 3M) مع إمكانية طباعة الصدر والظهر بدقة وثبات تام.
+                    شاهد نماذج حية وموك آب واقعي لفيستات العمال والمشرفين والمهندسين (لون واحد، 2 لون، 4 عاكس محلي، و 3M) مع خوذات الأمان المعتمدة وإمكانية طباعة الصدر والظهر بدقة وثبات تام.
                   </p>
 
                   <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
@@ -1452,14 +1445,14 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                     تنفيذ حقيقي وموك آب معتمد
                   </Badge>
                   <h3 className="text-xl sm:text-2xl font-black text-white">
-                    معرض نماذج الفيستات والطباعة الفعلية
+                    معرض نماذج الفيستات والخوذات والطباعة الفعلية
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-400 mt-1">
-                    استعرض أشكال الفيستات من الأمام والظهر مع نماذج 4 عاكس و 3M قبل إتمام طلبك
+                    استعرض أشكال مهمات السلامة من الأمام والظهر مع نماذج 4 عاكس و 3M وخوذات الحماية
                   </p>
                 </div>
                 <a
-                  href="https://wa.me/201010625349?text=أود الاستفسار عن تفاصيل طباعة كميات فيستات للشركات"
+                  href="https://wa.me/201010625349?text=أود الاستفسار عن تفاصيل طباعة كميات فيستات وخوذات للشركات"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-xs font-bold text-blue-400 hover:text-blue-300"
@@ -1539,7 +1532,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                   <Search className="w-4 h-4 absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                   <input
                     type="text"
-                    placeholder="ابحث بالاسم، اللون، أو الخامة (مثال: 3M)..."
+                    placeholder="ابحث بالاسم، اللون، أو الخامة (مثال: خوذه، 3M)..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full bg-slate-900 border border-slate-700 rounded-xl pr-10 pl-3 py-2 text-xs sm:text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500"
@@ -1663,19 +1656,21 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                             >
                               محلي ({localProducts.length})
                             </button>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                setSubCategoryFilter((prev) => ({ ...prev, [category.id]: "imported" }))
-                              }
-                              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                                currentFilter === "imported"
-                                  ? "bg-cyan-600 text-white shadow-sm"
-                                  : "text-slate-400 hover:text-white"
-                              }`}
-                            >
-                              مستورد ({importedProducts.length})
-                            </button>
+                            {importedProducts.length > 0 && (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setSubCategoryFilter((prev) => ({ ...prev, [category.id]: "imported" }))
+                                }
+                                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                                  currentFilter === "imported"
+                                    ? "bg-cyan-600 text-white shadow-sm"
+                                    : "text-slate-400 hover:text-white"
+                                }`}
+                              >
+                                مستورد ({importedProducts.length})
+                              </button>
+                            )}
                           </div>
                         )}
                       </div>
@@ -1732,7 +1727,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                   موثوق به من كبرى شركات المقاولات والمصانع
                 </h3>
                 <p className="text-slate-400 text-xs sm:text-sm max-w-xl mx-auto">
-                  قمنا بتجهيز أطقم الأمان المهني وتوريد السترات المطبوعة لمئات المشروعات الهندسية والمصانع على مستوى مصر.
+                  قمنا بتجهيز أطقم الأمان المهني وتوريد السترات والخوذات المعتمدة لمئات المشروعات الهندسية والمصانع على مستوى مصر.
                 </p>
               </div>
 
@@ -1744,7 +1739,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                     ))}
                   </div>
                   <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                    &quot;تم استلام دفعة 100 فيست مهندسين ثري إم لموقع التجمع. خامة القماش محملة وجودة طباعة اللوجو ممتازة والتسليم في الميعاد المحدد.&quot;
+                    &quot;تم استلام دفعة 100 فيست مهندسين ثري إم مع خوذات الأمان لموقع التجمع. خامة القماش محملة وجودة طباعة اللوجو ممتازة والتسليم في الميعاد المحدد.&quot;
                   </p>
                   <div className="pt-2 border-t border-slate-800/80">
                     <p className="font-bold text-xs text-white">م. أحمد سامي</p>
@@ -1759,7 +1754,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                     ))}
                   </div>
                   <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                    &quot;عرض الـ 50 فيست وفر معانا كتير في تجهيز العمال بالمصنع، العواكس بتلمع جداً بالإضاءة الليلية وشغل محترم جداً.&quot;
+                    &quot;عرض الـ 50 فيست وخوذات العمال وفر معانا كتير في تجهيز العمال بالمصنع، العواكس بتلمع جداً بالإضاءة الليلية وشغل محترم جداً.&quot;
                   </p>
                   <div className="pt-2 border-t border-slate-800/80">
                     <p className="font-bold text-xs text-white">أ. محمد الشريف</p>
@@ -2475,7 +2470,7 @@ ${discountAmount > 0 ? `🎁 خصم الكميات المطبق (${discountRate 
                 <tbody className="divide-y divide-slate-200">
                   {cart.map((item, i) => (
                     <tr key={i}>
-                      <td className="p-2 font-medium">{item.name} (شامل الطباعة)</td>
+                      <td className="p-2 font-medium">{item.name}</td>
                       <td className="p-2 text-center">{item.size}</td>
                       <td className="p-2 text-center">{item.quantity}</td>
                       <td className="p-2 text-center">{item.price} ج.م</td>
