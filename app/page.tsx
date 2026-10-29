@@ -85,18 +85,18 @@ function FuturePressLogo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   );
 }
 
-// الصور المعتمدة المطابقة تماماً للصور الخمس المرفقة
+// الصور المعتمدة المطابقة للروابط الخمسة المطلوبة
 const WORKER_VEST_IMAGES = {
   // 1. فيست عمال ليموني
-  lemon: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=700&q=80",
+  lemon: "https://iili.io/n848vet.jpg",
   // 2. فيست عمال برتقالي
-  orange: "https://images.unsplash.com/photo-1618042164219-62c820f10723?auto=format&fit=crop&w=700&q=80",
+  orange: "https://iili.io/n848gXs.jpg",
   // 3. فيست عمال أسود
-  black: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=700&q=80",
+  black: "https://iili.io/n8488mX.jpg",
   // 4. فيست عمال أزرق
-  blue: "https://images.unsplash.com/photo-1541888946425-d0fbb186c5f7?auto=format&fit=crop&w=700&q=80",
+  blue: "https://iili.io/n848UIn.jpg",
   // 5. فيست عمال أحمر
-  red: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=700&q=80",
+  red: "https://iili.io/n848irl.jpg",
   
   // الخوذات والفيستات الهندسية
   engineer3M: "https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=700&q=80",
