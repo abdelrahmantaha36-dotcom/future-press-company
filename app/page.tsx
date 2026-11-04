@@ -126,37 +126,37 @@ const VEST_IMAGES = {
   helmetWhite: "https://iili.io/n86uLXf.jpg",
 };
 
-// صور البانر الرئيسية المحدثة بروابط مباشرة
+// صور البانر الرئيسية المحدثة: خامات ممتازة وتوريدات شركات على كل الفيستات
 const HERO_SHOWCASE_IMAGES = [
   {
     url: "https://cdn.imagetourls.com/uploads/tyImg/1aGruKJ6x.jpg",
     title: "فيست أمان عالي الرؤية ومطابق للمواصفات الميدانية",
-    badge: "الأكثر طلباً",
-    category: "فيستات أمان",
+    badge: "خامات ممتازة",
+    category: "توريدات شركات",
   },
   {
     url: "https://cdn.imagetourls.com/uploads/tyImg/1frYggchu.jpg",
-    title: "فيستات إشراف وتنفيذ بتصميم احترافي متعدد الجيوب",
-    badge: "إشراف ميداني",
-    category: "مشرفين",
+    title: "فيستات تنفيذية مجهزة بجيوب متعددة وأشرطة عاكسة متطورة",
+    badge: "خامات ممتازة",
+    category: "توريدات شركات",
   },
   {
     url: "https://cdn.imagetourls.com/uploads/tyImg/17jqVr9YY.jpg",
-    title: "فيست مهندسين تنفيذي بأشرطة عاكسة متطورة",
-    badge: "4 خطوط عاكسة",
-    category: "مهندسين",
+    title: "فيست أمان فسفوري عالي البريق للأمان والرؤية الميدانية",
+    badge: "خامات ممتازة",
+    category: "توريدات شركات",
   },
   {
     url: "https://cdn.imagetourls.com/uploads/tyImg/Xyz64hYo.jpg",
-    title: "مهمات سلامة مهنية وسترات حماية للمواقع الإنشائية",
+    title: "مهمات سلامة مهنية وسترات حماية للمواقع الإنشائية والمصانع",
     badge: "خامات ممتازة",
     category: "توريدات شركات",
   },
   {
     url: "https://cdn.imagetourls.com/uploads/tyImg/LtS5R5m2.jpg",
-    title: "سترات أمان للمشروعات والمصانع مع طباعة الشعار",
-    badge: "أمان متقدم",
-    category: "طباعة وشعار",
+    title: "باقات توريد كميات كبرى من السترات مع طباعة الشعار",
+    badge: "خامات ممتازة",
+    category: "توريدات شركات",
   },
 ];
 
