@@ -126,36 +126,37 @@ const VEST_IMAGES = {
   helmetWhite: "https://iili.io/n86uLXf.jpg",
 };
 
+// صور البانر الرئيسية المحدثة بروابط مباشرة
 const HERO_SHOWCASE_IMAGES = [
   {
-    url: VEST_IMAGES.workerLemon,
-    title: "فيست عمال ليموني فسفوري مستورد 2 عاكس",
+    url: "https://cdn.imagetourls.com/uploads/tyImg/1aGruKJ6x.jpg",
+    title: "فيست أمان عالي الرؤية ومطابق للمواصفات الميدانية",
     badge: "الأكثر طلباً",
-    category: "عمال",
+    category: "فيستات أمان",
   },
   {
-    url: VEST_IMAGES.supLemonBlack,
-    title: "فيست مشرفين مستورد 2 لون ليموني × أسود",
+    url: "https://cdn.imagetourls.com/uploads/tyImg/1frYggchu.jpg",
+    title: "فيستات إشراف وتنفيذ بتصميم احترافي متعدد الجيوب",
     badge: "إشراف ميداني",
     category: "مشرفين",
   },
   {
-    url: VEST_IMAGES.eng4RefLemonBlue,
-    title: "فيست مهندسين تنفيذي 4 عاكس ليموني × أزرق (محلي)",
+    url: "https://cdn.imagetourls.com/uploads/tyImg/17jqVr9YY.jpg",
+    title: "فيست مهندسين تنفيذي بأشرطة عاكسة متطورة",
     badge: "4 خطوط عاكسة",
     category: "مهندسين",
   },
   {
-    url: VEST_IMAGES.eng3MLemonBlack,
-    title: "فيست مهندسين شريط أصلي ثري إم (3M) مستورد",
-    badge: "3M الأصلي",
-    category: "مهندسين",
+    url: "https://cdn.imagetourls.com/uploads/tyImg/Xyz64hYo.jpg",
+    title: "مهمات سلامة مهنية وسترات حماية للمواقع الإنشائية",
+    badge: "خامات ممتازة",
+    category: "توريدات شركات",
   },
   {
-    url: VEST_IMAGES.supLemonOrange,
-    title: "فيست مشرفين مستورد 2 لون ليموني × برتقالي",
+    url: "https://cdn.imagetourls.com/uploads/tyImg/LtS5R5m2.jpg",
+    title: "سترات أمان للمشروعات والمصانع مع طباعة الشعار",
     badge: "أمان متقدم",
-    category: "مشرفين",
+    category: "طباعة وشعار",
   },
 ];
 
